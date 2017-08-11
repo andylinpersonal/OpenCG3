@@ -28,6 +28,7 @@ int main(void)
 				is_escape = false;
 				continue;
 			}
+			/*
 			cout << "input:[" << lineBfr << "]\n pattern:" << endl;
 			cout << boolalpha;
 			cout << " Is natural: " << isNaturalNum(lineBfr) << endl;
@@ -35,7 +36,7 @@ int main(void)
 			cout << " Is real: " << isReal(lineBfr) << endl;
 			cout << boolalpha;
 			cout << " Is valid string: " << isValidRawStr(lineBfr) << endl;
-			/*
+			
 			
 			pattern.clear();
 			pattern = StrParser(bfr);
@@ -46,15 +47,20 @@ int main(void)
 			sregex_iterator w_end = sregex_iterator();
 			size_t id = 0;
 			deque<ArgTree *> *out = line_parser(lineBfr);
+			cout << "Export pattern:" << endl;
 			for (size_t i = 0; i < out->size() ; ++i)
 			{
+				cout << " Pattern " << i << " :" << cmd_pattern_parser(out->at(i)) << endl;
 				delete out->at(i);
 			}
+			cout << endl;
 			delete out;
+			/*
 			for (sregex_iterator i = begin; i != w_end; ++i, ++id) {
 				smatch matched_id = *i;
 				cout << " valid term " << id << ": " << matched_id.str() << endl;
 			}
+			*/
 			lineBfr.clear();
 		}
 		else

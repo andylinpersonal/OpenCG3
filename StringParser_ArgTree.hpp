@@ -26,7 +26,7 @@ namespace OpenCG3 {
 			class Node {
 			public:
 #define ID_NOT_FOUND ULLONG_MAX
-#define STR_NULL  ""
+#define STR_NULL  string("")
 				const static size_t npos = ULLONG_MAX;
 				Node(Type t = Invalid, string const& val = "");
 				~Node();

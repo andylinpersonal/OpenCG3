@@ -11,6 +11,9 @@ StringParser::BRACKETS = {
 	{ '<', '>' }
 };
 
+const string
+StringParser::PTN_INVALID = "Invalid";
+
 deque<StringParser::ArgTree*>* 
 StringParser::line_parser(string &line)
 {
@@ -290,16 +293,149 @@ StringParser::cmd_trim_terminal_space(string &cmd)
 string
 StringParser::cmd_pattern_parser(ArgTree *const cmd)
 {
-	string out = STR_NULL;
-	
-	return out;
+	return cmd_pattern_parser_rec(cmd->root);
 }
 
-string OpenCG3::StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
+string
+StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 {
-	string out = STR_NULL;
+	string out = STR_NULL, tmp = STR_NULL;
+	deque<string> bfr = deque<string>();
+	size_t sz_child = arg->child.size();
+	if (sz_child)
+	{
+		for (size_t i = 0; i < sz_child; ++i)
+		{
+			tmp = cmd_pattern_parser_rec(arg->at(i));
+			// if any item in this argument is INVALID, this command will also be 
+			// INVALID.
+			if (tmp == PTN_INVALID) return PTN_INVALID;
+			bfr.push_back(string(tmp));
+		}
+		// [] is universal container : can have different type of child
+		if (arg->type == ArgTree::Type::Ctnr_Univ)
+		{
+			out.append(1, '[');
+			for (string item : bfr) out.append(item);
+			out.append(1, ']');
+			return out;
+		}
+		// root node is also universal container : can have different type of child
+		else if(arg->type == ArgTree::Type::Ctnr_Root)
+		{
+			for (string item : bfr) out.append(item);
+			return out;
+		}
+		else
+		{
+			bool exist_N = false, exist_R = false, exist_S = false, exist_Other = false;
+			// promotion N -> R -> S
+			for (size_t i = 0; i < sz_child; ++i)
+			{
+				if (bfr[i] == "N")
+					exist_N = true;
+				else if (bfr[i] == "R")
+					exist_R = true;
+				else if (bfr[i] == "S")
+					exist_S = true;
+				else
+					exist_Other = true;
+			}
+			{
+				auto end_type = [&](ArgTree::Type t) -> string {
+					switch (t)
+					{
+					case OpenCG3::StringParser::ArgTree::Ctnr_Set:
+						return "}";
+					case OpenCG3::StringParser::ArgTree::Ctnr_Tuple:
+						return ")";
+					case OpenCG3::StringParser::ArgTree::Ctnr_Vector:
+						return ">";
+					default:
+						// never go here...
+#ifdef _MSC_VER
+						__debugbreak();
+#else  // for non windows
+						_asm { int 3 };
+#endif // _MSC_VER
+						return PTN_INVALID;
+					}
+				};
+				if (exist_Other)
+				{
+					size_t cnt = sz_child - 1;
+					for (size_t i = 0; i < cnt; ++i)
+					{
+						if (bfr[i] != bfr[i + 1])
+							return PTN_INVALID;
+					}
+					out.append(bfr[0]);
+					out.append(1, ':');
+					out.append(to_string(sz_child));
+					out.append(end_type(arg->type));
+					return out;
+				}
+				else if (exist_S)
+				{
+					out = string("S:");
+					// std::to_string(T number) -> convert number to 
+					// corresponding string representation.
+					out.append(to_string(sz_child));
+					out.append(end_type(arg->type));
+					return out;
+				}
+				else if (exist_R)
+				{
+					out = string("R:");
+					out.append(to_string(sz_child));
+					out.append(end_type(arg->type));
+					return out;
+				}
+				else if (exist_N)
+				{
+					out = string("N:");
+					out.append(to_string(sz_child));
+					out.append(end_type(arg->type));
+					return out;
+				}
+			}
+		}
+	}
+	// is leaf node...
+	else
+	{
+		switch (arg->type)
+		{
+		case ArgTree::Type::Ctnr_Univ:
+			return "[]";
+		case ArgTree::Type::Ctnr_Set:
+			return "}";
+		case ArgTree::Type::Ctnr_Tuple:
+			return ")";
+		case ArgTree::Type::Ctnr_Vector:
+			return ">";
+		case ArgTree::Type::Natural:
+			return "N";
+		case ArgTree::Type::Real:
+			return "R";
+		case ArgTree::Type::Str:
+			return "S";
+		default:
+			return PTN_INVALID;
+		}
+	}
+	// Never goes here
+	cerr << "Error:\n Unexpected status:\n  Reach the end of function " <<
+		"\"StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)" <<
+		" -> string\"" << endl;
 
-	return out;
+#ifdef _MSC_VER
+	__debugbreak();
+#else  // for non windows
+	asm { "int 3" };
+#endif // _MSC_VER
+
+	return PTN_INVALID;
 }
 
 bool

@@ -44,7 +44,9 @@ namespace OpenCG3 {
         inline bool cmd_trim_terminal_space(string &);
 
 		/// parse pattern of tree content
+		extern const string PTN_INVALID;
 		string cmd_pattern_parser(ArgTree *const cmd);
+		//  for parsing the pattern string recursively ...
 		string cmd_pattern_parser_rec(ArgTree::Node *const arg);
 
 		enum num_parser_status
