@@ -1,0 +1,58 @@
+# MS Visual Studio project...
+*.sln
+*.vcxproj
+*.filters
+*.user
+*.props
+.vs/
+
+# MSVC debug info
+*.db
+*.idb
+*.pdb
+*.tlog
+*.lastbuildstate
+*.enc
+
+# Code::Blocks project...
+*.cbp
+*.depend
+*.layout
+
+# Binary file
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+.builds
+*.exe
+*.o
+*.obj
+*.elf
+
+
+# Resource File
+*.ico
+*.png
+
+# Log
+*.log
+
+# Test Files
+*.sh
+*.bat
+*.txt
+
+# Archive
+*.rar
+*.7z
+*.lzma
+*.gz
+*.tar
+*.bz2
+*.tgz
+*.tbz
+*.xz
+
