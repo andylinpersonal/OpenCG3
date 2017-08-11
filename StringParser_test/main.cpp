@@ -50,7 +50,7 @@ int main(void)
 			cout << "Export pattern:" << endl;
 			for (size_t i = 0; i < out->size() ; ++i)
 			{
-				cout << " Pattern " << i << " :" << cmd_pattern_parser(out->at(i)) << endl;
+				cout << " Line " << i << " :" << cmd_pattern_parser(out->at(i)) << endl;
 				delete out->at(i);
 			}
 			cout << endl;
