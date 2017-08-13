@@ -184,9 +184,9 @@ StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
 				{
 					cerr << "error:    unbalanced quotation marks or brackets" << endl;
 					parent->type = ArgTree::Type::Invalid;
-					for (size_t i = 0; i < parent->child.size(); ++i)
+					for (size_t j = 0; j < parent->child.size(); ++j)
 					{
-						if(parent->child[i]) delete parent->child[i];
+						if(parent->child[j]) delete parent->child[j];
 					}
 					parent->child.clear();
 					return false;
