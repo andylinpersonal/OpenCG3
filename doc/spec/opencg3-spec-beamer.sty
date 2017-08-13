@@ -1,0 +1,65 @@
+\useoutertheme{infolines}
+\usecolortheme{whale}
+\useinnertheme{rounded}
+\usecolortheme{orchid}
+\setbeamersize{text margin left=12pt,text margin right=12pt}
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{enumerate items}[circle]
+\setbeamertemplate{sections/subsections in toc}[default]
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true]
+\setbeamertemplate{navigation symbols}{}
+
+\usecolortheme[RGB={3,80,150}]{structure}
+\pgfdeclarehorizontalshading[frametitle.bg,black]{beamer@frametitleshade}{\paperheight}{color(0pt)=(frametitle.bg);color(\paperwidth)=(black)}
+
+\defbeamertemplate*{frametitle}{theme}{%
+	\nointerlineskip%
+	\hbox{%
+		\leavevmode%
+		\hskip-\Gm@lmargin\hbox{%
+			\setbox\beamer@tempbox=%
+			\hbox{%
+				\begin{minipage}[b]{\paperwidth}%
+					\vbox{}%
+					\leftskip.3cm%
+					\insertframetitle%
+					\vskip-.3em%
+					\par{\usebeamerfont*{framesubtitle}{\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}\strut\par}%
+					\nointerlineskip%
+					\vbox{}%
+				\end{minipage}%
+			}%
+			\beamer@tempdim=\ht\beamer@tempbox%
+			\begin{pgfpicture}{0mm}{0pt}{\paperwidth}{\beamer@tempdim}%
+				\usebeamercolor{frametitle right}%
+				\pgfpathrectangle{\pgfpointorigin}{\pgfpoint{\paperwidth}{\beamer@tempdim}}%
+				\pgfusepath{clip}%
+				\pgftext[left,base]{\pgfuseshading{beamer@frametitleshade}}%
+			\end{pgfpicture}%
+			\hskip-\paperwidth%
+			\box\beamer@tempbox%
+		}%
+		\hskip-\Gm@rmargin%
+	}%
+}
+
+\defbeamertemplate*{footline}{theme}{%
+	\leavevmode%
+	\hbox {%
+		\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+			\usebeamerfont{author in head/foot}\insertshortauthor%
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+			\usebeamerfont{author in head/foot}\insertshortdate%
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.40\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+			\usebeamerfont{title in head/foot}\insertshorttitle%
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.10\paperwidth,ht=2.25ex,dp=1ex,right]{title in head/foot}%
+			\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}%
+		\end{beamercolorbox}%
+	}%
+}

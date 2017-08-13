@@ -102,3 +102,11 @@ x86/
 *.exe
 *.out
 *.app
+
+# Others
+.testcase
+
+# Exclusions
+!doc/*
+!doc/*/*
+!doc/*/*/*
