@@ -2,7 +2,6 @@
 #ifndef OPENCG3_STRING_PARSER_HEADER
 #define OPENCG3_STRING_PARSER_HEADER
 
-#include <iterator>
 #include <unordered_map>
 #include <deque>
 #include <list>
@@ -10,6 +9,8 @@
 
 #include <iostream>
 #include <sstream>
+
+#include <iterator>
 
 #include <cstdint>
 #include <cstdio>

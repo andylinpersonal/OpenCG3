@@ -102,3 +102,6 @@ x86/
 *.exe
 *.out
 *.app
+
+# Temporary Files
+*.tmp
