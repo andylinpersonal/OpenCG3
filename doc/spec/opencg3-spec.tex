@@ -152,7 +152,7 @@
 			  	\ParamMust{\SetOptl{\StrName{label}}{}} &
 			  	\ParamMust{\TupName{\MSR}{3}{coord}} & \InstrItem \\
 			\InstrName{create point } &
-				\ParamMust{\Tup{\StrName{label}}{n}} &
+				\ParamMust{\Tup{\StrName{label}}{\,\geqslant n}} &
 				\ParamMust{\Tup{\TupName{\MSR}{3}{coord}}{n}} & \InstrItem
 		\end{tabularx}
 	\end{block}
@@ -198,10 +198,10 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
 				\ParamMust{\SetOptl{\StrName{palette}}{}} &
-				\ParamMust{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}} & \InstrItem \\
+				\ParamMust{\LstOptl{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
-				\ParamMust{\Tup{\StrName{palette}}{n}} &
-				\ParamMust{\Lst{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{\,\geqslant n}} & \InstrItem
+				\ParamMust{\Tup{\StrName{palette}}{}} &
+				\ParamMust{\Lst{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
@@ -229,8 +229,8 @@
 				\ParamMust{\TupOptl{\StrName{palette}}{}} &
 				\ParamMust{\SetOptl{\StrName{label}}{}} & \InstrItem \\
 			\InstrName{attach attrib} &
-				\ParamMust{\TupName{\StrName{palette}}{n}{}} &
-				\ParamMust{\TupName{\StrName{label}}{n}{}} & \InstrItem
+				\ParamMust{\Tup{\StrName{palette}}{}} &
+				\ParamMust{\Tup{\StrName{label}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
@@ -243,8 +243,8 @@
 		\CommandEx{attach attrib \ red \quad \quad \quad \ \ point-0}
 		\CommandEx{attach attrib \TupText{red large} \ point-1}
 		\CommandEx{attach attrib \ blue \quad \quad \quad \SetText{point-2 rect-0}}
-		\CommandEx{attach attrib \TupText{5px black} \SetText{point-3 circ-1}}
-		\CommandEx{attach attrib \TupText{red thick} \TupText{point-4 line-0}}
+		\CommandEx{attach attrib \TupText{5px black} \SetText{point-3 circ-0}}
+		\CommandEx{attach attrib \TupText{red thick} \TupText{point-4 line-0 trianle-0}}
 	\end{block}
 
 \end{frame}
