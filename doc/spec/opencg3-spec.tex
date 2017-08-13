@@ -76,19 +76,19 @@
 			$\TUP(\Pi) \EQV \Tup{\Pi}{n} \EXP \texttt{\TupBrkL}     \ \, \Sigma(\Pi, n) \ \, \texttt{\TupBrkR}$ \\ [.24em]
 			$\VCT(\Pi) \EQV \Vct{\Pi}{n} \EXP \texttt{\VctBrkTextL} \ \, \Sigma(\Pi, n) \ \, \texttt{\VctBrkTextR}$ \\ [.24em]
 			$\SET(\Pi) \EQV \Set{\Pi}{n} \EXP \texttt{\SetBrkL}     \ \, \Sigma(\Pi, n) \ \, \texttt{\SetBrkR}$
-		\end{tabular}} \right\|$%
+		\end{tabular}} \right\|\kern.128em$%
 		\begin{tabular}{@{}l}%
 			$\ \Sigma(\Pi, n) \EXP \underbrace{\Pi \ \cdots \ \Pi}_{n \ \text{items}} \quad\,\ \text{(identical)}$ \\ [1.725em]
 			$\ \LST(\Pi) \EQV \Lst{\Pi}{n} \EXP \texttt{\LstBrkL} \ \, \Sigma(\Pi, n) \ \, \texttt{\LstBrkR}$
 		\end{tabular} \\ [.24em]
-		$\left.\LST(\Pi_1,\Pi_2,\cdots,\Pi_{n-1},\Pi_n) \EQV \kern.05em \LstFull{\Pi_1\,\Pi_2\cdots\Pi_{n-1}\,\Pi_n} \EXP
+		$\left.\LST(\Pi_1,\Pi_2,\cdots,\Pi_{n-1},\Pi_n) \EQV \LstFull{\Pi_1\,\Pi_2\cdots\Pi_{n-1}\,\Pi_n} \EXP
 		 \texttt{\LstBrkL} \ \, \Pi_1\cdots\Pi_n \ \, \texttt{\LstBrkR}\right.$
 	\end{block}
 
 	\begin{block}{Descriptions}
 		\begin{itemize}
 			\item Each command starts from $\CMD$ and ends with a \texttt{;} or an \texttt{EOL}.
-			\item Non-terminal symbol expansions are prior than function expansions except that it is used in the form of describing types of a command.
+			\item Non-terminal symbol expansions are prior than function expansions except that symbols are used for describing argument types of a command.
 		\end{itemize}
 	\end{block}
 
@@ -243,8 +243,8 @@
 		\CommandEx{attach attrib \ red \quad \quad \quad \ \ point-0}
 		\CommandEx{attach attrib \TupText{red large} \ point-1}
 		\CommandEx{attach attrib \ blue \quad \quad \quad \SetText{point-2 rect-0}}
-		\CommandEx{attach attrib \TupText{gray tiny} \SetText{point-3 rect-1}}
-		\CommandEx{attach attrib \TupText{blue thin} \TupText{point-4 line-0}}
+		\CommandEx{attach attrib \TupText{5px black} \SetText{point-3 circ-1}}
+		\CommandEx{attach attrib \TupText{red thick} \TupText{point-4 line-0}}
 	\end{block}
 
 \end{frame}
