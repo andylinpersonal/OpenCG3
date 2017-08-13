@@ -86,7 +86,7 @@ namespace OpenCG3 {
 			string const& get_pattern();
 			void set_pattern(string const&);
 			void set_phy_line_no(size_t no);
-			size_t const get_phy_line_no();
+			size_t get_phy_line_no();
 
 		private:
 			string pattern;

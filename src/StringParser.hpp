@@ -13,6 +13,7 @@
 #include <iterator>
 
 #include <cstdint>
+#include <cstdio>
 using namespace std;
 
 #include "StringParser_ArgTree.hpp"

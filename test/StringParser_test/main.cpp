@@ -9,7 +9,7 @@ int main(void)
 {
 	string lineBfr;
 	char ch;
-	bool is_escape = false, is_invalid_line = false;
+	bool is_escape_char = false, is_invalid_line = false;
 	size_t physical_line = 0, logical_line = 0;
 	while ((ch = getchar()) != EOF)
 	{
@@ -22,9 +22,9 @@ int main(void)
 				is_invalid_line = false;
 				continue;
 			}
-			if (is_escape)
+			if (is_escape_char)
 			{
-				is_escape = false;
+				is_escape_char = false;
 				continue;
 			}
 			size_t id = 0;
@@ -34,16 +34,17 @@ int main(void)
 				cout << physical_line << ":" << (physical_line + i) << " " << (*out)[i]->get_pattern() << endl;
 				delete out->at(i);
 			}
+			logical_line += out->size() - 1;
 			delete out;
 			lineBfr.clear();
 		}
 		else
 		{
 			if (ch == '\\') {
-				is_escape = true;
+				is_escape_char = true;
 				continue;
 			}
-			if (is_escape)
+			if (is_escape_char)
 			{
 				switch (ch)
 				{
@@ -56,7 +57,7 @@ int main(void)
 					cerr << "warning: unsupported escape sequence: [\\" << ch << "] ignored. please be careful, Mr. Pig." << endl;
 					break;
 				}
-				is_escape = false;
+				is_escape_char = false;
 			}
 			else
 				lineBfr.append(1, ch);
