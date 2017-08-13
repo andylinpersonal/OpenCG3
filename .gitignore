@@ -7,12 +7,17 @@
 .vs/
 
 # MSVC debug info
+*.opendb
 *.db
 *.idb
 *.pdb
 *.tlog
 *.lastbuildstate
 *.enc
+
+# Precompiled Headers
+*.gch
+*.pch
 
 # Code::Blocks project...
 *.cbp
@@ -29,6 +34,8 @@ x86/
 .builds
 *.exe
 *.o
+*.slo
+*.lo
 *.obj
 *.elf
 
@@ -56,3 +63,9 @@ x86/
 *.tbz
 *.xz
 
+# Temp / Backup
+*.bup
+*.bkp
+*.original
+*.save
+*.~

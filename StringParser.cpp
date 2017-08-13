@@ -13,6 +13,8 @@ StringParser::BRACKETS = {
 
 const string
 StringParser::PTN_INVALID = "Invalid";
+const string
+StringParser::PTN_EMPTY_TREE = "<empty>";
 
 deque<StringParser::ArgTree*>* 
 StringParser::line_parser(string &line)
@@ -28,16 +30,16 @@ StringParser::line_parser(string &line)
 	size_t str_len = line.size(), i = 0;
 	// this section of substring...
 	size_t curr_start = 0;
-	string strbfr;
 	while (true)
 	{
 		// last character in the input line...
 		if (i == str_len)
 		{
 			// if last character is unquoted semicolon, discard it.
-			if (!((line[i] == SEMICOLON) && !is_quoted && bracketStack.empty()))
-				++i;
-			lineLst.push_back(string(line, curr_start, i - curr_start));
+			// incomplete quoted string or container will be treated later in lexer.
+			// if (line[(i - 1)] != SEMICOLON && !is_quoted && bracketStack.empty())
+			if (line[(i - 1)] != SEMICOLON)
+				lineLst.push_back(string(line, curr_start, i - curr_start));
 			break;
 		}
 		// unquoted semicolon is EOL symbol
@@ -59,24 +61,6 @@ StringParser::line_parser(string &line)
 		}
 		++i;
 	}
-	
-	// remove empty logical line
-	{
-		list<string>::iterator it = lineLst.begin();
-		while (it != lineLst.end())
-		{
-			cmd_trim_terminal_space(*it);
-			if (*it == STR_NULL)
-			{
-				it = lineLst.erase(it);
-				continue;
-			}
-			if (it != lineLst.end())
-				++it;
-			else
-				break;
-		}
-	}
 	// if no logical line exist, return NULL...
 	if (lineLst.empty())
 	{
@@ -88,6 +72,11 @@ StringParser::line_parser(string &line)
 	{
 		treeLst->push_back(new ArgTree());
 		arg_lexer(cmd, treeLst->back()->root);
+	}
+	// parse pattern of each line
+	for (ArgTree *cmd : *treeLst)
+	{
+		cmd->set_pattern(cmd_pattern_parser(cmd));
 	}
 	return treeLst;
 }
@@ -186,9 +175,22 @@ StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
 		while (true)
 		{
 			// if this char is end of command, flush it & quit...
-			if (i == sz)
+			if (i >= sz)
 			{
-				flush_arg(i);
+				if (!is_quoted && bracketStack.empty())
+					flush_arg(i);
+				// handle incomplete input
+				else
+				{
+					cerr << "error:    unbalanced quotation marks or brackets" << endl;
+					parent->type = ArgTree::Type::Invalid;
+					for (size_t i = 0; i < parent->child.size(); ++i)
+					{
+						if(parent->child[i]) delete parent->child[i];
+					}
+					parent->child.clear();
+					return false;
+				}
 				break;
 			}
 			if (is_space)
@@ -228,16 +230,11 @@ StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
 				else if (cmd[i] == QUOTE)
 				{
 					is_quoted = true;
-					++i;
 				}
 				else if (BRACKETS.count(cmd[i]) && !is_quoted)
 				{
-					// Just get into enclosed section, flush the argument;
-					// xxx(arg0)|(arg1)<[enclosed]...
-					//if (bracketStack.size() == 1)
-					{
-						//FLUSH_ARG();
-					}
+					if(bracketStack.empty())
+						flush_arg(i);
 					bracketStack.push(cmd[i]);
 				}
 				else if (!bracketStack.empty())
@@ -356,7 +353,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 #ifdef _MSC_VER
 						__debugbreak();
 #else  // for non windows
-						_asm { int 3 };
+						asm ( "int3" );
 #endif // _MSC_VER
 						return PTN_INVALID;
 					}
@@ -406,6 +403,8 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 	{
 		switch (arg->type)
 		{
+		case ArgTree::Ctnr_Root:
+			return PTN_EMPTY_TREE;
 		case ArgTree::Type::Ctnr_Univ:
 			return "[]";
 		case ArgTree::Type::Ctnr_Set:
@@ -432,7 +431,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 #ifdef _MSC_VER
 	__debugbreak();
 #else  // for non windows
-	asm { "int 3" };
+	asm("int3");
 #endif // _MSC_VER
 
 	return PTN_INVALID;
@@ -465,7 +464,7 @@ StringParser::isReal(string const &bfr)
 	uint8_t ch;
 	// contain digit
 	bool contain_digit = false;
-	num_parser_status prev_char_type = start;
+	NUM_PSR_STAT prev_char_type = start;
 	do
 	{
 		if (bfr == "") break;
@@ -523,12 +522,12 @@ StringParser::isNaturalNum(string const &bfr)
 	tmpbfr >> std::noskipws;
 	tmpbfr << bfr;
 	// previous character type
-	num_parser_status prev_char_type = start;
+	NUM_PSR_STAT prev_char_type = start;
 	// current character cache
 	uint8_t ch;
 	do
 	{
-		if (bfr == "") break;
+		if (bfr == STR_NULL) break;
 		tmpbfr >> ch;
 		// after parsing complete, any appearance of non-blank character
 		// is invalid.

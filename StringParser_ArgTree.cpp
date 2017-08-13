@@ -22,33 +22,34 @@ StringParser::ArgTree::Node::~Node()
 bool
 StringParser::ArgTree::Node::isLeaf()
 {
-	return !!(this->child.size());
+	return this->child.empty();
 }
 
 StringParser::ArgTree::Node *
 StringParser::ArgTree::Node::operator[](size_t pos)
 {
 	size_t sz = this->child.size();
-	if (pos >= sz) return NULL;
+	if ((pos < 0) || (pos >= sz))
+	{
+		string msg = "OpenCG3::StringParser::ArgTree::Node::at(" + pos;
+		msg += ") : index is out of range.";
+		throw std::out_of_range(msg.c_str());
+	}
 	return this->child[pos];
 }
 
 StringParser::ArgTree::Node *
 StringParser::ArgTree::Node::at(size_t pos)
 {
-	size_t sz = this->child.size();
-	if ((pos < 0) || (pos >= sz))
-		throw std::out_of_range(
-			"OpenCG3::StringParser::ArgTree::Node::at(size_t pos) : index is out of range."
-		);
-	return this->child[pos];
+	return (*this)[pos];
 }
+
 
 StringParser::ArgTree::ArgTree()
 {
 	this->root = new Node();
 	this->root->type = Ctnr_Root;
-	this->root->str_val = "";
+	this->root->str_val = STR_NULL;
 	this->root->child.clear();
 	// First level is root
 	this->iter = Iterator(this->root);
@@ -63,6 +64,29 @@ void
 StringParser::ArgTree::iter_return_root()
 {
 	this->iter.to_root(this->root);
+}
+
+string const &
+StringParser::ArgTree::get_pattern()
+{
+	return this->pattern;
+}
+
+void OpenCG3::StringParser::ArgTree::set_pattern(string const&pat)
+{
+	this->pattern = string(pat);
+}
+
+void
+StringParser::ArgTree::set_phy_line_no(size_t no)
+{
+	this->phy_line_no = no;
+}
+
+size_t const
+StringParser::ArgTree::get_phy_line_no()
+{
+	return this->phy_line_no;
 }
 
 StringParser::ArgTree::Iterator::Iterator()

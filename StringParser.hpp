@@ -26,7 +26,7 @@ namespace OpenCG3 {
 		/// Bracket relationship...
 		extern const unordered_map<char, char> BRACKETS;
 		/// Internal use
-		enum string_parser_status
+		enum STR_PSR_STAT
 		{
 			Start = 0, Text = 0x1, Quoted_Text = 0x2, In_Ctnr = 0x4, Undefined = 0x8
 		};
@@ -45,11 +45,12 @@ namespace OpenCG3 {
 
 		/// parse pattern of tree content
 		extern const string PTN_INVALID;
+		extern const string PTN_EMPTY_TREE;
 		string cmd_pattern_parser(ArgTree *const cmd);
 		//  for parsing the pattern string recursively ...
 		string cmd_pattern_parser_rec(ArgTree::Node *const arg);
 
-		enum num_parser_status
+		enum NUM_PSR_STAT
 		{
 			start, sign, digit, dot, digit_decimal, blank, closed
 		};

@@ -20,7 +20,7 @@ namespace OpenCG3 {
 			// Only Ctnr_Root and Ctnr_Univ can contain different type of child...
 			enum Type
 			{
-				Invalid, Str, Real, Natural, Ctnr_Set, Ctnr_Tuple, Ctnr_Vector, Ctnr_Univ, Ctnr_Root
+				Invalid, Str, Real, Natural, Ctnr_Set, Ctnr_Tuple, Ctnr_Vector, Ctnr_Univ, Ctnr_Root, Empty
 			};
 			
 			class Node {
@@ -41,6 +41,9 @@ namespace OpenCG3 {
 				Number num_val;
 
 				deque<Node *> child;
+
+				size_t phy_line_no = 0, logical_line_no = 0;
+
 				/// member function
 				bool isLeaf();
 				Node *operator[](size_t pos);
@@ -79,6 +82,15 @@ namespace OpenCG3 {
 			Iterator iter;
 			// methods ...
 			void iter_return_root();
+			// get set
+			string const& get_pattern();
+			void set_pattern(string const&);
+			void set_phy_line_no(size_t no);
+			size_t const get_phy_line_no();
+
+		private:
+			string pattern;
+			size_t phy_line_no;
 		};
 	}
 }
