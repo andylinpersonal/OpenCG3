@@ -83,7 +83,7 @@ StringParser::ArgTree::set_phy_line_no(size_t no)
 	this->phy_line_no = no;
 }
 
-size_t const
+size_t
 StringParser::ArgTree::get_phy_line_no()
 {
 	return this->phy_line_no;
