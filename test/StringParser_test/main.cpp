@@ -1,5 +1,5 @@
-#include "../StringParser.hpp"
-#include "../StringParser_ArgTree.hpp"
+#include "../../src/StringParser.hpp"
+#include "../../src/StringParser_ArgTree.hpp"
 
 
 using namespace OpenCG3::StringParser;
