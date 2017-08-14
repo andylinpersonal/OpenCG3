@@ -16,12 +16,13 @@ StringParser::PTN_INVALID = "Invalid";
 const string
 StringParser::PTN_EMPTY_TREE = "<empty>";
 
-deque<StringParser::ArgTree*>* 
-StringParser::line_parser(string &line)
+
+deque<StringParser::ArgTree*>*
+StringParser::line_parser(ExtensibleString &line)
 {
 	cmd_trim_terminal_space(line);
 	deque<StringParser::ArgTree*> *treeLst = new deque<StringParser::ArgTree*>();
-	list<string> lineLst;
+	list<ExtensibleString> lineLst;
 	// check for unquoted semicolon ...
 	bool is_quoted = false;
 	// for stacks
@@ -38,14 +39,14 @@ StringParser::line_parser(string &line)
 			// if last character is unquoted semicolon, discard it.
 			// incomplete quoted string or container will be treated later in lexer.
 			// if (line[(i - 1)] != SEMICOLON && !is_quoted && bracketStack.empty())
-			if (line[(i - 1)] != SEMICOLON)
-				lineLst.push_back(string(line, curr_start, i - curr_start));
+			//if (line[(i - 1)] != SEMICOLON)
+			lineLst.push_back(ExtensibleString(line, curr_start, i - curr_start));
 			break;
 		}
 		// unquoted semicolon is EOL symbol
 		else if ((line[i] == SEMICOLON) && !is_quoted && bracketStack.empty())
 		{
-			lineLst.push_back(string(line, curr_start, i - curr_start));
+			lineLst.push_back(ExtensibleString(line, curr_start, i - curr_start));
 			++i;
 			curr_start = i;
 			continue;
@@ -68,7 +69,7 @@ StringParser::line_parser(string &line)
 		return NULL;
 	}
 	// parse each logical line
-	for (string cmd : lineLst)
+	for (ExtensibleString cmd : lineLst)
 	{
 		treeLst->push_back(new ArgTree());
 		arg_lexer(cmd, treeLst->back()->root);
@@ -82,9 +83,9 @@ StringParser::line_parser(string &line)
 }
 
 StringParser::ArgTree::Node *
-StringParser::arg_parser(string const &token)
+StringParser::arg_parser(ExtensibleString const &token)
 {
-	string arg_edit = string(token);
+	ExtensibleString arg_edit = ExtensibleString(token);
 	cmd_trim_terminal_space(arg_edit);
 	if (arg_edit.empty())
 		return NULL;
@@ -97,7 +98,7 @@ StringParser::arg_parser(string const &token)
 		arg_edit.erase(0, 1);
 		paired_bracket_loc = arg_edit.find_last_of('\'');
 		if (paired_bracket_loc < arg_edit.size()) arg_edit.erase(paired_bracket_loc, 1);
-		node->str_val = string(arg_edit);
+		node->str_val = token.to_string();
 		node->type = ArgTree::Type::Str;
 		break;
 	case '<':
@@ -133,7 +134,7 @@ StringParser::arg_parser(string const &token)
 		node->type = ArgTree::Type::Ctnr_Univ;
 		break;
 	default:
-		node->str_val = string(token);
+		node->str_val = token.to_string();
 		stringstream str;
 		if (isNaturalNum(token))
 		{
@@ -157,7 +158,7 @@ StringParser::arg_parser(string const &token)
 }
 
 bool
-StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
+StringParser::arg_lexer(ExtensibleString const &cmd, ArgTree::Node *parent)
 {
 	bool is_quoted = false, is_space = false;
 	stack<char> bracketStack;
@@ -165,7 +166,7 @@ StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
 	size_t curr_arg_start = 0;
 
 	auto flush_arg = [&](size_t &i) {
-		auto out = arg_parser(string(cmd, curr_arg_start, i - curr_arg_start));
+		auto out = arg_parser(ExtensibleString(cmd, curr_arg_start, i - curr_arg_start));
 		if (out) parent->child.push_back(out);
 		curr_arg_start = i;
 	};
@@ -224,7 +225,6 @@ StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
 				{
 					flush_arg(i);
 					is_space = true;
-					curr_arg_start = i;
 				}
 				// '[quoted]'(arg0)|(arg1)
 				else if (cmd[i] == QUOTE)
@@ -258,7 +258,7 @@ StringParser::arg_lexer(string const &cmd, ArgTree::Node *parent)
 }
 
 bool
-StringParser::cmd_trim_terminal_space(string &cmd)
+StringParser::cmd_trim_terminal_space(ExtensibleString &cmd)
 {
 	
 	if(!cmd.size()) return false;
@@ -374,7 +374,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 				}
 				else if (exist_S)
 				{
-					out = string("S:");
+					out = "S:";
 					// std::to_string(T number) -> convert number to 
 					// corresponding string representation.
 					out.append(to_string(sz_child));
@@ -383,14 +383,14 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 				}
 				else if (exist_R)
 				{
-					out = string("R:");
+					out = "R:";
 					out.append(to_string(sz_child));
 					out.append(end_type(arg->type));
 					return out;
 				}
 				else if (exist_N)
 				{
-					out = string("N:");
+					out = "N:";
 					out.append(to_string(sz_child));
 					out.append(end_type(arg->type));
 					return out;
@@ -438,7 +438,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 }
 
 bool
-StringParser::isValidRawStr(string const &bfr)
+StringParser::isValidRawStr(ExtensibleString const &bfr)
 {
 	stringstream tmpbfr;
 	tmpbfr >> std::noskipws;
@@ -455,7 +455,7 @@ StringParser::isValidRawStr(string const &bfr)
 }
 
 bool
-StringParser::isReal(string const &bfr)
+StringParser::isReal(ExtensibleString const &bfr)
 {
 	stringstream tmpbfr;
 	tmpbfr >> std::noskipws;
@@ -467,7 +467,7 @@ StringParser::isReal(string const &bfr)
 	NUM_PSR_STAT prev_char_type = start;
 	do
 	{
-		if (bfr == "") break;
+		if (bfr == XSTR_NULL) break;
 		tmpbfr >> ch;
 		switch (prev_char_type)
 		{
@@ -516,7 +516,7 @@ StringParser::isReal(string const &bfr)
 }
 
 bool
-StringParser::isNaturalNum(string const &bfr)
+StringParser::isNaturalNum(ExtensibleString const &bfr)
 {
 	stringstream tmpbfr;
 	tmpbfr >> std::noskipws;
@@ -527,7 +527,7 @@ StringParser::isNaturalNum(string const &bfr)
 	uint8_t ch;
 	do
 	{
-		if (bfr == STR_NULL) break;
+		if (bfr == XSTR_NULL) break;
 		tmpbfr >> ch;
 		// after parsing complete, any appearance of non-blank character
 		// is invalid.
@@ -578,4 +578,61 @@ StringParser::is_raw_string(char const ch)
 		is_sign(ch)))
 		return false;
 	return true;
+}
+
+/// class OpenCG3::StringParser::ExtensibleString
+const size_t
+StringParser::ExtensibleString::pos_eof = ULLONG_MAX;
+const size_t
+StringParser::ExtensibleString::pos_begin = 0;
+const char
+StringParser::ExtensibleString::eof = EOF;
+
+// ctors
+StringParser::ExtensibleString
+StringParser::operator""_xs(const char * in, size_t sz)
+{
+	ExtensibleString out = ExtensibleString(sz);
+	for (size_t i = 0; i < sz; ++i)
+	{
+		out.val[i] = in[i];
+	}
+	return out;
+}
+
+StringParser::ExtensibleString::ExtensibleString(size_t sz)
+	: val(deque<char>(sz)){ }
+
+StringParser::ExtensibleString::ExtensibleString(string const &in)
+{
+	this->val.clear();
+	this->val = deque<char>(in.begin(), in.end());
+}
+
+StringParser::ExtensibleString::ExtensibleString(ExtensibleString const &to_copy)
+{
+	this->val = deque<char>(to_copy.val);
+}
+
+StringParser::ExtensibleString::ExtensibleString(ExtensibleString const & src, size_t begin, size_t end)
+	:val(end >= begin ? (end - begin) : 0)
+{
+	this->val.assign(
+		src.val.begin() + begin,
+		src.val.begin() + begin + end
+	);
+}
+
+istream &
+StringParser::operator >> (istream &is, ExtensibleString &target)
+{
+	is >> skipws;
+	char tmp;
+	target.val.clear();
+	while (!is.eof())
+	{
+		is >> tmp;
+		target.val.push_back(tmp);
+	}
+	return is;
 }

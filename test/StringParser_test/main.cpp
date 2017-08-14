@@ -7,9 +7,10 @@ using namespace std;
 
 int main(void)
 {
-	string lineBfr;
+	FlexibleString lineBfr;
 	char ch;
 	bool is_escape_char = false, is_invalid_line = false;
+	stack<char> bracketStack;
 	size_t physical_line = 0, logical_line = 0;
 	while ((ch = getchar()) != EOF)
 	{
@@ -60,7 +61,7 @@ int main(void)
 				is_escape_char = false;
 			}
 			else
-				lineBfr.append(1, ch);
+				lineBfr.append(ch);
 		}
 	}
 
