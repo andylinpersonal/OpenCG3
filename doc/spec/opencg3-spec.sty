@@ -26,11 +26,11 @@
 \newcommand{\LstBrkL}[0]{[}
 \newcommand{\LstBrkR}[0]{]}
 
-\newcommand{\Tup}[2]{#1:#2 \ \mathclap{\TupBrkR}     \hphantom{:}}
-\newcommand{\Vct}[2]{#1:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}}
-\newcommand{\Set}[2]{#1:#2 \ \mathclap{\SetBrkR}     \hphantom{:}}
-\newcommand{\Lst}[2]{    \MSL\,\mathclap{\LstBrkL} \hphantom{:} #1:#2 \ \mathclap{\LstBrkR} \hphantom{:}}
-\newcommand{\LstFull}[1]{\MSL\,\mathclap{\LstBrkL} \hphantom{:} #1    \ \mathclap{\LstBrkR} \hphantom{:}}
+\newcommand{\Tup}[2]{#1:#2   \ \mathclap{\TupBrkR}     \hphantom{:}}
+\newcommand{\Vct}[2]{#1:#2   \ \mathclap{\VctBrkMathR} \hphantom{:}}
+\newcommand{\Set}[2]{#1:#2   \ \mathclap{\SetBrkR}     \hphantom{:}}
+\newcommand{\Lst}[2]{    \MSL\,\mathclap{\LstBrkL}     \hphantom{:} #1:#2 \ \mathclap{\LstBrkR} \hphantom{:}}
+\newcommand{\LstFull}[1]{\MSL\,\mathclap{\LstBrkL}     \hphantom{:} #1    \ \mathclap{\LstBrkR} \hphantom{:}}
 
 \newcommand{\ArgName}[1]{\ARG         \ \text{\underline{\smash{#1}}}}
 \newcommand{\MSNName}[1]{\MSN         \ \text{\underline{\smash{#1}}}}
@@ -39,11 +39,13 @@
 \newcommand{\TupName}[3]{\Tup{#1}{#2} \ \text{\underline{\smash{#3}}}}
 \newcommand{\VctName}[3]{\Vct{#1}{#2} \ \text{\underline{\smash{#3}}}}
 \newcommand{\SetName}[3]{\Set{#1}{#2} \ \text{\underline{\smash{#3}}}}
-\newcommand{\LstName}[2]{\Lst{#1}     \ \text{\underline{\smash{#2}}}}
+\newcommand{\LstName}[3]{\Lst{#1}{#2} \ \text{\underline{\smash{#3}}}}
+\newcommand{\LstFullName}[2]{\Lst{#1} \ \text{\underline{\smash{#2}}}}
 
 \newcommand{\TupOptl}[2]{#1\color{gray}:#2 \ \mathclap{\TupBrkR}     \leavevmode\color{black}\hphantom{:}}
 \newcommand{\VctOptl}[2]{#1\color{gray}:#2 \ \mathclap{\VctBrkMathR} \leavevmode\color{black}\hphantom{:}}
 \newcommand{\SetOptl}[2]{#1\color{gray}:#2 \ \mathclap{\SetBrkR}     \leavevmode\color{black}\hphantom{:}}
+\newcommand{\LstOptl}[2]{\color{gray}\MSL\,\mathclap{\LstBrkL}\leavevmode\color{black}\hphantom{:} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\leavevmode\color{black}\hphantom{:}}
 
 \newcommand{\TupExtd}[3]{\TupOptl{#1}{#2}\ExtdSup{#3}}
 \newcommand{\VctExtd}[3]{\VctOptl{#1}{#2}\ExtdSup{#3}}
@@ -63,7 +65,7 @@
 \newcommand{\CommandEx}[1]{\texttt{#1}\\}
 \newcommand{\CmdwLabel}[2]{\texttt{#1} \hfill $\ExtdSup{#2}$\\}
 
-\newcommand{\InstrName}[1]{\texttt{#1}}
+\newcommand{\InstrName}[1]{\mbox{\texttt{#1}}}
 \newcommand{\ParamMust}[1]{\ \ \uline{$#1$}}
 \newcommand{\ParamMphn}[2]{\ \ \uline{$#1$}$\phantom{#2}$}
 \newcommand{\ParamExOR}[0]{\ \ \textbf{|} \ }

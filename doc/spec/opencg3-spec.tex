@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[10pt]{beamer}
 \renewcommand\textbullet{\ensuremath{\bullet}}
 
 \usepackage{opencg3-spec}
@@ -7,7 +7,7 @@
 \usepackage[T1]{fontenc}
 \usefonttheme[onlymath]{serif}
 
-\newcommand{\Version}[0]{Version 0.2.2}
+\newcommand{\Version}[0]{Version 0.2.3}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Spec \Version}
@@ -76,19 +76,19 @@
 			$\TUP(\Pi) \EQV \Tup{\Pi}{n} \EXP \texttt{\TupBrkL}     \ \, \Sigma(\Pi, n) \ \, \texttt{\TupBrkR}$ \\ [.24em]
 			$\VCT(\Pi) \EQV \Vct{\Pi}{n} \EXP \texttt{\VctBrkTextL} \ \, \Sigma(\Pi, n) \ \, \texttt{\VctBrkTextR}$ \\ [.24em]
 			$\SET(\Pi) \EQV \Set{\Pi}{n} \EXP \texttt{\SetBrkL}     \ \, \Sigma(\Pi, n) \ \, \texttt{\SetBrkR}$
-		\end{tabular}} \right\|$%
+		\end{tabular}} \right\|\kern.128em$%
 		\begin{tabular}{@{}l}%
 			$\ \Sigma(\Pi, n) \EXP \underbrace{\Pi \ \cdots \ \Pi}_{n \ \text{items}} \quad\,\ \text{(identical)}$ \\ [1.725em]
 			$\ \LST(\Pi) \EQV \Lst{\Pi}{n} \EXP \texttt{\LstBrkL} \ \, \Sigma(\Pi, n) \ \, \texttt{\LstBrkR}$
 		\end{tabular} \\ [.24em]
-		$\left.\LST(\Pi_1,\Pi_2,\cdots,\Pi_{n-1},\Pi_n) \EQV \kern.05em \LstFull{\Pi_1\,\Pi_2\cdots\Pi_{n-1}\,\Pi_n} \EXP
+		$\left.\LST(\Pi_1,\Pi_2,\cdots,\Pi_{n-1},\Pi_n) \EQV \LstFull{\Pi_1\,\Pi_2\cdots\Pi_{n-1}\,\Pi_n} \EXP
 		 \texttt{\LstBrkL} \ \, \Pi_1\cdots\Pi_n \ \, \texttt{\LstBrkR}\right.$
 	\end{block}
 
 	\begin{block}{Descriptions}
 		\begin{itemize}
 			\item Each command starts from $\CMD$ and ends with a \texttt{;} or an \texttt{EOL}.
-			\item Non-terminal symbol expansions are prior than function expansions except that it is used in the form of describing types of a command.
+			\item Non-terminal symbol expansions are prior than function expansions except that symbols are used for describing argument types of a command.
 		\end{itemize}
 	\end{block}
 
@@ -104,14 +104,14 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}l@{}R}
 			\InstrName{create window} &
-				\ParamMust{\StrName{label}} &
+				\ParamMust{\StrName{title}} &
 				\ParamMust{\TupName{\MSR}{3}{coord}} &
 				\ParamMust{\TupName{\Vct{\MSR}{3}}{3}{dirct}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{label} the unique name of the window
+		\ParamItem{title} the unique name of the window
 		\ParamItem{coord} the coordinate $(c_x, c_y, c_z)$ of the window centre
 		\ParamItem{dirct} the width $\vec{v_w}$, height $\vec{v_h}$, and the view point $\vec{v_c}$
 	\end{itemize} \end{block}
@@ -152,7 +152,7 @@
 			  	\ParamMust{\SetOptl{\StrName{label}}{}} &
 			  	\ParamMust{\TupName{\MSR}{3}{coord}} & \InstrItem \\
 			\InstrName{create point } &
-				\ParamMust{\Tup{\StrName{label}}{n}} &
+				\ParamMust{\Tup{\StrName{label}}{\,\geqslant n}} &
 				\ParamMust{\Tup{\TupName{\MSR}{3}{coord}}{n}} & \InstrItem
 		\end{tabularx}
 	\end{block}
@@ -197,35 +197,65 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
-				\ParamMust{\SetOptl{\StrName{label}}{}} &
-				\ParamMust{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}} & \InstrItem \\
+				\ParamMust{\SetOptl{\StrName{palette}}{}} &
+				\ParamMust{\LstOptl{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
-				\ParamMust{\Tup{\StrName{label}}{n}} &
-				\ParamMust{\Lst{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{n}} & \InstrItem
+				\ParamMust{\Tup{\StrName{palette}}{}} &
+				\ParamMust{\Lst{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
+		\ParamItem{palette} the name of the attribute
 		\ParamItem{type} the type of the object
 		\ParamItem{key} the property of the object
 		\ParamItem{value} the value of the property
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{create attrib \SetText{surface} \LstText{surface translucency 0.85}}
-		\CommandEx{create attrib \TupText{magenta auxiliary} \EOLText
-								 \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \LstText{line style dashed}}}
+%		\CommandEx{create attrib \SetText{surface} \LstText{surface translucency 0.85}}
+		\CommandEx{create attrib \TupText{magenta dashed-and-traslucent-green} \EOLText
+								 \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \EOLText
+								 \ \LstText{line style dashed} \LstText{line fill-rgba \LstText{\TupText{0 255 0} .5}}}}
+	\end{block}
+
+\end{frame}
+
+\begin{frame}[t] \frametitle{Attach Attributes}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
+			\InstrName{attach attrib} &
+				\ParamMust{\TupOptl{\StrName{palette}}{}} &
+				\ParamMust{\SetOptl{\StrName{label}}{}} & \InstrItem \\
+			\InstrName{attach attrib} &
+				\ParamMust{\Tup{\StrName{palette}}{}} &
+				\ParamMust{\Tup{\StrName{label}}{}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parametres} \begin{itemize}
+		\ParamItem{palette} the name of the attribute
+		\ParamItem{label} the name of the object
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{attach attrib \ red \quad \quad \quad \ \ point-0}
+		\CommandEx{attach attrib \TupText{red large} \ point-1}
+		\CommandEx{attach attrib \ blue \quad \quad \quad \SetText{point-2 rect-0}}
+		\CommandEx{attach attrib \TupText{5px black} \SetText{point-3 circ-0}}
+		\CommandEx{attach attrib \TupText{red thick} \TupText{point-4 line-0 trianle-0}}
 	\end{block}
 
 \end{frame}
 
 \subsection{Miscellaneous}
 
-\begin{frame}[t] \frametitle{Assign an Operation}
+\begin{frame}[t] \frametitle{Assign an Operation Name}
 
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}l@{}R}
-			\InstrName{assign opratn} &
+			\InstrName{assign opname} &
 				\ParamMust{\StrName{action}} &
 				\ParamMust{\StrName{type}} &
 				\ParamOptl{\MSNName{repeat}\ \ValueDefn{=\infty}} & \InstrItem
@@ -235,11 +265,11 @@
 	\begin{block}{Parametres} \begin{itemize}
 		\ParamItem{action} the name of the action
 		\ParamItem{type} the type of the object applying the action
-		\ParamItem{repeat} the amount of the commands emitting operations
+		\ParamItem{repeat} the amount of the commands emitting operation names
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{assign opratn create point 2}
+		\CommandEx{assign instr create point 2}
 		\CommandEx{x-axis \TupText{1 0 0}; y-axis \TupText{0 1 0}}
 		\CommandEx{// Back To Normal}
 	\end{block}
