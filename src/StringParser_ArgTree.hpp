@@ -22,7 +22,7 @@ namespace OpenCG3 {
 			{
 				Invalid, Str, Real, Natural, Ctnr_Set, Ctnr_Tuple, Ctnr_Vector, Ctnr_Univ, Ctnr_Root, Empty
 			};
-			
+
 			class Node {
 			public:
 #define ID_NOT_FOUND ULLONG_MAX
@@ -43,12 +43,11 @@ namespace OpenCG3 {
 
 				deque<Node *> child;
 
-				size_t phy_line_no = 0, logical_line_no = 0;
-
 				/// member function
-				bool isLeaf();
+				inline bool isLeaf() { return this->child.empty(); }
 				Node *operator[](size_t pos);
-				Node *at(size_t pos);
+				Node *at(size_t pos) { return (*this)[pos]; }
+
 
 			};
 
@@ -61,7 +60,7 @@ namespace OpenCG3 {
 				stack<ArgTree::Node *> traverse_stack;
 				ArgTree::Node *current;
 				/// methods
-				Node *operator->();
+				inline Node *operator->() { return this->current; };
 				/// if operation failed, return false, iterator remain as is.
 				bool to_child_back();
 				bool to_child_front();
@@ -70,7 +69,12 @@ namespace OpenCG3 {
 				bool to_neighbor_back();
 				bool to_parent();
 				bool new_neighber_at_end(Node *in = NULL);
-				bool new_child(Node *in = NULL);
+				inline bool
+					new_child(Node *in = NULL)
+				{
+					this->current->child.push_back(in);
+					return true;
+				}
 				bool to_root(Node *root = NULL);
 				/// get current node index of parent deque...
 				size_t get_current_node_idx(void);
@@ -82,16 +86,22 @@ namespace OpenCG3 {
 			Node *root;
 			Iterator iter;
 			// methods ...
-			void iter_return_root();
+			inline void          iter_return_root()               { this->iter.to_root(this->root); }
 			// get set
-			string const& get_pattern();
-			void set_pattern(string const&);
-			void set_phy_line_no(size_t no);
-			size_t get_phy_line_no();
+			inline string const& get_pattern(void)                { return this->pattern; }
+			inline void          set_pattern(string const &pat)   { this->pattern = string(pat); }
+			inline void          set_physical_line_no(size_t no)  { this->phy_line_number = no; }
+			inline size_t &      physical_line_no(void)           { return this->phy_line_number; }
+			inline size_t        get_physical_line_no(void) const { return this->phy_line_number; }
+
+			inline void          set_logical_line_no(size_t no)   { this->log_line_number = no; }
+			inline size_t &      logical_line_no(void)            { return this->log_line_number; }
+			inline size_t        get_logical_line_no(void) const  { return this->log_line_number; }
 
 		private:
 			string pattern;
-			size_t phy_line_no;
+			size_t phy_line_number;
+			size_t log_line_number;
 		};
 	}
 }

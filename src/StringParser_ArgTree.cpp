@@ -19,12 +19,6 @@ StringParser::ArgTree::Node::~Node()
 	}
 }
 
-bool
-StringParser::ArgTree::Node::isLeaf()
-{
-	return this->child.empty();
-}
-
 StringParser::ArgTree::Node *
 StringParser::ArgTree::Node::operator[](size_t pos)
 {
@@ -38,14 +32,8 @@ StringParser::ArgTree::Node::operator[](size_t pos)
 	return this->child[pos];
 }
 
-StringParser::ArgTree::Node *
-StringParser::ArgTree::Node::at(size_t pos)
-{
-	return (*this)[pos];
-}
-
-
-StringParser::ArgTree::ArgTree()
+StringParser::ArgTree::ArgTree() 
+	:phy_line_number(0), log_line_number(0)
 {
 	this->root = new Node();
 	this->root->type = Ctnr_Root;
@@ -58,35 +46,6 @@ StringParser::ArgTree::ArgTree()
 StringParser::ArgTree::~ArgTree()
 {
 	delete this->root;
-}
-
-void
-StringParser::ArgTree::iter_return_root()
-{
-	this->iter.to_root(this->root);
-}
-
-string const &
-StringParser::ArgTree::get_pattern()
-{
-	return this->pattern;
-}
-
-void OpenCG3::StringParser::ArgTree::set_pattern(string const&pat)
-{
-	this->pattern = string(pat);
-}
-
-void
-StringParser::ArgTree::set_phy_line_no(size_t no)
-{
-	this->phy_line_no = no;
-}
-
-size_t
-StringParser::ArgTree::get_phy_line_no()
-{
-	return this->phy_line_no;
 }
 
 StringParser::ArgTree::Iterator::Iterator()
@@ -103,12 +62,6 @@ StringParser::ArgTree::Iterator::~Iterator()
 {
 	while (this->traverse_stack.size())
 		this->traverse_stack.pop();
-}
-
-StringParser::ArgTree::Node *
-StringParser::ArgTree::Iterator::operator->()
-{
-	return this->current;
 }
 
 bool
@@ -198,13 +151,6 @@ StringParser::ArgTree::Iterator::new_neighber_at_end(Node *new_node)
 	this->traverse_stack.top()->child.push_back(new_node);
 	this->current = old;
 	this->traverse_stack.push(old);
-	return true;
-}
-
-bool
-StringParser::ArgTree::Iterator::new_child(Node *new_node)
-{
-	this->current->child.push_back(new_node);
 	return true;
 }
 

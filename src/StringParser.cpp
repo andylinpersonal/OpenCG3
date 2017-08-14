@@ -17,10 +17,10 @@ const string
 StringParser::PTN_EMPTY_TREE = "<empty>";
 
 
+
 deque<StringParser::ArgTree*>*
 StringParser::line_parser(ExtensibleString &line)
 {
-	cmd_trim_terminal_space(line);
 	deque<StringParser::ArgTree*> *treeLst = new deque<StringParser::ArgTree*>();
 	list<ExtensibleString> lineLst;
 	// check for unquoted semicolon ...
@@ -72,6 +72,20 @@ StringParser::line_parser(ExtensibleString &line)
 	for (ExtensibleString cmd : lineLst)
 	{
 		treeLst->push_back(new ArgTree());
+		// get line number info
+		string phy = string(cmd.begin(), cmd.begin() + cmd.find_first_of(SPACE) + 1);
+		cmd.erase(0, cmd.find_first_of(SPACE) + 1);
+		string logical = string(cmd.begin(), cmd.begin() + cmd.find_first_of(SPACE) + 1);
+		cmd.erase(0, cmd.find_first_of(SPACE) + 1);
+
+		stringstream bfr;
+		bfr << phy;
+		bfr >> treeLst->back()->physical_line_no();
+		bfr.clear();
+		bfr << logical;
+		bfr >> treeLst->back()->logical_line_no();
+
+		cmd_trim_terminal_space(cmd);
 		arg_lexer(cmd, treeLst->back()->root);
 	}
 	// parse pattern of each line

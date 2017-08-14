@@ -29,6 +29,7 @@ namespace OpenCG3 {
 			const static size_t pos_eof;
 			const static size_t pos_begin;
 			const static char   eof;
+
 			ExtensibleString(size_t sz = 0);
 			ExtensibleString(string const &src);
 			ExtensibleString(ExtensibleString const &src);
@@ -40,17 +41,27 @@ namespace OpenCG3 {
 			}
 
 			inline void
-				append(string const &in, size_t pos = pos_eof)
+				append(string const &str, size_t pos = pos_eof)
 			{
 				this->val.insert(
 					(this->val.begin() + (pos < this->val.size() ? pos : this->val.size())),
-					in.begin(), in.end());
+					str.begin(), str.end()
+				);
 			}
 
 			inline void
-				append(char const &in, size_t pos = pos_eof)
+				append(ExtensibleString const &str, size_t pos = pos_eof)
 			{
-				this->val.insert((this->val.begin() + (pos < this->val.size() ? pos : this->val.size())), in);
+				this->val.insert(
+					(this->val.begin() + (pos < this->val.size() ? pos : this->val.size())),
+					str.val.begin(), str.val.end()
+				);
+			}
+
+			inline void
+				append(char const &ch, size_t pos = pos_eof)
+			{
+				this->val.insert((this->val.begin() + (pos < this->val.size() ? pos : this->val.size())), ch);
 			}
 
 			inline string
@@ -61,7 +72,7 @@ namespace OpenCG3 {
 					(this->val.begin() + (idx_end <= this->val.size() ? idx_end : this->val.size()))
 				);
 			}
-			// operators
+			/// operators
 			friend istream &operator >> (istream &, ExtensibleString &);
 			friend ostream &operator<<(ostream &, ExtensibleString const &);
 
@@ -105,10 +116,23 @@ namespace OpenCG3 {
 				operator[](size_t idx) const { return this->val.at(idx); }
 
 
-			// utility
+			/// utility
+			inline deque<char>::iterator
+				begin(void)
+			{
+				return this->val.begin();
+			}
+
+			inline deque<char>::iterator
+				end(void)
+			{
+				return this->val.end();
+			}
+
 			inline void     clear(void) { this->val.clear(); }
 			inline size_t   size(void) const { return this->val.size(); }
 			inline bool     empty(void) const { return this->val.empty(); }
+			// erase range: [off, off + count)
 			inline void     erase(size_t off, size_t count = 1)
 			{
 				this->val.erase(this->val.begin() + off, this->val.begin() + off + count);
@@ -118,9 +142,8 @@ namespace OpenCG3 {
 			{
 				size_t sz = this->val.size();
 				for (size_t i = sz - 1; (i > start_offset) && (i < pos_eof); --i)
-				{
 					if (this->val[i] == ch) return i;
-				}
+
 				return pos_eof;
 			}
 			inline size_t   find_first_of(char ch, size_t start_offset = 0) const
@@ -153,6 +176,7 @@ namespace OpenCG3 {
 		/// Command parser functions
 #define QUOTE        '\''
 #define SEMICOLON    ';'
+#define SPACE        ' '
 		/// Bracket relationship...
 		extern const unordered_map<char, char> BRACKETS;
 		/// Internal use
@@ -171,7 +195,7 @@ namespace OpenCG3 {
 		//  split logical line into tokens (arg) => action successful?
 		bool              arg_lexer(ExtensibleString const& logical_line, ArgTree::Node *parent = NULL);
 		/// remove trailing / fronting space characters.
-        inline bool       cmd_trim_terminal_space(ExtensibleString &);
+		inline bool       cmd_trim_terminal_space(ExtensibleString &);
 
 		/// parse pattern of tree content
 		extern const string PTN_INVALID;

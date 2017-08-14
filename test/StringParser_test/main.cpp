@@ -7,17 +7,26 @@ using namespace std;
 
 int main(void)
 {
-	FlexibleString lineBfr;
+	ExtensibleString lineBfr;
 	char ch;
+	// flags for escape sequence parsing
 	bool is_escape_char = false, is_invalid_line = false;
+
+	// for valid semicolon resolution
 	stack<char> bracketStack;
-	size_t physical_line = 0, logical_line = 0;
+	bool is_quoted = false;
+
+	size_t physical_line = 1, logical_line = 1;
+
+	// add line number tag for first input line...
+	lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+
 	while ((ch = getchar()) != EOF)
 	{
 		if (ch == '\n')
 		{
 			++physical_line;
-			// "\\\n" disable newline
+			// "\\\n" 使此次換行失效
 			if (is_invalid_line)
 			{
 				is_invalid_line = false;
@@ -28,16 +37,19 @@ int main(void)
 				is_escape_char = false;
 				continue;
 			}
+			++logical_line;
 			size_t id = 0;
 			deque<ArgTree *> *out = line_parser(lineBfr);
 			for (size_t i = 0; i < out->size() ; ++i)
 			{
-				cout << physical_line << ":" << (physical_line + i) << " " << (*out)[i]->get_pattern() << endl;
+				cout << (*out)[i]->get_physical_line_no() << ":" << 
+					(*out)[i]->get_logical_line_no() << " " << 
+					(*out)[i]->get_pattern() << endl;
 				delete out->at(i);
 			}
-			logical_line += out->size() - 1;
 			delete out;
 			lineBfr.clear();
+			lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
 		}
 		else
 		{
@@ -61,7 +73,41 @@ int main(void)
 				is_escape_char = false;
 			}
 			else
+			{
 				lineBfr.append(ch);
+				// processing line number
+				if (is_quoted && ch == QUOTE)
+				{
+					is_quoted = false;
+				}
+				else
+				{
+					if (ch == QUOTE)
+					{
+						is_quoted = true;
+					}
+					else if (bracketStack.size())
+					{
+						if (ch == BRACKETS.at(bracketStack.top()))
+						{
+							bracketStack.pop();
+						}
+					}
+					else if (BRACKETS.count(ch))
+					{
+						bracketStack.push(ch);
+					}
+					else if (bracketStack.empty())
+					{
+						if (ch == SEMICOLON)
+						{
+							++logical_line;
+							lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+						}
+					}
+					
+				}
+			}
 		}
 	}
 
