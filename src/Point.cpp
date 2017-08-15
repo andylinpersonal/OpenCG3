@@ -41,7 +41,7 @@ Point &Point::operator-=(Point const &p)
 }
 ostream &OpenCG3::operator<<(ostream &out, Point const &in)
 {
-	out << "(" << in._x << ", " << in._y << ")";
+	out << "(" << in._x << " " << in._y << ")";
 	return out;
 }
 
@@ -68,11 +68,11 @@ int &Point::Y(void)
 }
 
 // Utility
-string Point::toString(void) const
+string Point::to_string(void) const
 {
 	string out = string();
 	out =  "(" + this->_x;
-	out += "," + this->_y;
+	out += " " + this->_y;
 	out += ")";
 	return out;
 }
@@ -87,6 +87,7 @@ Vertex3i::Vertex3i()
 
 Vertex3i::Vertex3i(int x, int y, int z)
 	: Point(x, y), _z(z) {}
+
 
 // operator
 Vertex3i Vertex3i::operator+(Vertex3i const &p) const
@@ -121,7 +122,7 @@ Vertex3i &Vertex3i::operator-=(Vertex3i const &p)
 }
 ostream &OpenCG3::operator<<(ostream &out, Vertex3i const &in)
 {
-	out << "(" << in.getX() << "," << in.getY() << "," << in._z << ")";
+	out << in.to_string();
 	return out;
 }
 // friend function: must show namespace explicitly.
@@ -164,12 +165,12 @@ int &Vertex3i::Z(void)
 
 
 // Utility
-string Vertex3i::toString(void) const
+string Vertex3i::to_string(void) const
 {
 	string out = string();
-	out = "(" + this->getX();
-	out += "," + this->getY();
-	out += "," + this->_z;
+	out =  "(" + this->getX();
+	out += " " + this->getY();
+	out += " " + this->_z;
 	out += ")";
 	return out;
 }
@@ -198,7 +199,7 @@ Vector3i::Vector3i(int x, int y, int z)
 // Operator
 ostream &OpenCG3::operator<<(ostream &out, Vector3i const &in)
 {
-	out << "<" << in.getX() << "," << in.getY() << "," << in.getZ() << ">";
+	out << in.to_string();
 	return out;
 }
 
@@ -229,12 +230,12 @@ istream &OpenCG3::operator >> (istream &istr, Vector3i &target)
 }
 
 // Utility
-string Vector3i::toString(void) const
+string Vector3i::to_string(void) const
 {
 	string out = string();
 	out = "<" + this->getX();
-	out += "," + this->getY();
-	out += "," + this->getZ();
+	out += " " + this->getY();
+	out += " " + this->getZ();
 	out += ">";
 	return out;
 }

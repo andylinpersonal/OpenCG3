@@ -16,10 +16,12 @@ int main(void)
 	stack<char> bracketStack;
 	bool is_quoted = false;
 
-	size_t physical_line = 1, logical_line = 1;
-
 	// add line number tag for first input line...
-	lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+	size_t physical_line = 1, logical_line = 1;
+	auto add_line_no = [&]() {
+		lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+	};
+	add_line_no();
 
 	while ((ch = getchar()) != EOF)
 	{
@@ -38,8 +40,8 @@ int main(void)
 				continue;
 			}
 			++logical_line;
-			size_t id = 0;
 			deque<ArgTree *> *out = line_parser(lineBfr);
+
 			for (size_t i = 0; i < out->size() ; ++i)
 			{
 				cout << (*out)[i]->get_physical_line_no() << ":" << 
@@ -49,11 +51,11 @@ int main(void)
 			}
 			delete out;
 			lineBfr.clear();
-			lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+			add_line_no();
 		}
 		else
 		{
-			if (ch == '\\') {
+			if ((ch == '\\') && (is_escape_char == false)) {
 				is_escape_char = true;
 				continue;
 			}
@@ -64,6 +66,7 @@ int main(void)
 				// "\\\\" -> append a '\\' character on string.
 				case '\\':
 					lineBfr.append(1, ch);
+					is_escape_char = false;
 					break;
 				// discard line with invalid escape character.
 				default:
@@ -102,7 +105,7 @@ int main(void)
 						if (ch == SEMICOLON)
 						{
 							++logical_line;
-							lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+							add_line_no();
 						}
 					}
 					

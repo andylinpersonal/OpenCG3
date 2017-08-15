@@ -1,5 +1,6 @@
-#include "../Canvas.hpp"
+#include "../../src/Canvas.hpp"
 #include "gtkmm.h"
+#include "cairomm/cairomm.h"
 
 int main()
 {

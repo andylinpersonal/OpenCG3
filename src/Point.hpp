@@ -41,7 +41,7 @@ namespace OpenCG3 {
 		int &Y(void);
 
 		// utility
-		string toString(void) const;
+		string to_string(void) const;
 	};
 
 	typedef Point Size2D;
@@ -69,7 +69,7 @@ namespace OpenCG3 {
 		int &Z(void);
 
 		// Utility
-		string toString(void) const;
+		string to_string(void) const;
 		double Distance(Vertex3i const& another = Vertex3i()) const;
 
 	};
@@ -81,7 +81,7 @@ namespace OpenCG3 {
 		Vector3i();
 		Vector3i(int x, int y, int z);
 		// Utility
-		string toString(void) const;
+		string to_string(void) const;
 		double Cosine(Vector3i const &) const;
 		double Length(void) const;
 

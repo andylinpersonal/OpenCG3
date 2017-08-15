@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include "CmdParser.hpp"
+#include "StringParser.hpp"
 
 using namespace std;
 
