@@ -13,6 +13,7 @@ StringParser::BRACKETS = {
 
 const string
 StringParser::PTN_INVALID = "Invalid";
+
 const string
 StringParser::PTN_EMPTY_TREE = "<empty>";
 

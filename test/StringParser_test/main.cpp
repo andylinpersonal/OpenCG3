@@ -28,7 +28,8 @@ int main(void)
 		if (ch == '\n')
 		{
 			++physical_line;
-			// "\\\n" 使此次換行失效
+			// if input is "\\\n" , disable this newline (concatenate 
+			// previous input with following input)
 			if (is_invalid_line)
 			{
 				is_invalid_line = false;
@@ -44,9 +45,14 @@ int main(void)
 
 			for (size_t i = 0; i < out->size() ; ++i)
 			{
-				cout << (*out)[i]->get_physical_line_no() << ":" << 
-					(*out)[i]->get_logical_line_no() << " " << 
+				if ((*out)[i]->get_pattern() == PTN_INVALID)
+				{
+#ifdef _DEBUG
+				cout << (*out)[i]->get_physical_line_no() << ":" <<
+					(*out)[i]->get_logical_line_no() << " " <<
 					(*out)[i]->get_pattern() << endl;
+#endif
+				}
 				delete out->at(i);
 			}
 			delete out;

@@ -3,9 +3,6 @@
 using namespace std;
 using namespace OpenCG3;
 
-std::thread Thread_stdin_handler;
-Glib::RefPtr<Gtk::Application> App;
-
 int main(int argc, char** argv)
 {
 	// parse some args...
@@ -24,10 +21,10 @@ int main(int argc, char** argv)
 		}
 	}
 	// Start background stdin recepter... (non-blocking)
-    Thread_stdin_handler = thread(&Input::StdinHandler, std::ref(Input::CmdQueue));
+	thread Thread_stdin_handler = thread(&Input::StdinHandler, std::ref(Input::CommandQueue));
 
-    App = Gtk::Application::create(argc, argv);
+	OpenCG3::App = Gtk::Application::create(argc, argv);
 
     OpenCG3::MainWindow root_win;
-    return App->run(root_win);
+    return OpenCG3::App->run(root_win);
 }

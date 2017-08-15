@@ -2,85 +2,161 @@
 
 using namespace std;
 using namespace OpenCG3;
+using namespace OpenCG3::StringParser;
 
 /// Global variable
-deque<string>
-Input::CmdQueue;
-/// TODO: save each command as deque of Command object
+// mutex for CommandQueue
+mutex
+Input::mutex_CommandQueue;
+
+// deque for transferring parsed command to main thread.
 deque<OpenCG3::CmdParser::Command>
 Input::CommandQueue;
 
+volatile bool
+Input::is_alive = true;
+
 /// TODO: escape sequence "\\\n" "\\\\" should be test carefully
 void
-Input::StdinHandler(deque<string> &Queue)
+Input::stdin_handle_worker(deque<CmdParser::Command> &Queue)
 {
-    string lineBfr;
-    int    ch;
-    int    assign_cnt = 0;
-    CmdParser::Command queueItem;
-	bool is_escape = false, is_invalid_line = false;
-	
-    while(1)
-    {
-        // loader
-		while ((ch = getchar()) != '\n') {
-			// discard whole line when invalid escape character occurrs until reach
-			// another newline character.
+
+	ExtensibleString lineBfr;
+	char ch;
+	// flags for escape sequence parsing
+	bool is_escape_char = false, is_invalid_line = false;
+
+	// for valid semicolon resolution
+	stack<char> bracketStack;
+	bool is_quoted = false;
+
+	// add line number tag for first input line...
+	size_t physical_line = 1, logical_line = 1;
+	auto add_line_no = [&]() {
+		lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
+	};
+	add_line_no();
+
+	while (is_alive)
+	{
+		ch = getchar();
+		if (ch == '\n')
+		{
+			++physical_line;
+			// if input is "\\\n" , disable this newline (concatenate 
+			// previous input with following input)
 			if (is_invalid_line)
-				continue;
-			// processing escape character
-			if (ch == '\\')
 			{
-				is_escape = true;
+				is_invalid_line = false;
 				continue;
 			}
-			if (!is_escape)
-				lineBfr.append(1, ch);
-			else
+			if (is_escape_char)
+			{
+				is_escape_char = false;
+				continue;
+			}
+			++logical_line;
+
+			// parsing input ...
+			deque<ArgTree *> *out = line_parser(lineBfr);
+			//  clear empty or invalid commands ...
+
+			for (size_t i = 0; i < out->size(); ++i)
+			{
+#ifdef _DEBUG
+				if ((*out)[i]->get_pattern() == PTN_INVALID)
+#endif // _DEBUG
+				{
+					cout << (*out)[i]->get_physical_line_no() << ":" <<
+						(*out)[i]->get_logical_line_no() << " " <<
+						(*out)[i]->get_pattern() << endl;
+
+				}
+
+				if ((out->at(i)->get_pattern() == PTN_EMPTY_TREE) ||
+					(out->at(i)->get_pattern() == PTN_INVALID))
+				{
+#ifdef _DEBUG
+					cout << " debug:\n  command at line " <<
+						out->at(i)->get_physical_line_no() << " is ignored." << endl;
+#endif // _DEBUG
+					delete out->at(i);
+					out->at(i) == NULL;
+				}
+
+				safe_queue_maker(out, Queue);
+				
+			}
+
+			delete out;
+			lineBfr.clear();
+			add_line_no();
+		}
+		else
+		{
+			if ((ch == '\\') && (is_escape_char == false)) {
+				is_escape_char = true;
+				continue;
+			}
+			if (is_escape_char)
 			{
 				switch (ch)
 				{
-				// "\\\\" -> append a '\\' character on string.
+					// "\\\\" -> append a '\\' character on string.
 				case '\\':
 					lineBfr.append(1, ch);
+					is_escape_char = false;
 					break;
+					// discard line with invalid escape character.
 				default:
-					cerr << "Error:\n Invalid escape character: [" << ch << "]" << endl;
-					is_invalid_line = true;
+					cerr << "warning: unsupported escape sequence: [\\" << ch << "] ignored. please be careful, Mr. Pig." << endl;
 					break;
 				}
-				// jump out when invalid escape character occurrs.
-				if (is_invalid_line)
-					break;
+				is_escape_char = false;
+			}
+			else
+			{
+				lineBfr.append(ch);
+				// processing line number
+				if (is_quoted && ch == QUOTE)
+					is_quoted = false;
+
+				else
+				{
+					if (ch == QUOTE)
+						is_quoted = true;
+
+					else if (bracketStack.size())
+					{
+						if (ch == BRACKETS.at(bracketStack.top()))
+							bracketStack.pop();
+					}
+					else if (BRACKETS.count(ch))
+						bracketStack.push(ch);
+
+					else if (bracketStack.empty())
+					{
+						if (ch == SEMICOLON)
+						{
+							++logical_line;
+							add_line_no();
+						}
+					}
+
+				}
 			}
 		}
-		// clear line buffer when invalid escape character occurrs until reach
-		// another newline character.
-		if (is_invalid_line)
-		{
-			lineBfr.clear();
-			is_invalid_line = false;
-			continue;
-		}
-		// "\\\n" disable newline
-		if (is_escape)
-		{
-			is_escape = false;
-			continue;
-		}
-
-        queueItem = CmdParser::Parser(lineBfr);
-        // push latest command to the head of deque
-        if(queueItem.isValid)
-        {
-            Queue.push_front(string(lineBfr));
-            //CommandQueue.push_front(Command(queueItem));
-        }
-        else
-            cerr << "Error:\n Invalid command:\n  " << lineBfr << endl;
-
-        lineBfr.clear();
-    }
+	}
     return;
+}
+
+void
+Input::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command>& queue)
+{
+	static ArgTree* cached_cmd;
+	AUTOLOCK(mutex, mutex_CommandQueue)
+
+	AUTOLOCK_END
+
 }
 

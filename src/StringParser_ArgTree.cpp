@@ -6,6 +6,20 @@ using namespace std;
 StringParser::ArgTree::Node::Node(Type t, string const& val)
 	:type(t), str_val(string(val)){ }
 
+StringParser::ArgTree::Node::Node(Node & src)
+	:type(src.type), str_val(src.str_val), num_val(src.num_val)
+{
+	this->child.clear();
+	if (!this->child.empty())
+	{
+		this->child = deque<Node *>(src.child.size());
+		for (Node *subtree : src.child)
+		{
+			this->child.push_back(new Node(*subtree));
+		}
+	}
+}
+
 StringParser::ArgTree::Node::~Node()
 {
 	if (!this->child.empty())
@@ -17,19 +31,6 @@ StringParser::ArgTree::Node::~Node()
 		}
 		this->child.clear();
 	}
-}
-
-StringParser::ArgTree::Node *
-StringParser::ArgTree::Node::operator[](size_t pos)
-{
-	size_t sz = this->child.size();
-	if ((pos < 0) || (pos >= sz))
-	{
-		string msg = "OpenCG3::StringParser::ArgTree::Node::at(" + pos;
-		msg += ") : index is out of range.";
-		throw std::out_of_range(msg.c_str());
-	}
-	return this->child[pos];
 }
 
 StringParser::ArgTree::ArgTree() 

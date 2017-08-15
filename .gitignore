@@ -42,7 +42,6 @@ x86/
 
 # Resource File
 *.ico
-*.png
 
 # Log
 *.log

@@ -9,6 +9,8 @@
 #include <string>
 #include <sstream>
 
+#include <mutex>
+
 #include "CmdParser.hpp"
 #include "StringParser.hpp"
 
@@ -18,10 +20,29 @@ namespace OpenCG3 {
 
 	namespace Input {
 
-	extern deque<string> CmdQueue;
-	extern deque<OpenCG3::CmdParser::Command> CommandQueue;
+#define AUTOLOCK(MutexType, to_lock)                                          \
+{   lock_guard<MutexType> lock(to_lock);
 
-	void StdinHandler(deque<string> &Queue);
+#define AUTOLOCK_END                                                          \
+}
+
+		/// global variable for data exchange ...
+		extern mutex mutex_CommandQueue;
+
+		extern deque<CmdParser::Command> CommandQueue;
+		/*
+		* if main thread is closing, set this variable to false,
+		* shut down the infinite loop inside stdin_handle_worker.
+		*/
+		extern volatile bool is_alive;
+
+		/*
+		*  main function for command input ...
+		*/
+		void stdin_handle_worker(deque<CmdParser::Command> &Queue);
+		// auxilliary functions
+		void safe_queue_maker(deque<StringParser::ArgTree *> *raw_arg, deque<CmdParser::Command> &queue);
+		
 	}
 }
 

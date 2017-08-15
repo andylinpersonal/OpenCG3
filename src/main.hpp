@@ -12,7 +12,4 @@
 #include "Window.hpp"
 #include "InputHandler.hpp"
 
-extern std::thread Thread_stdin_handler;
-extern Glib::RefPtr<Gtk::Application> App;
-
 #endif //!OPENCG3_H

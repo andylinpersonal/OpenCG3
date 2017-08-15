@@ -8,8 +8,6 @@
 #include <map>
 using namespace std;
 
-#include <gtkmm.h>
-
 #include "IObject.hpp"
 #include "StringParser.hpp"
 
@@ -18,16 +16,13 @@ namespace OpenCG3 {
 
 		class Command {
 		public:
-			bool isValid;
 			int opcode;
 			int object;
-			string type;
-			vector<string> param;
+			StringParser::ArgTree * param;
 
 			Command();
-			Command(OpenCG3::CmdParser::Command const&);
-			
-
+			Command(CmdParser::Command const&);
+			void swap(Command &);
 		};
 		/// const
 		// defines
@@ -46,11 +41,6 @@ namespace OpenCG3 {
 		extern const map<string, int> OP_ID;
 		extern const map<string, int> OBJ_ID;
 		extern const string TYPE_STR[4][4];
-
-		/// Generate command item
-		Command Parser(string &raw);
-
-
 	}
 
 }
