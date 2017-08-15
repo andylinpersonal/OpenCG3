@@ -59,7 +59,7 @@
 \newcommand{\EOLText}[0]{\texttt{\textbackslash}\\}
 
 \newcounter{Counter}
-\setcounter{Counter}{0}
+\setcounter{Counter}{1}
 \newcommand{\InstrItem}[0]{$(\arabic{Counter})$ \stepcounter{Counter}}
 \newcommand{\Command}[1]{#1 \hfill \InstrItem}
 \newcommand{\CommandEx}[1]{\texttt{#1}\\}
@@ -71,7 +71,8 @@
 \newcommand{\ParamExOR}[0]{\ \ \textbf{|} \ }
 \newcommand{\ParamOptl}[1]{\ \ \textcolor{gray}{\uline{$#1$}}}
 \newcommand{\ValueDefn}[1]{[#1]}
-\newcommand{\ParamItem}[1]{\item \makebox[3.5em]{\underline{\smash{#1}}:\hfill}}
+\newcommand{\Param}[1]{\underline{\smash{#1}}}
+\newcommand{\ParamItem}[1]{\item \makebox[3.5em]{\Param{#1}:\hfill}}
 
 \newcommand{\SingleQuote}[0]{\texttt{\textquotesingle}}
 \newcommand{\DoubleQuote}[0]{\texttt{\textquotedbl}}
