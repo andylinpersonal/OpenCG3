@@ -1,13 +1,13 @@
 \documentclass[10pt]{beamer}
 \renewcommand\textbullet{\ensuremath{\bullet}}
 
-\usepackage{opencg3-spec}
-\usepackage{opencg3-spec-beamer}
+\usepackage{sty/opencg3-spec}
+\usepackage{sty/opencg3-spec-beamer}
 \usepackage{xspace,bookmark,lmodern,mathtools,color,multido,ulem,upquote,tabularx}
 \usepackage[T1]{fontenc}
 \usefonttheme[onlymath]{serif}
 
-\newcommand{\Version}[0]{Version 0.2.4}
+\newcommand{\Version}[0]{Version 0.2.5}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Spec \Version}
@@ -94,6 +94,53 @@
 
 \end{frame}
 
+\begin{frame}[t] \frametitle{Command Parsing}
+
+	\begin{block}{Escape Sequence}
+		\begin{itemize}
+			\item \texttt{\textbackslash x} is an escape sequence.
+			\item If \texttt{x} is \texttt{\textbackslash}, then it is treated as a single backslash.
+			\item If \texttt{x} is \texttt{EOL} which may vary from platforms, then the sequence is omitted.
+			\item Otherwise, the sequence is ignored and triggers a warning by default.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Error Handling}
+		\begin{itemize}
+			\item Physical lines are separated by an \texttt{EOL}.
+			\item Logical lines are separated by either a semicolon or an unescaped \texttt{EOL}.
+			\item If the command cannot be parsed by the grammar, then all the characters on the same logical line will be discarded.
+		\end{itemize}
+	\end{block}
+
+\end{frame}
+
+\begin{frame}[t] \frametitle{Class and Object System}
+
+	\begin{block}{Classes}
+		\begin{itemize}
+			\item Classes are split into two categories, top and bottom.
+			\item Top classes consist of window, camera, point, line, surface, etc.
+			\item Bottom classes consist of attrib(ute) and group.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Objects}
+		\begin{itemize}
+			\item An object is derived from a class aforementioned.
+			\item An object has an unique name throughout its class category derivations.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Relations}
+		\begin{itemize}
+			\item Objects derived from the same class category cannot form a relation.
+			\item Relations are bidirectional and can be created or deleted via commands.
+		\end{itemize}
+	\end{block}
+
+\end{frame}
+
 
 \section{Commands}
 
@@ -104,16 +151,16 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}l@{}R}
 			\InstrName{create window} &
-				\ParamMust{\StrName{title}} &
-				\ParamMust{\TupName{\MSR}{3}{coord}} &
-				\ParamMust{\TupName{\Vct{\MSR}{3}}{3}{dirct}} & \InstrItem
+				\ParamMust{\StrName{label}} &
+				\ParamOptl{\TupName{\MSR}{3}{coord}} &
+				\ParamOptl{\TupName{\Vct{\MSR}{3}}{3}{dirct}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{title} the unique name of the window
-		\ParamItem{coord} the coordinate $(c_x, c_y, c_z)$ of the window centre
-		\ParamItem{dirct} the width $\vec{v_w}$, height $\vec{v_h}$, and the view point $\vec{v_c}$
+		\ParamItem{label} the object name of the class window
+		\ParamItem{coord} the coordinate $(c_x, c_y, c_z)$ of the centre of the window.
+		\ParamItem{dirct} the window width $\vec{v_w}$, height $\vec{v_h}$, and the camera view $\vec{v_c}$.
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -158,7 +205,7 @@
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{label} the name of the point
+		\ParamItem{label} the object name of the class point
 		\ParamItem{coord} the coordinate $(p_x, p_y, p_z)$ of the point
 	\end{itemize} \end{block}
 
@@ -180,7 +227,7 @@
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{label} the name of the point
+		\ParamItem{label} the object name of the class point
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -206,14 +253,13 @@
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{palette} the name of the attribute
-		\ParamItem{type} the type of the object
-		\ParamItem{key} the property of the object
-		\ParamItem{value} the value of the property
+		\ParamItem{palette} the object name of the class attrib
+		\ParamItem{type} the name of the class in the top class category
+		\ParamItem{key} the property of the object of class \Param{type}
+		\ParamItem{value} the appropriate value of the property \Param{key}
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-%		\CommandEx{create attrib \SetText{surface} \LstText{surface translucency 0.85}}
 		\CommandEx{create attrib \TupText{magenta dashed-and-traslucent-green} \EOLText
 								 \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \EOLText
 								 \ \LstText{line style dashed} \LstText{line fill-rgba \LstText{\TupText{0 255 0} .5}}}}
@@ -235,8 +281,8 @@
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{palette} the name of the attribute
-		\ParamItem{label} the name of the object
+		\ParamItem{palette} the object name of the class attrib
+		\ParamItem{label} the name of the object derived from the top class category
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -264,7 +310,7 @@
 
 	\begin{block}{Parametres} \begin{itemize}
 		\ParamItem{action} the name of the action
-		\ParamItem{type} the type of the object applying the action
+		\ParamItem{type} the object of the class \Param{type} applying the action
 		\ParamItem{repeat} the amount of the commands emitting operation names
 	\end{itemize} \end{block}
 
