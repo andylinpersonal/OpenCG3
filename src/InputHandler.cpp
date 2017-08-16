@@ -10,15 +10,14 @@ mutex
 Input::mutex_CommandQueue;
 
 // deque for transferring parsed command to main thread.
-deque<OpenCG3::CmdParser::Command>
+deque<OpenCG3::CmdParser::Command *>
 Input::CommandQueue;
 
 volatile bool
 Input::is_alive = true;
 
-/// TODO: escape sequence "\\\n" "\\\\" should be test carefully
 void
-Input::stdin_handle_worker(deque<CmdParser::Command> &Queue)
+Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 {
 
 	ExtensibleString lineBfr;
@@ -84,7 +83,7 @@ Input::stdin_handle_worker(deque<CmdParser::Command> &Queue)
 					out->at(i) == NULL;
 				}
 
-				safe_queue_maker(out, Queue);
+				safe_queue_maker(out, Queue, mutex_CommandQueue);
 				
 			}
 
@@ -148,15 +147,5 @@ Input::stdin_handle_worker(deque<CmdParser::Command> &Queue)
 		}
 	}
     return;
-}
-
-void
-Input::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command>& queue)
-{
-	static ArgTree* cached_cmd;
-	AUTOLOCK(mutex, mutex_CommandQueue)
-
-	AUTOLOCK_END
-
 }
 

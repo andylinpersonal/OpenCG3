@@ -1,3 +1,8 @@
+/*
+*  Resolving raw command from InputHandler thread,
+*  and push processed Command obj to queue for further using.
+*/
+
 #ifndef OPENCG3_CMDPARSER_H
 #define OPENCG3_CMDPARSER_H
 
@@ -10,6 +15,7 @@ using namespace std;
 
 #include "IObject.hpp"
 #include "StringParser.hpp"
+#include "Common.hpp"
 
 namespace OpenCG3 {
 	namespace CmdParser{
@@ -24,6 +30,8 @@ namespace OpenCG3 {
 			Command(CmdParser::Command const&);
 			void swap(Command &);
 		};
+
+#define CMDROOT(cmd) (cmd)->param->root
 		/// const
 		// defines
 #define OP_ID_CREATE 1
@@ -41,6 +49,14 @@ namespace OpenCG3 {
 		extern const map<string, int> OP_ID;
 		extern const map<string, int> OBJ_ID;
 		extern const string TYPE_STR[4][4];
+
+		/*
+		*  resolving command and convert to corresponding command object;
+		*  append it to command queue for further using by main thread.
+		*/
+		void safe_queue_maker(
+			deque<StringParser::ArgTree *> *raw_arg,
+			deque<CmdParser::Command *> &queue, mutex &Lock);
 	}
 
 }

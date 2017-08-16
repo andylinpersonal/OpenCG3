@@ -36,3 +36,16 @@ CmdParser::Command::swap(Command &target)
 	target.param = this->param;
 	this->param = tmp;
 }
+
+void
+CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command *>& Queue, mutex &Lock)
+{
+	static StringParser::ArgTree* cached_cmd;
+	deque<Command *> cache;
+
+	AUTOLOCK(mutex, Lock)
+
+	AUTOUNLOCK;
+
+
+}

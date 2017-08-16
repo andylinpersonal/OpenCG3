@@ -85,7 +85,7 @@ namespace OpenCG3 {
 				stack<ArgTree::Node *> traverse_stack;
 				ArgTree::Node *current;
 				/// methods
-				inline Node *operator->() { return this->current; };
+				inline Node *operator*() { return this->current; };
 				/// if operation failed, return false, iterator remain as is.
 				bool to_child_back(void);
 				bool to_child_front(void);
