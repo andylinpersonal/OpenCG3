@@ -6,10 +6,10 @@ using namespace OpenCG3::CmdParser;
 
 /// constants
 const string
-CmdParser::OP_NAME[4] = {"", "create", "delete", "assign"};
+CmdParser::OP_NAME[5] = {"", "create", "delete", "assign", "attach"};
 
 const string
-CmdParser::OBJ_NAME[4] = {"", "window", "point", "instr"};
+CmdParser::OBJ_NAME[3] = {"", "window", "point"};
 
 
 
@@ -46,10 +46,42 @@ CmdParser::Command::swap(Command &target)
 void
 CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command *> &Queue, mutex &Lock)
 {
-	static StringParser::ArgTree* cached_cmd;
+	// because an input may not include a complete assign command
+	static deque<StringParser::ArgTree *> cached_cmd;
+	// for assign command processing
+	static bool unfinished_assign_op = false;
+	static size_t unfinished_assign_count = 0;
+	{
+		deque<StringParser::ArgTree *>::iterator it = raw_arg->begin();
+		/* expanding assign opname
+		 * command format:
+		 * assign $opname:S $op:S $class:S $count:N
+		 */
+		while (it != raw_arg->end())
+		{
+			if (ARG_ROOT(*it)[0].str_val == OP_NAME[OP_ID_ASSIGN])
+			{
+				unfinished_assign_op = true;
+				try {
+					unfinished_assign_count = ARG_ROOT(*it)[4].num_val.i64;
+				}
+				catch (exception e) {
+					DBG_DMP_INVALID_CMD(OP_NAME[OP_ID_ASSIGN], "%s", );
+					fputs(e.what(), stderr);
+					DEBUG_TRACEBACK;
+				}
+			}
+			if (!unfinished_assign_count)
+				unfinished_assign_op = false;
+			++it;
+		}
+	}
+	// if there is any unfinished assign op, return for
+	// next command input
+	if (unfinished_assign_op) return;
+
+	// Expand compound commands
 	deque<Command *> cache;
-
-
 	AUTOLOCK(mutex, Lock)
 
 	AUTOUNLOCK;

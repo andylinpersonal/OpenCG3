@@ -155,7 +155,7 @@ StringParser::arg_parser(ExtensibleString const &token)
 		{
 			str << token;
 			node->type = ArgTree::Type::Natural;
-			str >> node->num_val.n64;
+			str >> node->num_val.i64;
 		}
 		else if (isReal(token))
 		{
@@ -593,61 +593,4 @@ StringParser::is_raw_string(char const ch)
 		is_sign(ch)))
 		return false;
 	return true;
-}
-
-/// class OpenCG3::StringParser::ExtensibleString
-const size_t
-StringParser::ExtensibleString::pos_eof = ULLONG_MAX;
-const size_t
-StringParser::ExtensibleString::pos_begin = 0;
-const char
-StringParser::ExtensibleString::eof = EOF;
-
-// ctors
-StringParser::ExtensibleString
-StringParser::operator""_xs(const char * in, size_t sz)
-{
-	ExtensibleString out = ExtensibleString(sz);
-	for (size_t i = 0; i < sz; ++i)
-	{
-		out.val[i] = in[i];
-	}
-	return out;
-}
-
-StringParser::ExtensibleString::ExtensibleString(size_t sz)
-	: val(deque<char>(sz)){ }
-
-StringParser::ExtensibleString::ExtensibleString(string const &in)
-{
-	this->val.clear();
-	this->val = deque<char>(in.begin(), in.end());
-}
-
-StringParser::ExtensibleString::ExtensibleString(ExtensibleString const &to_copy)
-{
-	this->val = deque<char>(to_copy.val);
-}
-
-StringParser::ExtensibleString::ExtensibleString(ExtensibleString const & src, size_t begin, size_t end)
-	:val(end >= begin ? (end - begin) : 0)
-{
-	this->val.assign(
-		src.val.begin() + begin,
-		src.val.begin() + begin + end
-	);
-}
-
-istream &
-StringParser::operator >> (istream &is, ExtensibleString &target)
-{
-	is >> skipws;
-	char tmp;
-	target.val.clear();
-	while (!is.eof())
-	{
-		is >> tmp;
-		target.val.push_back(tmp);
-	}
-	return is;
 }

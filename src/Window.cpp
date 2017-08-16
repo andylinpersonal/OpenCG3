@@ -65,22 +65,12 @@ MainWindow::on_idle()
 /*
    Op functions
 */
-const
-MainWindow::OP_FUNC[][] = 
-{
-	{NULL,NULL,NULL,NULL},
-	{NULL,MainWindow::op_create_window},
-	{},
-	{},
-	{},
-	{}
-};
 
 void
 MainWindow::op_delete_window(CmdParser::Command * const args)
 {
 	fputs(" info: delete window\n  message: ", stderr);
-	cout << CMDROOT(args)[2].str_val << endl;
+	cout << CMD_ROOT(args)[2].str_val << endl;
 	Gtk::MessageDialog msgbox(
 		*this,
 		args->param->root[2].str_val,

@@ -33,8 +33,24 @@ StringParser::ArgTree::Node::~Node()
 	}
 }
 
+string
+StringParser::ArgTree::Node::to_string(void) const
+{
+	ExtensibleString out;
+	out = this->aux_to_string();
+	return out.to_string();
+}
+
+ExtensibleString
+StringParser::ArgTree::Node::aux_to_string(void) const
+{
+	ExtensibleString out;
+
+	return out;
+}
+
 StringParser::ArgTree::Node *
-StringParser::ArgTree::Node::get_deep_copy(void)
+StringParser::ArgTree::Node::get_deep_copy(void) const
 {
 	Node *out = new Node(*this);
 	return out;
@@ -150,7 +166,7 @@ StringParser::ArgTree::Iterator::to_parent()
 }
 
 bool
-StringParser::ArgTree::Iterator::new_neighber_at_end(Node *new_node)
+StringParser::ArgTree::Iterator::push_back_curr_lv(Node *new_node)
 {
 	// Level 1 is root node...
 	Node *old = this->current;
@@ -180,7 +196,7 @@ StringParser::ArgTree::Iterator::to_root(Node * root)
 }
 
 size_t
-StringParser::ArgTree::Iterator::get_current_node_idx(void)
+StringParser::ArgTree::Iterator::get_node_idx_in_parent(void)
 {
 	if (this->traverse_stack.size() <= 1)
 		return ID_NOT_FOUND;
