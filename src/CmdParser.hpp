@@ -25,7 +25,9 @@ namespace OpenCG3 {
 			int opcode;
 			int object;
 			StringParser::ArgTree * param;
-			
+		
+
+		public:
 			// ctor / dtor
 			Command();
 			Command(CmdParser::Command const&);
@@ -34,20 +36,24 @@ namespace OpenCG3 {
 			void swap(Command &);
 		};
 
-#define CMDROOT(cmd) (cmd)->param->root
+#define CMD_ROOT(cmd) ARG_ROOT((cmd)->param)
+#define DBG_DMP_INVALID_CMD(cmd, extra_format, ...)                           \
+	fprintf(stderr, "Internal Error:\n\tInvalid Command Format in %s\n"       \
+		extra_format, ##__VA_ARGS__);
 		/// const
 		// defines
 #define OP_ID_CREATE 1
 #define OP_ID_DELETE 2
 #define OP_ID_ASSIGN 3
+#define OP_ID_ATTACH 4
 
 #define OBJ_ID_WINDOW 1
 #define OBJ_ID_POINT  2
 #define OBJ_ID_INSTR  3
 
 		// Operation and object name
-		extern const string OP_NAME[4];
-		extern const string OBJ_NAME[4];
+		extern const string OP_NAME[5];
+		extern const string OBJ_NAME[3];
 		// Operation and object ID
 		extern const map<string, int> OP_ID;
 		extern const map<string, int> OBJ_ID;
