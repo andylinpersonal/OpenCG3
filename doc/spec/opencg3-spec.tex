@@ -7,7 +7,7 @@
 \usepackage[T1]{fontenc}
 \usefonttheme[onlymath]{serif}
 
-\newcommand{\Version}[0]{Version 0.2.5}
+\newcommand{\Version}[0]{Version 0.2.6}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Spec \Version}
@@ -78,7 +78,7 @@
 			$\SET(\Pi) \EQV \Set{\Pi}{n} \EXP \texttt{\SetBrkL}     \ \, \Sigma(\Pi, n) \ \, \texttt{\SetBrkR}$
 		\end{tabular}} \right\|\kern.128em$%
 		\begin{tabular}{@{}l}%
-			$\ \Sigma(\Pi, n) \EXP \underbrace{\Pi \ \cdots \ \Pi}_{n \ \text{items}} \quad\,\ \text{(identical)}$ \\ [1.725em]
+			$\ \Sigma(\Pi, n) \EXP \overbrace{\Pi \ \cdots \ \Pi}^{n \ \text{items}} \quad\,\ \text{(identical)}$ \\ [.43em]
 			$\ \LST(\Pi) \EQV \Lst{\Pi}{n} \EXP \texttt{\LstBrkL} \ \, \Sigma(\Pi, n) \ \, \texttt{\LstBrkR}$
 		\end{tabular} \\ [.24em]
 		$\left.\LST(\Pi_1,\Pi_2,\cdots,\Pi_{n-1},\Pi_n) \EQV \LstFull{\Pi_1\,\Pi_2\cdots\Pi_{n-1}\,\Pi_n} \EXP
@@ -88,7 +88,7 @@
 	\begin{block}{Descriptions}
 		\begin{itemize}
 			\item Each command starts from $\CMD$ and ends with a \texttt{;} or an \texttt{EOL}.
-			\item Non-terminal symbol expansions are prior than function expansions except that symbols are used for describing argument types of a command.
+			\item Non-terminal symbol expansions are prior than function expansions except that symbols are used for describing arguments of a command.
 		\end{itemize}
 	\end{block}
 
@@ -179,7 +179,7 @@
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{message} the text string printed right after exit
+		\ParamItem{message} the text string printed right after exiting
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -244,25 +244,25 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
-				\ParamMust{\SetOptl{\StrName{palette}}{}} &
-				\ParamMust{\LstOptl{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem \\
+				\ParamMust{\SetOptl{\StrName{desc}}{}} &
+				\ParamMust{\LstOptl{\LstFull{\StrName{t-class} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
-				\ParamMust{\Tup{\StrName{palette}}{}} &
-				\ParamMust{\Lst{\LstFull{\StrName{type} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem
+				\ParamMust{\Tup{\StrName{desc}}{}} &
+				\ParamMust{\Lst{\LstFull{\StrName{t-class} \ \StrName{key} \ \ArgName{value}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{palette} the object name of the class attrib
-		\ParamItem{type} the name of the class in the top class category
-		\ParamItem{key} the property of the object of class \Param{type}
+		\ParamItem{desc} the object name of the class attrib
+		\ParamItem{t-class} the name of one of the top classes
+		\ParamItem{key} the property of the object of class \Param{t-class}
 		\ParamItem{value} the appropriate value of the property \Param{key}
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
 		\CommandEx{create attrib \TupText{magenta dashed-and-traslucent-green} \EOLText
-								 \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \EOLText
-								 \ \LstText{line style dashed} \LstText{line fill-rgba \LstText{\TupText{0 255 0} .5}}}}
+		                         \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \EOLText
+		                       \ \LstText{line style dashed} \LstText{line fill-rgba \LstText{\TupText{0 255 0} .5}}}}
 	\end{block}
 
 \end{frame}
@@ -272,17 +272,17 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{attach attrib} &
-				\ParamMust{\TupOptl{\StrName{palette}}{}} &
+				\ParamMust{\TupOptl{\StrName{desc}}{}} &
 				\ParamMust{\SetOptl{\StrName{label}}{}} & \InstrItem \\
 			\InstrName{attach attrib} &
-				\ParamMust{\Tup{\StrName{palette}}{}} &
+				\ParamMust{\Tup{\StrName{desc}}{}} &
 				\ParamMust{\Tup{\StrName{label}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{palette} the object name of the class attrib
-		\ParamItem{label} the name of the object derived from the top class category
+		\ParamItem{desc} the name of the object of the class attrib
+		\ParamItem{label} the name of the object derived from the top classes
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -303,14 +303,14 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}l@{}R}
 			\InstrName{assign opname} &
 				\ParamMust{\StrName{action}} &
-				\ParamMust{\StrName{type}} &
+				\ParamMust{\StrName{class}} &
 				\ParamOptl{\MSNName{repeat}\ \ValueDefn{=\infty}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
 		\ParamItem{action} the name of the action
-		\ParamItem{type} the object of the class \Param{type} applying the action
+		\ParamItem{class} the name of one of the classes
 		\ParamItem{repeat} the amount of the commands emitting operation names
 	\end{itemize} \end{block}
 
