@@ -146,6 +146,12 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 			}
 		}
 	}
+	AUTOLOCK(mutex, mutex_CommandQueue)
+		for (CmdParser::Command *cmd : CommandQueue)
+		{
+			if(cmd)
+		}
+	AUTOUNLOCK;
     return;
 }
 

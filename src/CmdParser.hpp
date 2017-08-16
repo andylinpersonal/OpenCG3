@@ -25,9 +25,12 @@ namespace OpenCG3 {
 			int opcode;
 			int object;
 			StringParser::ArgTree * param;
-
+			
+			// ctor / dtor
 			Command();
 			Command(CmdParser::Command const&);
+			~Command();
+			// utility
 			void swap(Command &);
 		};
 

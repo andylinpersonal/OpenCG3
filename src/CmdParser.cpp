@@ -22,12 +22,18 @@ CmdParser::OBJ_ID = {{OBJ_NAME[0], 0} ,{OBJ_NAME[1], 1}, {OBJ_NAME[2], 2}, {OBJ_
 
 
 /// class Command
-CmdParser::Command::Command() {}
+CmdParser::Command::Command()
+	:opcode(0),object(0),param(NULL) {}
 
 CmdParser::Command::Command(CmdParser::Command const &in)
 	:opcode(in.opcode),
 	object(in.object),
 	param(in.param) {}
+
+OpenCG3::CmdParser::Command::~Command()
+{
+	if (this->param) delete this->param;
+}
 
 void
 CmdParser::Command::swap(Command &target)
@@ -38,10 +44,11 @@ CmdParser::Command::swap(Command &target)
 }
 
 void
-CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command *>& Queue, mutex &Lock)
+CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command *> &Queue, mutex &Lock)
 {
 	static StringParser::ArgTree* cached_cmd;
 	deque<Command *> cache;
+
 
 	AUTOLOCK(mutex, Lock)
 

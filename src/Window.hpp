@@ -55,7 +55,7 @@ namespace OpenCG3 {
 		/*
 		*  Working functions.
 		*/
-		extern
+		const static void(*OP_FUNC[][])(MainWindow* _this, CmdParser::Command *const arg);
 		/* set window attributes
 		*  create window title(Str) coord_win_cent(Vertex3d) \
 		*  direct(Tuple(Vx(Vector), Vy(Vector), Vz(Vector)))

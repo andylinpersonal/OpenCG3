@@ -10,7 +10,7 @@
 #define AUTOLOCK(MutexType, to_lock)                                          \
 {   lock_guard<MutexType> lock(to_lock);
 
-#define AUTOLOCK_END                                                          \
+#define AUTOUNLOCK                                                          \
 }
 
 #endif // !OPENCG3_COMMON_HEADER

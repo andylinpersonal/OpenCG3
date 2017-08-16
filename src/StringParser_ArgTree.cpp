@@ -6,7 +6,7 @@ using namespace std;
 StringParser::ArgTree::Node::Node(Type t, string const& val)
 	:type(t), str_val(string(val)){ }
 
-StringParser::ArgTree::Node::Node(Node & src)
+StringParser::ArgTree::Node::Node(Node const &src)
 	:type(src.type), str_val(src.str_val), num_val(src.num_val)
 {
 	this->child.clear();
@@ -31,6 +31,13 @@ StringParser::ArgTree::Node::~Node()
 		}
 		this->child.clear();
 	}
+}
+
+StringParser::ArgTree::Node *
+StringParser::ArgTree::Node::get_deep_copy(void)
+{
+	Node *out = new Node(*this);
+	return out;
 }
 
 StringParser::ArgTree::ArgTree() 

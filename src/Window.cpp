@@ -62,6 +62,19 @@ MainWindow::on_idle()
     // Always return true to keep handler connected.
     return true;
 }
+/*
+   Op functions
+*/
+const
+MainWindow::OP_FUNC[][] = 
+{
+	{NULL,NULL,NULL,NULL},
+	{NULL,MainWindow::op_create_window},
+	{},
+	{},
+	{},
+	{}
+};
 
 void
 MainWindow::op_delete_window(CmdParser::Command * const args)

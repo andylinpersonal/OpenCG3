@@ -35,7 +35,7 @@ namespace OpenCG3 {
 
 				const static size_t npos = ULLONG_MAX;
 				Node(Type t = Invalid, string const& val = "");
-				Node(Node &src);
+				Node(Node const &src);
 				~Node();
 				typedef union num_val
 				{
@@ -71,6 +71,7 @@ namespace OpenCG3 {
 				}
 
 				inline Node *at(size_t pos) { return (*this)[pos]; }
+				Node *       get_deep_copy(void);
 				
 
 
