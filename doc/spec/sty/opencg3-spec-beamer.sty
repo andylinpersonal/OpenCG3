@@ -2,15 +2,11 @@
 \usecolortheme{whale}
 \useinnertheme{rounded}
 \usecolortheme{orchid}
-\setbeamersize{text margin left=12pt,text margin right=12pt}
 
-\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{headline}{}
+\setbeamertemplate{itemize   items}[circle]
 \setbeamertemplate{enumerate items}[circle]
-\setbeamertemplate{sections/subsections in toc}[default]
-\setbeamertemplate{blocks}[rounded]
-\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
-\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true]
-\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=12pt, text margin right=12pt}
 
 \usecolortheme[RGB={0,80,160}]{structure}
 \pgfdeclarehorizontalshading[frametitle.bg,black]{beamer@frametitleshade}{\paperheight}{color(0pt)=(frametitle.bg);color(\paperwidth)=(black)}
@@ -49,17 +45,17 @@
 \defbeamertemplate*{footline}{theme}{%
 	\leavevmode%
 	\hbox {%
-		\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+		\begin{beamercolorbox}[wd=.25\paperwidth,ht=3ex,dp=2ex,center]{author in head/foot}%
 			\usebeamerfont{author in head/foot}\insertshortauthor%
 		\end{beamercolorbox}%
-		\begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+		\begin{beamercolorbox}[wd=.25\paperwidth,ht=3ex,dp=2ex,center]{author in head/foot}%
 			\usebeamerfont{author in head/foot}\insertshortdate%
 		\end{beamercolorbox}%
-		\begin{beamercolorbox}[wd=.40\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
-			\usebeamerfont{title in head/foot}\insertshorttitle%
+		\begin{beamercolorbox}[wd=.40\paperwidth,ht=3ex,dp=2ex,center]{title  in head/foot}%
+			\usebeamerfont{title  in head/foot}\insertshorttitle%
 		\end{beamercolorbox}%
-		\begin{beamercolorbox}[wd=.10\paperwidth,ht=2.25ex,dp=1ex,right]{title in head/foot}%
-			\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}%
+		\begin{beamercolorbox}[wd=.10\paperwidth,ht=3ex,dp=2ex,right ]{title  in head/foot}%
+			\insertframenumber{} / \inserttotalframenumber \hspace*{2ex}%
 		\end{beamercolorbox}%
 	}%
 }
