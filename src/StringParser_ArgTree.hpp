@@ -43,7 +43,7 @@ namespace OpenCG3 {
 #define STR_NULL  ""
 #define XSTR_NULL ""_xs
 
-#define ARG_ROOT(arg) (arg)->root
+#define ARG_ROOT_PTR(arg) (arg)->root
 				 
 				// members
 			public:

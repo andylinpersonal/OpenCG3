@@ -27,7 +27,8 @@ Canvas::delItem(string const & key)
 	return Unknown_Error;
 }
 
-bool Canvas::refresh_screen()
+bool
+Canvas::refresh_screen()
 {
 
 	return false;
