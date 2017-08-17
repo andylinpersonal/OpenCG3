@@ -61,9 +61,7 @@
 \newcounter{Counter}
 \setcounter{Counter}{1}
 \newcommand{\InstrItem}[0]{$(\arabic{Counter})$ \stepcounter{Counter}}
-\newcommand{\Command}[1]{#1 \hfill \InstrItem}
 \newcommand{\CommandEx}[1]{\texttt{#1}\\}
-\newcommand{\CmdwLabel}[2]{\texttt{#1} \hfill $\ExtdSup{#2}$\\}
 
 \newcommand{\InstrName}[1]{\mbox{\texttt{#1}}}
 \newcommand{\ParamMust}[1]{\ \ \uline{$#1$}}
@@ -75,7 +73,6 @@
 \newcommand{\ParamItem}[1]{\item \makebox[4em]{\Param{#1}\hfill:}}
 \newcommand{\Class}[1]{class\textsuperscript{#1}}
 \newcommand{\Label}[1]{label\textsuperscript{#1}}
-\newcommand{\Desc}[1]{desc\textsuperscript{#1}}
 
 \newcommand{\SingleQuote}[0]{\texttt{\textquotesingle}}
 \newcommand{\DoubleQuote}[0]{\texttt{\textquotedbl}}
