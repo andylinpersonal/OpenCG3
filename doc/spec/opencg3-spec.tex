@@ -113,7 +113,7 @@
 
 \end{frame}
 
-\subsubsection{System}
+\subsubsection{Design}
 
 \begin{frame}[t] \frametitle{System Hierarchy}
 
@@ -267,11 +267,11 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create point } &
-			  	\ParamMust{\SetOptl{\StrName{\Label{p}}}{}} &
+			  	\ParamMust{\SetStarOptl{\StrName{\Label{p}}}{}} &
 			  	\ParamMust{\TupName{\MSR}{3}{coord}} & \InstrItem \\
 			\InstrName{create point } &
-				\ParamMust{\Tup{\StrName{\Label{p}}}{\,\geqslant n}} &
-				\ParamMust{\Tup{\TupName{\MSR}{3}{coord}}{n}} & \InstrItem
+				\ParamMust{\TupStar{\StrName{\Label{p}}}{\,\geqslant n}} &
+				\ParamMust{\TupStar{\TupName{\MSR}{3}{coord}}{n}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
@@ -281,7 +281,7 @@
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{create point \QuoteText{origin} \ \ \ \TupText{0 0 0}}
+		\CommandEx{create point \QuoteText{origin} \ \ \TupText{0 0 0}}
 		\CommandEx{create point \SetText{X-1 X-2} \ \TupText{1 0 0}}
 		\CommandEx{create point \TupText{Y-1 Z-1} \TupText{\TupText{0 1 0}\TupText{0 0 1}}}
 	\end{block}
@@ -319,11 +319,11 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
-				\ParamMust{\SetOptl{\StrName{attrib}}{}} &
-				\ParamMust{\LstOptl{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
+				\ParamMust{\SetStarOptl{\StrName{attrib}}{}} &
+				\ParamMust{\LstStarOptl{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
-				\ParamMust{\Tup{\StrName{attrib}}{}} &
-				\ParamMust{\Lst{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
+				\ParamMust{\TupStar{\StrName{attrib}}{}} &
+				\ParamMust{\LstStar{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
@@ -349,11 +349,11 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{attach attrib} &
-				\ParamMust{\TupOptl{\StrName{attrib}}{}} &
-				\ParamMust{\SetOptl{\StrName{label}}{}} & \InstrItem \\
+				\ParamMust{\TupStarOptl{\StrName{attrib}}{}} &
+				\ParamMust{\SetStarOptl{\StrName{label}}{}} & \InstrItem \\
 			\InstrName{attach attrib} &
-				\ParamMust{\Tup{\StrName{attrib}}{}} &
-				\ParamMust{\Tup{\StrName{label}}{}} & \InstrItem
+				\ParamMust{\TupStar{\StrName{attrib}}{}} &
+				\ParamMust{\TupStar{\StrName{label}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
