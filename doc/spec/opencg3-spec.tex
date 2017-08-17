@@ -8,9 +8,9 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.2.10}
+\newcommand{\Version}[0]{Version 0.2.11}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
-\newcommand{\PrjNameFull}{Open Command-oriented\\Geometric Graphics Generator}
+\newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
 
 \title[\PrjSpec]{\PrjNameFull}
@@ -45,7 +45,7 @@
 		$\MSN \coloneqq \{\ \alpha \mid \alpha \in \texttt{[0-9]+} \ \}$ \\ [.24em]
 		$\MSR \coloneqq \{\ \alpha \mid \alpha \in \texttt{[+\textbackslash-]?([0-9]*[.])?[0-9]+}\ \}$ \hfill
 		$\Rightarrow \MSR \supset \MSN \ $ \\ [.24em]
-		$\MSS \coloneqq \{\ \alpha \mid \alpha \in \texttt{\SingleQuote(.*?)\SingleQuote|[.0-9A-Za-z+\textbackslash-]+} \ \}$ \hfill
+		$\MSS \coloneqq \{\ \alpha \mid \alpha \in \texttt{\Quote(.*?)\Quote|[.0-9A-Za-z+\textbackslash-]+} \ \}$ \hfill
 		$\Rightarrow \MSS \supset \MSR \ $ \\ [.24em]
 		$\MSW \coloneqq \{\ \alpha \mid \alpha \in \texttt{[ \textbackslash{}t]} \}$ \hfill whitespace
 	\end{block}
@@ -53,7 +53,7 @@
 	\begin{block}{Descriptions}
 		\begin{itemize}
 			\item The matching mechanism abides by the maximal munch rule.
-			\item Each command is whitespace-insensitive except being quoted by a pair of single quotation marks (\SingleQuote).
+			\item Each command is whitespace-insensitive except being quoted by a pair of single quotation marks (\Quote).
 		\end{itemize}
 	\end{block}
 
@@ -201,7 +201,7 @@
 
 	\begin{block}{Examples}
 		\CommandEx{delete window main}
-		\CommandEx{delete window main \SingleQuote Have a nice day.\SingleQuote}
+		\CommandEx{delete window main \QuoteText{Have a nice day.}}
 	\end{block}
 
 \end{frame}
@@ -281,7 +281,7 @@
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{create point \SingleQuote origin\SingleQuote \ \ \ \TupText{0 0 0}}
+		\CommandEx{create point \QuoteText{origin} \ \ \ \TupText{0 0 0}}
 		\CommandEx{create point \SetText{X-1 X-2} \ \TupText{1 0 0}}
 		\CommandEx{create point \TupText{Y-1 Z-1} \TupText{\TupText{0 1 0}\TupText{0 0 1}}}
 	\end{block}
@@ -305,7 +305,7 @@
 
 	\begin{block}{Examples}
 		\CommandEx{delete point \ origin}
-		\CommandEx{delete point \SetText{origin \SingleQuote random-point\SingleQuote}}
+		\CommandEx{delete point \SetText{origin \QuoteText{random-point}}}
 	\end{block}
 
 \end{frame}
@@ -320,10 +320,10 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
 				\ParamMust{\SetOptl{\StrName{attrib}}{}} &
-				\ParamMust{\LstOptl{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \ArgName{value}}{}}}{}} & \InstrItem \\
+				\ParamMust{\LstOptl{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
 				\ParamMust{\Tup{\StrName{attrib}}{}} &
-				\ParamMust{\Lst{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \ArgName{value}}{}}}{}} & \InstrItem
+				\ParamMust{\Lst{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
@@ -336,8 +336,8 @@
 
 	\begin{block}{Examples}
 		\CommandEx{create attrib \TupText{magenta dashed-and-translucent-line} \EOLText
-		                         \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \EOLText
-		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rbga \LstText{\TupText{0 255 0} 0.5}}}}}
+		                         \LstText{\LstText{point fill-hsv \QuoteText{\TupText{300 1.0 1.0}}} \EOLText
+		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rbga \QuoteText{\LstText{\TupText{0 255 0} 0.5}}}}}}
 	\end{block}
 
 \end{frame}

@@ -58,6 +58,9 @@
 \newcommand{\LstText}[1]{\texttt{\LstBrkL#1\LstBrkR}}
 \newcommand{\EOLText}[0]{\texttt{\textbackslash}\\}
 
+\newcommand{\Quote}    [0]{\texttt{\textquotesingle}}
+\newcommand{\QuoteText}[1]{\Quote#1\Quote}
+
 \newcounter{Counter}
 \setcounter{Counter}{1}
 \newcommand{\InstrItem}[0]{$(\arabic{Counter})$ \stepcounter{Counter}}
@@ -73,6 +76,3 @@
 \newcommand{\ParamItem}[1]{\item \makebox[4em]{\Param{#1}\hfill:}}
 \newcommand{\Class}[1]{class\textsuperscript{#1}}
 \newcommand{\Label}[1]{label\textsuperscript{#1}}
-
-\newcommand{\SingleQuote}[0]{\texttt{\textquotesingle}}
-\newcommand{\DoubleQuote}[0]{\texttt{\textquotedbl}}
