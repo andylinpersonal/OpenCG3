@@ -7,7 +7,7 @@
 \usepackage[T1]{fontenc}
 \usefonttheme[onlymath]{serif}
 
-\newcommand{\Version}[0]{Version 0.2.7}
+\newcommand{\Version}[0]{Version 0.2.8}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Spec \Version}
@@ -179,7 +179,7 @@
 
 	\begin{block}{Parametres} \begin{itemize}
 		\ParamItem{\Label{w}} the object name of the class window
-		\ParamItem{string} the text printed right after exiting the session
+		\ParamItem{string}    the text printed right after exiting the session
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -292,19 +292,19 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
-				\ParamMust{\SetOptl{\StrName{\Desc{a}}}{}} &
+				\ParamMust{\SetOptl{\StrName{attrib}}{}} &
 				\ParamMust{\LstOptl{\LstFull{\StrName{\Class{t}} \ \StrName{property} \ \ArgName{value}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
-				\ParamMust{\Tup{\StrName{\Desc{a}}}{}} &
+				\ParamMust{\Tup{\StrName{attrib}}{}} &
 				\ParamMust{\Lst{\LstFull{\StrName{\Class{t}} \ \StrName{property} \ \ArgName{value}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Desc{a}}  the object name of the class attrib
+		\ParamItem{attrib}    the object name of the class attrib
 		\ParamItem{\Class{t}} the name of one of the top classes
 		\ParamItem{property}  the property of the object of the class
-		\ParamItem{value}     the appropriate value of the property
+		\ParamItem{value}     the appropriate form of the property
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -320,17 +320,17 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{attach attrib} &
-				\ParamMust{\TupOptl{\StrName{\Desc{a}}}{}} &
-				\ParamMust{\SetOptl{\StrName{\Label{t}}}{}} & \InstrItem \\
+				\ParamMust{\TupOptl{\StrName{attrib}}{}} &
+				\ParamMust{\SetOptl{\StrName{label}}{}} & \InstrItem \\
 			\InstrName{attach attrib} &
-				\ParamMust{\Tup{\StrName{\Desc{a}}}{}} &
-				\ParamMust{\Tup{\StrName{\Label{t}}}{}} & \InstrItem
+				\ParamMust{\Tup{\StrName{attrib}}{}} &
+				\ParamMust{\Tup{\StrName{label}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Desc{a}}  the object name of the class attrib
-		\ParamItem{\Label{t}} the name of the object instantiated from the top classes
+		\ParamItem{attrib}    the object name of the class attrib
+		\ParamItem{label}     the name of the object instantiated from the top classes
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
