@@ -40,7 +40,7 @@ namespace OpenCG3 {
 		ExtensibleString(ExtensibleString const &src);
 		ExtensibleString(ExtensibleString const &src, size_t begin, size_t end);
 
-		string to_string() const
+		inline string to_string() const
 		{
 			return string(this->val.begin(), this->val.end());
 		}
@@ -81,14 +81,14 @@ namespace OpenCG3 {
 		friend istream &operator >> (istream &, ExtensibleString &);
 		friend ostream &operator<<(ostream &, ExtensibleString const &);
 
-		inline bool
+		inline ExtensibleString &
 			operator+=(ExtensibleString const &in)
 		{
 			this->val.insert(this->val.end(), in.val.begin(), in.val.end());
-			return true;
+			return *this;
 		}
 
-		ExtensibleString
+		inline ExtensibleString
 			operator+(ExtensibleString const &in) const
 		{
 			ExtensibleString out = ExtensibleString(*this);
@@ -96,8 +96,9 @@ namespace OpenCG3 {
 			return out;
 		}
 
-		ExtensibleString &
-			operator=(ExtensibleString const &to_assign) {
+		inline ExtensibleString &
+			operator=(ExtensibleString const &to_assign)
+		{
 			this->val = deque<char>(to_assign.val);
 			return *this;
 		}

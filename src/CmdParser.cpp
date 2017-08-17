@@ -47,7 +47,7 @@ void
 CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdParser::Command *> &Queue, mutex &Lock)
 {
 	// because an input may not include a complete assign command
-	static deque<StringParser::ArgTree *> cached_cmd;
+	static StringParser::ArgTree cached_assign;
 	// for assign command processing
 	static bool unfinished_assign_op = false;
 	static size_t unfinished_assign_count = 0;
@@ -59,20 +59,24 @@ CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdPar
 		 */
 		while (it != raw_arg->end())
 		{
-			if (ARG_ROOT(*it)[0].str_val == OP_NAME[OP_ID_ASSIGN])
+			if (ARG_ROOT_PTR(*it)[0].str_val == OP_NAME[OP_ID_ASSIGN])
 			{
 				unfinished_assign_op = true;
 				try {
-					unfinished_assign_count = ARG_ROOT(*it)[4].num_val.i64;
+					unfinished_assign_count = ARG_ROOT_PTR(*it)[4].num_val.i64;
 				}
 				catch (exception e) {
-					DBG_DMP_INVALID_CMD(OP_NAME[OP_ID_ASSIGN], "%s", );
+					DBG_DMP_INVALID_CMD(OP_NAME[OP_ID_ASSIGN], "%s\n", ARG_ROOT_PTR(*it)->to_string());
 					fputs(e.what(), stderr);
 					DEBUG_TRACEBACK;
 				}
 			}
 			if (!unfinished_assign_count)
+			{
 				unfinished_assign_op = false;
+				delete cached_assign;
+				cached_assign = NULL;
+			}
 			++it;
 		}
 	}

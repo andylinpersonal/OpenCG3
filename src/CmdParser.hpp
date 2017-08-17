@@ -36,7 +36,7 @@ namespace OpenCG3 {
 			void swap(Command &);
 		};
 
-#define CMD_ROOT(cmd) ARG_ROOT((cmd)->param)
+#define CMD_ROOT(cmd) ARG_ROOT_PTR((cmd)->param)
 #define DBG_DMP_INVALID_CMD(cmd, extra_format, ...)                           \
 	fprintf(stderr, "Internal Error:\n\tInvalid Command Format in %s\n"       \
 		extra_format, ##__VA_ARGS__);

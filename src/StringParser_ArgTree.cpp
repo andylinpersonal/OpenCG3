@@ -36,8 +36,7 @@ StringParser::ArgTree::Node::~Node()
 string
 StringParser::ArgTree::Node::to_string(void) const
 {
-	ExtensibleString out;
-	out = this->aux_to_string();
+	ExtensibleString &out = this->aux_to_string();
 	return out.to_string();
 }
 
@@ -45,7 +44,43 @@ ExtensibleString
 StringParser::ArgTree::Node::aux_to_string(void) const
 {
 	ExtensibleString out;
-
+	auto concatenate = [&](char const front = 0, char const back = 0)
+	{
+		if (front) out += front;
+		for (Node *node : this->child)
+		{
+			out += node->aux_to_string();
+			out += " "_xs;
+		}
+		if (front) out += back;
+	};
+	switch (this->type)
+	{
+	case ArgTree::Type::Ctnr_Root:
+		concatenate();
+		break;
+	case ArgTree::Type::Ctnr_Set:
+		concatenate('{','}');
+		break;
+	case ArgTree::Type::Ctnr_Tuple:
+		concatenate('(', ')');
+		break;
+	case ArgTree::Type::Ctnr_Univ:
+		concatenate('[', ']');
+		break;
+	case ArgTree::Type::Ctnr_Vector:
+		concatenate('<', '>');
+		break;
+	case ArgTree::Type::Natural:
+	case ArgTree::Type::Real:
+	case ArgTree::Type::Str:
+	case ArgTree::Type::Invalid:
+	case ArgTree::Type::Empty:
+		out += this->str_val;
+		break;
+	default:
+		break;
+	}
 	return out;
 }
 
