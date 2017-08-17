@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}
+\documentclass[9pt]{beamer}
 \renewcommand\textbullet{\ensuremath{\bullet}}
 
 \usepackage{sty/opencg3-spec}
@@ -320,24 +320,24 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
 				\ParamMust{\SetOptl{\StrName{attrib}}{}} &
-				\ParamMust{\LstOptl{\LstFull{\StrName{\Class{t}} \ \StrName{property} \ \ArgName{value}}}{}} & \InstrItem \\
+				\ParamMust{\LstOptl{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \ArgName{value}}{}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
 				\ParamMust{\Tup{\StrName{attrib}}{}} &
-				\ParamMust{\Lst{\LstFull{\StrName{\Class{t}} \ \StrName{property} \ \ArgName{value}}}{}} & \InstrItem
+				\ParamMust{\Lst{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \ArgName{value}}{}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
 		\ParamItem{attrib}    the name of the object instantiated from the class attrib
 		\ParamItem{\Class{t}} the name of one of the top classes
-		\ParamItem{property}  the property of the object of \Param{\Class{t}}
-		\ParamItem{value}     the value of \Param{property} in designated format
+		\ParamItem{prop}      the property of the object of \Param{\Class{t}}
+		\ParamItem{value}     the value of \Param{prop} in designated format
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{create attrib \TupText{magenta dashed-and-translucent-green} \EOLText
+		\CommandEx{create attrib \TupText{magenta dashed-and-translucent-line} \EOLText
 		                         \LstText{\LstText{point fill-hsv \TupText{300 1.0 1.0}} \EOLText
-		                       \ \LstText{line style dashed} \LstText{line fill-rgba \LstText{\TupText{0 255 0} 0.5}}}}
+		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rbga \LstText{\TupText{0 255 0} 0.5}}}}}
 	\end{block}
 
 \end{frame}
