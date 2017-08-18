@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.2.11}
+\newcommand{\Version}[0]{Version 0.2.12}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -35,7 +35,7 @@
 
 \section{Overview}
 
-\subsection{Definition}
+\subsection{Language}
 
 \subsubsection{Token}
 
@@ -84,13 +84,13 @@
 	\begin{block}{Descriptions}
 		\begin{itemize}
 			\item Each command starts from $\CMD$ and ends with a \texttt{;} or an \texttt{EOL}.
-			\item Non-terminal symbol expansions are prior than function expansions except that symbols are used for describing arguments of a command.
+			\item Non-terminal symbol expansions are prior than function expansions.
 		\end{itemize}
 	\end{block}
 
 \end{frame}
 
-\subsubsection{Syntax}
+\subsubsection{Parsing}
 
 \begin{frame}[t] \frametitle{Command Parsing}
 
@@ -113,39 +113,41 @@
 
 \end{frame}
 
-\subsubsection{Design}
+\subsection{Terminology}
 
-\begin{frame}[t] \frametitle{System Hierarchy}
+\begin{frame}[t] \frametitle{Fields, Classes, Objects and References}
 
-	\begin{block}{Classes}
+	\begin{block}{Definitions}
 		\begin{itemize}
-			\item Classes are split into two categories, top and bottom.
-			\item Top classes are class window, class camera, and data classes.
-			\item Bottom classes are class attrib and class group.
-			\item Data classes are split into primitive classes and compound classes.
-			\item Primitive classes are class point, etc.
-			\item Compound classes are class line, class polygon, etc.
+			\item The whole system are divided into four fields and several classes:
+			\begin{enumerate}
+				\item \mbox{\rlap{field e-(nviron.): }\hskip 7.75em} includes class window and class camera.
+				\item \mbox{\rlap{field p-(rimitive):}\hskip 7.75em} includes class point, class circle, etc.
+				\item \mbox{\rlap{field c-(ompound): }\hskip 7.75em} includes class line, class triangle, class polygon, etc.
+				\item \mbox{\rlap{field a-(uxiliary):}\hskip 7.75em} includes class attrib and class group.
+			\end{enumerate}
 		\end{itemize}
 	\end{block}
 
-	\begin{block}{Objects}
+	\begin{block}{Notations}
 		\begin{itemize}
-			\item An object is instantiated from a class aforementioned.
-			\item An object has an unique name throughout the category of its class.
+			\item \mbox{\rlap{\CLS{x}}\hphantom{\LAB{x}}} denotes the name of the class in the field \texttt{x}.
+			\item             \LAB{x}                     denotes the name of the object instantiated from the class in the field \texttt{x}.
 		\end{itemize}
 	\end{block}
 
-	\begin{block}{Relations}
+	\begin{block}{Prototypes}
 		\begin{itemize}
-			\item References are bidirectional and can be created or deleted via commands.
+			\item Argument prototypes are written in a mixture of types and names with underlines.
+			\item Each type with an asterisk indicates that the brackets are used for cross-referencing.
+			\item Cross-reference is a feature for manipulating multitple objects in a single command.
+			\item Each name with a plus/minus/ampersand implies that the given name is used for creating new objects/deleting existed objects/cross-referencing among objects, etc.
 		\end{itemize}
 	\end{block}
 
 \end{frame}
 
 \subsection{Projection}
-
-\subsubsection{Perspective}
 
 \begin{frame} \frametitle{Perspective Projection}
 
@@ -168,12 +170,12 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}R}
 			\InstrName{create window} &
-				\ParamMust{\StrName{\Label{w}}} & \InstrItem
+				\ParamMust{\StrName{\ADD\LAB{e}}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Label{w}} the name of the object instantiated from the class window
+		\ParamItem{\LAB{e}}   the name of the object instantiated from the class window
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -189,13 +191,13 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{delete window} &
-				\ParamMust{\StrName{\Label{w}}} &
+				\ParamMust{\StrName{\SUB\LAB{e}}} &
 			  	\ParamOptl{\StrName{string}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Label{w}} the name of the object instantiated from the class window
+		\ParamItem{\LAB{e}}   the name of the object instantiated from the class window
 		\ParamItem{string}    the text printed right after exiting the session
 	\end{itemize} \end{block}
 
@@ -215,7 +217,7 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}l@{}l@{}R}
 			\InstrName{create camera} &
-				\ParamMust{\StrName{\Label{c}}} &
+				\ParamMust{\StrName{\ADD\LAB{e}}} &
 				\ParamMust{\TupName{\MSR}{3}{centre}} &
 				\ParamMust{\TupName{\Vct{\MSR}{3}}{2}{plane}} &
 				\ParamMust{\VctName{\MSR}{3}{sight}} & \InstrItem
@@ -223,7 +225,7 @@
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Label{c}} the name of the object instantiated from the class camera
+		\ParamItem{\LAB{e}}   the name of the object instantiated from the class camera
 		\ParamItem{centre}    the world coordinate $(c_x, c_y, c_z)$ of the centre of the viewport
 		\ParamItem{plane}     the horizontal and the vertical vertors $(\vec{v_w}, \vec{v_h})$ of the viewport
 		\ParamItem{sight}     the reverse line of sight $\vec{v_c}$ from \Param{centre} to the camera
@@ -242,14 +244,14 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{select camera} &
-				\ParamMust{\StrName{\Label{c}}} &
-				\ParamMust{\StrName{\Label{w}}} & \InstrItem
+				\ParamMust{\StrName{\REF\LABEL{e}{1}}} &
+				\ParamMust{\StrName{\REF\LABEL{e}{2}}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Label{c}} the name of the object instantiated from the class camera
-		\ParamItem{\Label{w}} the name of the object instantiated from the class window
+		\ParamItem{\LABEL{e}{1}} the name of the object instantiated from the class camera
+		\ParamItem{\LABEL{e}{2}} the name of the object instantiated from the class window
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -267,17 +269,17 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create point } &
-			  	\ParamMust{\SetStarOptl{\StrName{\Label{p}}}{}} &
+			  	\ParamMust{\SetStarOptl{\StrName{\ADD\LAB{p}}}{}} &
 			  	\ParamMust{\TupName{\MSR}{3}{coord}} & \InstrItem \\
 			\InstrName{create point } &
-				\ParamMust{\TupStar{\StrName{\Label{p}}}{\,\geqslant n}} &
+				\ParamMust{\TupStar{\StrName{\ADD\LAB{p}}}{\,\geqslant n}} &
 				\ParamMust{\TupStar{\TupName{\MSR}{3}{coord}}{n}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Label{p}} the name of the object instantiated from the class point
-		\ParamItem{coord}     the world coordinate $(p_x, p_y, p_z)$ of the object named \Param{\Label{p}}
+		\ParamItem{\LAB{p}}   the name of the object instantiated from the class point
+		\ParamItem{coord}     the world coordinate $(p_x, p_y, p_z)$ of the object named \Param{\LAB{p}}
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -295,12 +297,12 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}R}
 			\InstrName{delete point } &
-				\ParamMust{\SetOptl{\StrName{\Label{p}}}{}} & \InstrItem
+				\ParamMust{\SetStarOptl{\StrName{\SUB\LAB{p}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\Label{p}} the name of the object instantiated from the class point
+		\ParamItem{\LAB{p}}   the name of the object instantiated from the class point
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -319,18 +321,18 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
-				\ParamMust{\SetStarOptl{\StrName{attrib}}{}} &
-				\ParamMust{\LstStarOptl{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
+				\ParamMust{\SetStarOptl{\StrName{\ADD\LAB{a}}}{}} &
+				\ParamMust{\LstStarOptl{\LstFull{\StrName{\CLS{p,c}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
-				\ParamMust{\TupStar{\StrName{attrib}}{}} &
-				\ParamMust{\LstStar{\LstFull{\StrName{\Class{t}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
+				\ParamMust{\TupStar{\StrName{\ADD\LAB{a}}}{}} &
+				\ParamMust{\LstStar{\LstFull{\StrName{\CLS{p,c}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{attrib}    the name of the object instantiated from the class attrib
-		\ParamItem{\Class{t}} the name of one of the top classes
-		\ParamItem{prop}      the property of the object of \Param{\Class{t}}
+		\ParamItem{\LAB{a}}   the name of the object instantiated from the class attrib
+		\ParamItem{\CLS{p,c}} the name of a class in the field primitive or compound
+		\ParamItem{prop}      the property of the object of \Param{\CLS{p,c}}
 		\ParamItem{value}     the value of \Param{prop} in designated format
 	\end{itemize} \end{block}
 
@@ -349,17 +351,17 @@
 	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{attach attrib} &
-				\ParamMust{\TupStarOptl{\StrName{attrib}}{}} &
-				\ParamMust{\SetStarOptl{\StrName{label}}{}} & \InstrItem \\
+				\ParamMust{\TupStarOptl{\StrName{\REF\LAB{a}}}{}} &
+				\ParamMust{\SetStarOptl{\StrName{\REF\LAB{p,c}}}{}} & \InstrItem \\
 			\InstrName{attach attrib} &
-				\ParamMust{\TupStar{\StrName{attrib}}{}} &
-				\ParamMust{\TupStar{\StrName{label}}{}} & \InstrItem
+				\ParamMust{\TupStar{\StrName{\REF\LAB{a}}}{}} &
+				\ParamMust{\TupStar{\StrName{\REF\LAB{p,c}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
 	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{attrib}    the name of the object instantiated from the class attrib
-		\ParamItem{label}     the name of the object instantiated from one of the top classes
+		\ParamItem{\LAB{a}}   the name of the object instantiated from the class attrib
+		\ParamItem{\LAB{p,c}} the name of the object instantiated from a class in the field p and c
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -389,7 +391,7 @@
 
 	\begin{block}{Parametres} \begin{itemize}
 		\ParamItem{action}    the name of the corresponding action of \Param{class}
-		\ParamItem{class}     the name of one of the classes
+		\ParamItem{class}     the name of a class
 		\ParamItem{repeat}    the amount of the commands emitting operation names
 	\end{itemize} \end{block}
 

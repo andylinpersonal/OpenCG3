@@ -84,5 +84,10 @@
 \newcommand{\ParamItem}[1]{\item \makebox[4em]{\Param{#1}\hfill:}}
 \newcommand{\ValueDefn}[1]{[#1]}
 
-\newcommand{\Class}[1]{class\textsuperscript{#1}}
-\newcommand{\Label}[1]{label\textsuperscript{#1}}
+\newcommand{\CLS}[1]  {class\rlap{\textsuperscript{\texttt{#1}}}\textsubscript{\phantom{\texttt{#1}}}}
+\newcommand{\LAB}[1]  {label\rlap{\textsuperscript{\texttt{#1}}}\textsubscript{\phantom{\texttt{#1}}}}
+\newcommand{\LABEL}[2]{label\rlap{\textsuperscript{\texttt{#1}}}\textsubscript{\texttt{#2}}}
+
+\newcommand{\ADD}[0]{\texttt{+\,}}
+\newcommand{\SUB}[0]{\texttt{-\,}}
+\newcommand{\REF}[0]{\texttt{\&\,}}
