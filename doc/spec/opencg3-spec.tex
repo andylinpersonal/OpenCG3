@@ -218,7 +218,7 @@
 		\hline
 		Group      & Property        & Value Format & Example \\ \hhline{|=|=|=|=|}
 		Digital    & dots-per-cm*    & $\MSR$ & \texttt{28.346472} \\ \hline
-		BG-Color   & background-rgb* & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
+		BG-Color   & background-rgb* & $\Tup{\underline{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
 	\end{tabularx}
 
 \end{frame}
@@ -330,12 +330,12 @@
 		Group      & Property        & Value Format & Example \\ \hhline{|=|=|=|=|}
 		Axis       & axis-enable*    & $\underline{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
 		\multirow{3}{*}{Axis-Color}
-		           & axis-x-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{255 0 0}} \\ \cline{2-4}
-		           & axis-y-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 255 0}} \\ \cline{2-4}
-		           & axis-z-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 255}} \\ \hline
+		           & axis-x-rgb*     & $\Tup{\underline{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{255 0 0}} \\ \cline{2-4}
+		           & axis-y-rgb*     & $\Tup{\underline{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 255 0}} \\ \cline{2-4}
+		           & axis-z-rgb*     & $\Tup{\underline{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 255}} \\ \hline
 		Axis-Width & axis-width*     & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
 		Grid       & grid-enable*    & $\underline{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
-		Grid-Color & grid-rgb*       & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
+		Grid-Color & grid-rgb*       & $\Tup{\underline{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
 		Grid-Width & grid-width*     & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
 		Grid-Intvl & grid-interval*  & $\underline{\MSR\in[0,\infty)}$ & \texttt{10} \\ \hline
 	\end{tabularx}
@@ -407,10 +407,10 @@
 		In-Type  & type*         & $\underline{\MSS\in\{\texttt{dot},\texttt{square}\}}$ & \texttt{dot} \\ \hline
 		In-Size  & radius*       & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{3 px}} \\ \hline
 		\multirow{4}{*}{In-Color}
-		         & fill-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 0}} \\ \cline{2-4}
+		         & fill-rgb*     & $\Tup{\underline{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 0}} \\ \cline{2-4}
 		         & fill-rgba     & $\LstFull{\Tup{\underline{\MSN\in[0,255]}}{3} \ \ \underline{\MSR\in[0,1]}}$ & \texttt{\LstText{\TupText{31 0 63} 0.5}} \\ \cline{2-4}
-		         & fill-hsv      & $\LstFull{\underline{\MSR\in[0,360)} \ \ \Tup{\underline{\MSR\in[0,1]}}{2}}$ & \texttt{\LstText{240 \TupText{0.8 1.0}}} \\ \cline{2-4}
-		         & fill-hsl      & $\LstFull{\underline{\MSR\in[0,360)} \ \ \Tup{\underline{\MSR\in[0,1]}}{2}}$ & \texttt{\LstText{240 \TupText{1.0 0.6}}} \\ \hline
+		         & fill-hsv      & $\LstFull{\underline{\MSR\in[0,360]} \ \ \Tup{\underline{\MSR\in[0,1]}}{2}}$ & \texttt{\LstText{240 \TupText{0.8 1.0}}} \\ \cline{2-4}
+		         & fill-hsl      & $\LstFull{\underline{\MSR\in[0,360]} \ \ \Tup{\underline{\MSR\in[0,1]}}{2}}$ & \texttt{\LstText{240 \TupText{1.0 0.6}}} \\ \hline
 		Ex-Type  & border-type*  & $\underline{\MSS\in\{\texttt{none},\texttt{mid},\texttt{in},\texttt{out}\}}$ & \texttt{none} \\ \hline
 		Ex-Width & border-width* & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
 		\multirow{2}{*}{Ex-Color}
