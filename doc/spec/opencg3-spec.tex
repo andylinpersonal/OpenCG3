@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.3.0}
+\newcommand{\Version}[0]{Version 0.3.1}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -208,6 +208,21 @@
 
 \end{frame}
 
+\subsubsection{Property}
+
+\begin{frame}[t] \frametitle{Properties of a Window}
+
+	\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+	\renewcommand\arraystretch{1.6}
+	\begin{tabularx}{\textwidth}{|l|l|l|R|}
+		\hline
+		Group      & Property        & Value Format & Example \\ \hhline{|=|=|=|=|}
+		Digital    & dots-per-cm*    & $\MSR$ & \texttt{28.346472} \\ \hline
+		BG-Color   & background-rgb* & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
+	\end{tabularx}
+
+\end{frame}
+
 \subsection{Camera}
 
 \subsubsection{Create}
@@ -313,7 +328,6 @@
 	\begin{tabularx}{\textwidth}{|l|l|l|R|}
 		\hline
 		Group      & Property        & Value Format & Example \\ \hhline{|=|=|=|=|}
-		BG-Color   & background-rgb* & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
 		Axis       & axis-enable*    & $\underline{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
 		\multirow{3}{*}{Axis-Color}
 		           & axis-x-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{255 0 0}} \\ \cline{2-4}
