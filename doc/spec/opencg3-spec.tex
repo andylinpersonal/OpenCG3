@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.2.12}
+\newcommand{\Version}[0]{Version 0.2.13}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -307,8 +307,8 @@
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{delete point \ origin}
-		\CommandEx{delete point \SetText{origin \QuoteText{random-point}}}
+		\CommandEx{delete point \QuoteText{origin}}
+		\CommandEx{delete point \SetText{Z D1 D2}}
 	\end{block}
 
 \end{frame}
@@ -338,6 +338,28 @@
 	\begin{block}{Examples}
 		\CommandEx{create line \ seg-1 \quad \quad \quad \ \SetText{X-1 Y-1}}
 		\CommandEx{create line \SetText{seg-2 seg-3} \SetText{X-2 Y-2}}
+	\end{block}
+
+\end{frame}
+
+\subsubsection{Delete}
+
+\begin{frame}[t] \frametitle{Delete Line Segments}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}R}
+			\InstrName{delete line \ } &
+			  	\ParamMust{\SetStarOptl{\StrName{\SUB\LAB{c}}}{}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{c}}   the name of the object from the class line
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{delete line \ seg-1}
+		\CommandEx{delete line \SetText{seg-2 seg-3}}
 	\end{block}
 
 \end{frame}
