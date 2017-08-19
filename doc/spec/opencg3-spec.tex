@@ -131,8 +131,8 @@
 
 	\begin{block}{Notations}
 		\begin{itemize}
-			\item \mbox{\rlap{\CLS{x}}\hphantom{\LAB{x}}} denotes the name of the class in the field \texttt{x}.
-			\item             \LAB{x}                     denotes the unique name of the object from the class in the field \texttt{x}.
+			\item \mbox{\rlap{\CLS{x}}\hphantom{\LAB{x}}} denotes the name of a class in the field \texttt{x}.
+			\item             \LAB{x}                     denotes the unique name of the object from a class in the field \texttt{x}.
 		\end{itemize}
 	\end{block}
 
@@ -174,8 +174,8 @@
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{e}}   the name of the object instantiated from the class window
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{e}}   the name of the object from the class window
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -196,9 +196,9 @@
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{e}}   the name of the object instantiated from the class window
-		\ParamItem{string}    the text printed right after exiting the session
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{e}}   the name of the object from the class window
+		\ParamItem{string}    the text printed right after exiting the current session
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -218,17 +218,17 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}l@{}l@{}R}
 			\InstrName{create camera} &
 				\ParamMust{\StrName{\ADD\LAB{e}}} &
-				\ParamMust{\TupName{\MSR}{3}{centre}} &
+				\ParamMust{\TupName{\MSR}{3}{center}} &
 				\ParamMust{\TupName{\Vct{\MSR}{3}}{2}{plane}} &
 				\ParamMust{\VctName{\MSR}{3}{sight}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{e}}   the name of the object instantiated from the class camera
-		\ParamItem{centre}    the world coordinate $(c_x, c_y, c_z)$ of the centre of the viewport
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{e}}   the name of the object from the class camera
+		\ParamItem{center}    the world coordinate $(c_x, c_y, c_z)$ of the center of the viewport
 		\ParamItem{plane}     the horizontal and the vertical vertors $(\vec{v_w}, \vec{v_h})$ of the viewport
-		\ParamItem{sight}     the reverse line of sight $\vec{v_c}$ from \Param{centre} to the camera
+		\ParamItem{sight}     the reverse line of sight $\vec{v_c}$ from \Param{center} to the camera
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -249,9 +249,9 @@
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LABEL{e}{1}} the name of the object instantiated from the class camera
-		\ParamItem{\LABEL{e}{2}} the name of the object instantiated from the class window
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LABEL{e}{1}} the name of the object from the class camera
+		\ParamItem{\LABEL{e}{2}} the name of the object from the class window
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -277,8 +277,8 @@
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{p}}   the name of the object instantiated from the class point
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{p}}   the name of the object from the class point
 		\ParamItem{coord}     the world coordinate $(p_x, p_y, p_z)$ of the object named \Param{\LAB{p}}
 	\end{itemize} \end{block}
 
@@ -301,8 +301,8 @@
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{p}}   the name of the object instantiated from the class point
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{p}}   the name of the object from the class point
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -322,18 +322,18 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{create attrib} &
 				\ParamMust{\SetStarOptl{\StrName{\ADD\LAB{a}}}{}} &
-				\ParamMust{\LstStarOptl{\LstFull{\StrName{\CLS{p,c}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
+				\ParamMust{\LstStarOptl{\LstFull{\StrName{\CLS{pc}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem \\
 			\InstrName{create attrib} &
 				\ParamMust{\TupStar{\StrName{\ADD\LAB{a}}}{}} &
-				\ParamMust{\LstStar{\LstFull{\StrName{\CLS{p,c}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
+				\ParamMust{\LstStar{\LstFull{\StrName{\CLS{pc}} \ \LstOptl{\StrName{prop} \ \StrName{value}}{}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{a}}   the name of the object instantiated from the class attrib
-		\ParamItem{\CLS{p,c}} the name of a class in the field primitive or compound
-		\ParamItem{prop}      the property of the object of \Param{\CLS{p,c}}
-		\ParamItem{value}     the value of \Param{prop} in designated format
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{a}}   the name of the object from the class attrib
+		\ParamItem{\CLS{pc}}  the name of a class in the field primitive or compound
+		\ParamItem{prop}      the property of the object from \Param{\CLS{pc}}
+		\ParamItem{value}     the value of \Param{prop} in the designated format
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -352,16 +352,16 @@
 		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
 			\InstrName{attach attrib} &
 				\ParamMust{\TupStarOptl{\StrName{\REF\LAB{a}}}{}} &
-				\ParamMust{\SetStarOptl{\StrName{\REF\LAB{p,c}}}{}} & \InstrItem \\
+				\ParamMust{\SetStarOptl{\StrName{\REF\LAB{pc}}}{}} & \InstrItem \\
 			\InstrName{attach attrib} &
 				\ParamMust{\TupStar{\StrName{\REF\LAB{a}}}{}} &
-				\ParamMust{\TupStar{\StrName{\REF\LAB{p,c}}}{}} & \InstrItem
+				\ParamMust{\TupStar{\StrName{\REF\LAB{pc}}}{}} & \InstrItem
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
-		\ParamItem{\LAB{a}}   the name of the object instantiated from the class attrib
-		\ParamItem{\LAB{p,c}} the name of the object instantiated from a class in the field p or c
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{a}}   the name of the object from the class attrib
+		\ParamItem{\LAB{pc}}  the name of the object from a class in the field primitive or compound
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
@@ -389,7 +389,7 @@
 		\end{tabularx}
 	\end{block}
 
-	\begin{block}{Parametres} \begin{itemize}
+	\begin{block}{Parameters} \begin{itemize}
 		\ParamItem{action}    the name of the corresponding action of \Param{class}
 		\ParamItem{class}     the name of a class
 		\ParamItem{repeat}    the amount of the commands emitting operation names
