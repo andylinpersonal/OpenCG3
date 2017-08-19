@@ -13,12 +13,23 @@ MainWindow::IconFileName = "ocg3.png";
 // instance of this Gtk::Application ...
 Glib::RefPtr<Gtk::Application> App;
 
+const unordered_map<const char *, unordered_map<const char *, MainWindow::op_handler_t>>
+MainWindow::Operation = 
+{
+	{ "create", {
+		{ "window", MainWindow::op_create_window },
+		{ "point",  MainWindow::op_create_point }
+	} },
+	{ "delete", {
+		{ "window", MainWindow::op_delete_window },
+		{ "point", MainWindow::op_delete_point }
+	} }
+};
+
 MainWindow::MainWindow(string const& icon, Size2D const& sz_win, Glib::ustring const& title)
     :Window()
 {
-
     set_border_width(5);
-
     set_default_size(sz_win.getX(), sz_win.getY());
     set_title(title);
     try{
@@ -47,6 +58,7 @@ MainWindow::on_idle()
 {
 	// resolve the command queue
 	CmdParser::Command *tmp = NULL;
+
 	AUTOLOCK(mutex, Input::mutex_CommandQueue)
 		if (!Input::CommandQueue.empty())
 		{
@@ -67,13 +79,26 @@ MainWindow::on_idle()
 */
 
 void
+MainWindow::op_create_window(CmdParser::Command * const arg)
+{
+	this->title = (*arg)[2]->str_val;
+	this->set_title(this->title);
+#ifdef DEBUG
+	cout << "Message:\n " << << arg->to_string() << endl;
+#endif // DEBUG
+}
+
+void
 MainWindow::op_delete_window(CmdParser::Command * const args)
 {
 	fputs(" info: delete window\n  message: ", stderr);
-	cout << CMD_ROOT(args)[2].str_val << endl;
+	Glib::ustring msg = "Good bye!";
+	if ((*args)[2])
+		msg = (*args)[2]->str_val;
+	cout << msg << endl;
 	Gtk::MessageDialog msgbox(
 		*this,
-		args->param->root[2].str_val,
+		msg,
 		false,
 		Gtk::MESSAGE_INFO,
 		Gtk::BUTTONS_OK_CANCEL,

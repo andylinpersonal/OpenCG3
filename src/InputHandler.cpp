@@ -10,6 +10,7 @@ mutex
 Input::mutex_CommandQueue;
 
 // deque for transferring parsed command to main thread.
+// push front and pop back
 deque<OpenCG3::CmdParser::Command *>
 Input::CommandQueue;
 
@@ -17,7 +18,7 @@ volatile bool
 Input::is_alive = true;
 
 void
-Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
+Input::stdin_handle_worker(deque<CmdParser::Command *> &queueLst)
 {
 
 	ExtensibleString lineBfr;
@@ -42,7 +43,7 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 		if (ch == '\n')
 		{
 			++physical_line;
-			// if input is "\\\n" , disable this newline (concatenate 
+			// if input is "\\\n" , disable this newline (concatenate
 			// previous input with following input)
 			if (is_invalid_line)
 			{
@@ -80,11 +81,11 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 						out->at(i)->get_physical_line_no() << " is ignored." << endl;
 #endif // _DEBUG
 					delete out->at(i);
-					out->at(i) == NULL;
+					out->at(i) = NULL;
 				}
 
-				safe_queue_maker(out, Queue, mutex_CommandQueue);
-				
+				safe_queue_maker(out, queueLst, mutex_CommandQueue);
+
 			}
 
 			delete out;
@@ -146,10 +147,11 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 			}
 		}
 	}
+	// clear before quit the application
 	AUTOLOCK(mutex, mutex_CommandQueue)
 		for (CmdParser::Command *cmd : CommandQueue)
 		{
-			if(cmd)
+			if(cmd) delete cmd;
 		}
 	AUTOUNLOCK;
     return;

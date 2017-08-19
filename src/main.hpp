@@ -1,7 +1,11 @@
 #ifndef OPENCG3_H
 #define OPENCG3_H
 
-#include <getopt.h>
+ #ifdef __unix
+  #include <unistd.h>
+ #else
+  #include <getopt.h>
+ #endif
 #include <iostream>
 #include <string>
 

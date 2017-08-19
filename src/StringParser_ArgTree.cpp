@@ -36,7 +36,7 @@ StringParser::ArgTree::Node::~Node()
 string
 StringParser::ArgTree::Node::to_string(void) const
 {
-	ExtensibleString &out = this->aux_to_string();
+	ExtensibleString out = this->aux_to_string();
 	return out.to_string();
 }
 

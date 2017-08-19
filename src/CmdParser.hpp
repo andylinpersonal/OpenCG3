@@ -10,7 +10,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 #include "IObject.hpp"
@@ -34,6 +34,28 @@ namespace OpenCG3 {
 			~Command();
 			// utility
 			void swap(Command &);
+			inline const string &to_string()
+			{
+				if (this->param)
+					return this->param->to_string();
+				else
+					return "";
+			}
+			// get root-level child of param
+			inline StringParser::ArgTree::Node *
+				operator[](size_t idx) 
+			{ 
+				if (this->param->root->child.empty() ||
+					(idx >= this->param->root->child.size()))
+					return NULL;
+				return (*(this->param))[idx]; 
+			}
+			// get root node
+			inline StringParser::ArgTree::Node *
+				get_root(void)
+			{
+				return this->param->root;
+			}
 		};
 
 #define CMD_ROOT(cmd) ARG_ROOT_PTR((cmd)->param)
@@ -52,11 +74,11 @@ namespace OpenCG3 {
 #define OBJ_ID_INSTR  3
 
 		// Operation and object name
-		extern const string OP_NAME[5];
-		extern const string OBJ_NAME[3];
+		extern const char* OP_NAME[5];
+		extern const char* OBJ_NAME[6];
 		// Operation and object ID
-		extern const map<string, int> OP_ID;
-		extern const map<string, int> OBJ_ID;
+		extern const unordered_map<string, int> OP_ID;
+		extern const unordered_map<string, int> OBJ_ID;
 		extern const string TYPE_STR[4][4];
 
 		/*
@@ -64,7 +86,7 @@ namespace OpenCG3 {
 		*  append it to command queue for further using by main thread.
 		*/
 		void safe_queue_maker(
-			deque<StringParser::ArgTree *> *raw_arg,
+			deque<StringParser::ArgTree *> *const raw_arg,
 			deque<CmdParser::Command *> &queue, mutex &Lock);
 	}
 

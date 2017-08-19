@@ -23,6 +23,7 @@ namespace OpenCG3 {
 		static const Size2D DefaultWindowSize;
 		static const Glib::ustring DefaultWindowName;
 		static string IconFileName;
+		string title;
 		/// ctor
 		MainWindow(
 			string const& icon = IconFileName,
@@ -30,7 +31,6 @@ namespace OpenCG3 {
 			Glib::ustring const& title = DefaultWindowName
 			);
 		/// set get
-
 	protected:
 		/// Canvas
 		Canvas canvas;
@@ -55,28 +55,25 @@ namespace OpenCG3 {
 		/*
 		*  Working functions.
 		*/
-		const static void(*OP_FUNC[][])(MainWindow* _this, CmdParser::Command *const arg);
+		typedef void (MainWindow::*op_handler_t)(CmdParser::Command *const arg);
+		const static unordered_map<const char *, unordered_map<const char *, op_handler_t>> Operation;
 		/* set window attributes
-		*  create window title(Str) coord_win_cent(Vertex3d) \
-		*  direct(Tuple(Vx(Vector), Vy(Vector), Vz(Vector)))
+		*  create window $label_name:S
 		*/
 		void op_create_window(CmdParser::Command *const arg);
 		/* close current window
-		*  delete window message(Str)
+		*  delete window $label_name:S Opt_$message:S
 		*/
 		void op_delete_window(CmdParser::Command *const arg);
 		/* create point
-		*  create point point_lbl(Str) coord(Vertex3d)
+		*  create point $point_lbl:S $coord(Vertex3d)
 		*/
 		void op_create_point(CmdParser::Command *const arg);
 		/* delete point
-		*  delete point point_lbl(Str)
+		*  delete point $point_lbl:S
 		*/
 		void op_delete_point(CmdParser::Command *const arg);
-		/* set attribute for object
-		*  attach attrib palette(Str) point_lbl(Str)
-		*/
-		void op_attach_attrib(CmdParser::Command *const arg);
+		void op_create_camera(CmdParser::Command *const arg);
 
 	};
 }

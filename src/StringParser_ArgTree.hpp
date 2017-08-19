@@ -42,8 +42,10 @@ namespace OpenCG3 {
 #define ID_NOT_FOUND ULLONG_MAX
 #define STR_NULL  ""
 #define XSTR_NULL ""_xs
-
+				// get root node *
 #define ARG_ROOT_PTR(arg) (arg)->root
+				// get node * by subscript in root level
+#define ARG_ROOT_ELEMT(arg, idx_root_lvl) ARG_ROOT_PTR(arg)[(idx_root_lvl)]
 				 
 				// members
 			public:
@@ -86,9 +88,14 @@ namespace OpenCG3 {
 				}
 
 				inline Node *at(size_t pos) { return (*this)[pos]; }
-				Node *       get_deep_copy(void) const;
-				// todo
-				string       to_string(void) const;
+				// get set
+				Node               *get_deep_copy(void) const;
+				string              to_string(void) const;
+				inline uint64_t    &uint() { return this->num_val.i64; }
+				inline uint64_t     get_uint() { return this->num_val.i64; }
+				inline long double &ldouble() { return this->num_val.fp64; }
+				inline long double  get_ldouble() { return this->num_val.fp64; }
+
 			private:
 				ExtensibleString aux_to_string(void) const;
 			};
@@ -153,7 +160,18 @@ namespace OpenCG3 {
 				return out;
 			}
 			bool                 clear(void);
-
+			// get child in root node by subscript
+			inline Node *        operator[](size_t idx)
+			{
+				return this->root->child[idx];
+			}
+			inline string const& to_string(void)
+			{ 
+				if (this->root)
+					return this->root->to_string();
+				else
+					return "";
+			}
 			// get set
 			inline string const& get_pattern(void) { return this->pattern; }
 			inline void          set_pattern(string const &pat) { this->pattern = string(pat); }
