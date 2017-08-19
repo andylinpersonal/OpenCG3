@@ -285,7 +285,8 @@
 	\begin{block}{Examples}
 		\CommandEx{create point \QuoteText{origin} \ \ \TupText{0 0 0}}
 		\CommandEx{create point \SetText{X-1 X-2} \ \TupText{1 0 0}}
-		\CommandEx{create point \TupText{Y-1 Z-1} \TupText{\TupText{0 1 0}\TupText{0 0 1}}}
+		\CommandEx{create point \TupText{Y-1 Y-2} \TupText{\TupText{0 1 0}}}
+		\CommandEx{create point \TupText{Z D1 D2} \TupText{\TupText{0 1 0} \TupText{1 1 1}}}
 	\end{block}
 
 \end{frame}
@@ -308,6 +309,35 @@
 	\begin{block}{Examples}
 		\CommandEx{delete point \ origin}
 		\CommandEx{delete point \SetText{origin \QuoteText{random-point}}}
+	\end{block}
+
+\end{frame}
+
+\subsection{Line}
+
+\subsubsection{Create}
+
+\begin{frame}[t] \frametitle{Create Line Segments}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
+			\InstrName{create line \ } &
+			  	\ParamMust{\SetStarOptl{\StrName{\ADD\LAB{c}}}{}} &
+			  	\ParamMust{\Set{\StrName{\REF\LAB{p}}}{2}} & \InstrItem \\
+			\InstrName{create line \ } &
+				\ParamMust{\TupStar{\StrName{\ADD\LAB{c}}}{\,\geqslant n}} &
+				\ParamMust{\TupStar{\Set{\StrName{\REF\LAB{p}}}{2}}{n}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{c}}   the name of the object from the class line
+		\ParamItem{\LAB{p}}   the name of the object from the class point
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{create line \ seg-1 \quad \quad \quad \ \SetText{X-1 Y-1}}
+		\CommandEx{create line \SetText{seg-2 seg-3} \SetText{X-2 Y-2}}
 	\end{block}
 
 \end{frame}
