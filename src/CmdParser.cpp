@@ -30,7 +30,7 @@ CmdParser::Command::Command(CmdParser::Command const &in)
 	object(in.object),
 	param(in.param) {}
 
-OpenCG3::CmdParser::Command::~Command()
+CmdParser::Command::~Command()
 {
 	if (this->param) delete this->param;
 }
@@ -74,8 +74,7 @@ CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *raw_arg, deque<CmdPar
 			if (!unfinished_assign_count)
 			{
 				unfinished_assign_op = false;
-				delete cached_assign;
-				cached_assign = NULL;
+				cached_assign.clear();
 			}
 			++it;
 		}

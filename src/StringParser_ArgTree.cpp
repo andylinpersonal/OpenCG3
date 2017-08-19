@@ -107,6 +107,16 @@ StringParser::ArgTree::~ArgTree()
 	delete this->root;
 }
 
+bool
+StringParser::ArgTree::clear(void)
+{
+	this->logical_line_no = 0;
+	this->physical_line_no = 0;
+	this->pattern = STR_NULL;
+	this->root->clear();
+	return false;
+}
+
 StringParser::ArgTree::Iterator::Iterator()
 	:current(NULL), traverse_stack(stack<Node *>()) {}
 

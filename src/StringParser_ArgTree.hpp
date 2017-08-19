@@ -65,7 +65,11 @@ namespace OpenCG3 {
 				{
 					for (Node *item : this->child)
 						if (item != NULL) delete item;
+
 					this->child.clear();
+					this->num_val.i64 = 0;
+					this->str_val.clear();
+					this->type = Type::Empty;
 				}
 
 				inline bool  isLeaf(void) { return this->child.empty(); }
@@ -148,6 +152,7 @@ namespace OpenCG3 {
 
 				return out;
 			}
+			bool                 clear(void);
 
 			// get set
 			inline string const& get_pattern(void) { return this->pattern; }
