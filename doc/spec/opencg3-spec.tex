@@ -3,12 +3,12 @@
 
 \usepackage{sty/opencg3-spec}
 \usepackage{sty/opencg3-spec-beamer}
-\usepackage{xspace,bookmark,lmodern,mathtools,color,multido,ulem,upquote,tabularx}
+\usepackage{xspace,bookmark,lmodern,mathtools,color,multido,ulem,upquote,tabularx,hhline,multirow}
 \usepackage[T1]{fontenc}
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.2.13}
+\newcommand{\Version}[0]{Version 0.3.0}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -132,7 +132,7 @@
 	\begin{block}{Notations}
 		\begin{itemize}
 			\item \mbox{\rlap{\CLS{x}}\hphantom{\LAB{x}}} denotes the name of a class in the field \texttt{x}.
-			\item             \LAB{x}                     denotes the unique name of the object from a class in the field \texttt{x}.
+			\item             \LAB{x}                     denotes the globally unique name of the object from a class in the field \texttt{x}.
 		\end{itemize}
 	\end{block}
 
@@ -260,6 +260,74 @@
 
 \end{frame}
 
+\subsubsection{Remove}
+
+\begin{frame}[t] \frametitle{Remove a Camera}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
+			\InstrName{remove camera} &
+				\ParamMust{\StrName{\REF\LABEL{e}{1}}} &
+				\ParamMust{\StrName{\REF\LABEL{e}{2}}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LABEL{e}{1}} the name of the object from the class camera
+		\ParamItem{\LABEL{e}{2}} the name of the object from the class window
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{remove camera z-top main}
+	\end{block}
+
+\end{frame}
+
+\subsubsection{Delete}
+
+\begin{frame}[t] \frametitle{Delete a Camera}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}R}
+			\InstrName{delete camera} &
+				\ParamMust{\StrName{\SUB\LAB{e}}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{e}}   the name of the object from the class camera
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{delete camera z-top}
+	\end{block}
+
+\end{frame}
+
+\subsubsection{Property}
+
+\begin{frame}[t] \frametitle{Properties of a Camera}
+
+	\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+	\renewcommand\arraystretch{1.6}
+	\begin{tabularx}{\textwidth}{|l|l|l|R|}
+		\hline
+		Group      & Property        & Value Format & Example \\ \hhline{|=|=|=|=|}
+		BG-Color   & background-rgb* & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
+		Axis       & axis-enable*    & $\underline{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
+		\multirow{3}{*}{Axis-Color}
+		           & axis-x-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{255 0 0}} \\ \cline{2-4}
+		           & axis-y-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 255 0}} \\ \cline{2-4}
+		           & axis-z-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 255}} \\ \hline
+		Axis-Width & axis-width*     & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
+		Grid       & grid-enable*    & $\underline{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
+		Grid-Color & grid-rgb*       & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
+		Grid-Width & grid-width*     & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
+		Grid-Intvl & grid-interval*  & $\underline{\MSR\in[0,\infty)}$ & \texttt{10} \\ \hline
+	\end{tabularx}
+
+\end{frame}
+
 \subsection{Point}
 
 \subsubsection{Create}
@@ -310,6 +378,31 @@
 		\CommandEx{delete point \QuoteText{origin}}
 		\CommandEx{delete point \SetText{Z D1 D2}}
 	\end{block}
+
+\end{frame}
+
+\subsubsection{Property}
+
+\begin{frame}[t] \frametitle{Properties of a Point}
+
+	\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+	\renewcommand\arraystretch{1.6}
+	\begin{tabularx}{\textwidth}{|l|l|l|R|}
+		\hline
+		Group    & Property      & Value Format & Example \\ \hhline{|=|=|=|=|}
+		In-Type  & type*         & $\underline{\MSS\in\{\texttt{dot},\texttt{square}\}}$ & \texttt{dot} \\ \hline
+		In-Size  & radius*       & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{3 px}} \\ \hline
+		\multirow{4}{*}{In-Color}
+		         & fill-rgb*     & $\Tup{\underline{\MSN\leqslant 255}}{3}$ & \texttt{\TupText{0 0 0}} \\ \cline{2-4}
+		         & fill-rgba     & $\LstFull{\Tup{\underline{\MSN\in[0,255]}}{3} \ \ \underline{\MSR\in[0,1]}}$ & \texttt{\LstText{\TupText{31 0 63} 0.5}} \\ \cline{2-4}
+		         & fill-hsv      & $\LstFull{\underline{\MSR\in[0,360)} \ \ \Tup{\underline{\MSR\in[0,1]}}{2}}$ & \texttt{\LstText{240 \TupText{0.8 1.0}}} \\ \cline{2-4}
+		         & fill-hsl      & $\LstFull{\underline{\MSR\in[0,360)} \ \ \Tup{\underline{\MSR\in[0,1]}}{2}}$ & \texttt{\LstText{240 \TupText{1.0 0.6}}} \\ \hline
+		Ex-Type  & border-type*  & $\underline{\MSS\in\{\texttt{none},\texttt{mid},\texttt{in},\texttt{out}\}}$ & \texttt{none} \\ \hline
+		Ex-Width & border-width* & $\LstFull{\underline{\MSR\in[0,\infty)} \ \ \underline{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
+		\multirow{2}{*}{Ex-Color}
+		         & border-rgb*   & same as fill-rgb  & \texttt{\TupText{127 127 127}} \\ \cline{2-4}
+		         & border-(...)  & same as fill-rgba/hsv/hsl & (skipped) \\ \hline
+	\end{tabularx}
 
 \end{frame}
 
@@ -390,7 +483,7 @@
 
 	\begin{block}{Examples}
 		\CommandEx{create attrib \TupText{magenta dashed-and-translucent-line} \EOLText
-		                         \LstText{\LstText{point fill-hsv \QuoteText{\TupText{300 1.0 1.0}}} \EOLText
+		                         \LstText{\LstText{point fill-hsv \QuoteText{\LstText{300 \TupText{1.0 1.0}}}} \EOLText
 		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rbga \QuoteText{\LstText{\TupText{0 255 0} 0.5}}}}}}
 	\end{block}
 
@@ -422,6 +515,58 @@
 		\CommandEx{attach attrib \ blue \quad \quad \quad \SetText{point-2 rect-0}}
 		\CommandEx{attach attrib \TupText{5px black} \SetText{point-3 circ-0}}
 		\CommandEx{attach attrib \TupText{red thick} \TupText{point-4 line-0 triangle-0}}
+	\end{block}
+
+\end{frame}
+
+\subsubsection{Detach}
+
+\begin{frame}[t] \frametitle{Detach Attributes}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}l@{}R}
+			\InstrName{detach attrib} &
+				\ParamMust{\SetStarOptl{\StrName{\REF\LAB{a}}}{}} &
+				\ParamMust{\SetStarOptl{\StrName{\REF\LAB{pc}}}{}} & \InstrItem \\
+			\InstrName{detach attrib} &
+				\ParamMust{\TupStar{\StrName{\REF\LAB{a}}}{}} &
+				\ParamMust{\TupStar{\StrName{\REF\LAB{pc}}}{}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{a}}   the name of the object from the class attrib
+		\ParamItem{\LAB{pc}}  the name of the object from a class in the field primitive or compound
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{detach attrib \ red \quad \quad \quad \ \ point-0}
+		\CommandEx{detach attrib \SetText{red large} \ point-1}
+		\CommandEx{detach attrib \ blue \quad \quad \quad \SetText{point-2 rect-0}}
+		\CommandEx{detach attrib \SetText{5px black} \SetText{point-3 circ-0}}
+		\CommandEx{detach attrib \TupText{red thick} \TupText{point-4 line-0 triangle-0}}
+	\end{block}
+
+\end{frame}
+
+\subsubsection{Delete}
+
+\begin{frame}[t] \frametitle{Delete Attributes}
+
+	\begin{block}{Command} \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{@{}l@{}l@{}R}
+			\InstrName{delete attrib} &
+				\ParamMust{\SetStarOptl{\StrName{\SUB\LAB{a}}}{}} & \InstrItem
+		\end{tabularx}
+	\end{block}
+
+	\begin{block}{Parameters} \begin{itemize}
+		\ParamItem{\LAB{a}}   the name of the object from the class attrib
+	\end{itemize} \end{block}
+
+	\begin{block}{Examples}
+		\CommandEx{delete attrib \ red}
+		\CommandEx{delete attrib \SetText{5px large}}
 	\end{block}
 
 \end{frame}
