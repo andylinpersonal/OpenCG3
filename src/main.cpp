@@ -33,5 +33,8 @@ int main(int argc, char** argv)
 	OpenCG3::App = Gtk::Application::create(argc, argv);
 
     OpenCG3::MainWindow root_win(icon_filename);
-    return OpenCG3::App->run(root_win);
+
+	int ret = OpenCG3::App->run(root_win);
+	Thread_stdin_handler.join();
+    return ret;
 }

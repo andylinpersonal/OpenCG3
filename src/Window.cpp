@@ -13,16 +13,34 @@ MainWindow::IconFileName = "ocg3.png";
 // instance of this Gtk::Application ...
 Glib::RefPtr<Gtk::Application> App;
 
-const unordered_map<const char *, unordered_map<const char *, MainWindow::op_handler_t>>
+const unordered_map<string, unordered_map<string, MainWindow::op_handler_t>>
 MainWindow::Operation = 
 {
 	{ "create", {
-		{ "window", MainWindow::op_create_window },
-		{ "point",  MainWindow::op_create_point }
+		{ "window", &(MainWindow::op_create_window) },
+		{ "camera",  &(MainWindow::op_create_camera) },
+		{ "point",  &(MainWindow::op_create_point) },
+		{ "line",  &(MainWindow::op_create_line) },
+		{ "attrib",  &(MainWindow::op_create_attrib) }
 	} },
 	{ "delete", {
-		{ "window", MainWindow::op_delete_window },
-		{ "point", MainWindow::op_delete_point }
+		{ "window", &(MainWindow::op_delete_window) },
+		{ "point", &(MainWindow::op_delete_point) },
+		{ "camera",  &(MainWindow::op_delete_camera) },
+		{ "line",  &(MainWindow::op_delete_line) },
+		{ "attrib",  &(MainWindow::op_delete_attrib) }
+	} },
+	{ "remove", {
+		{ "camera", &(MainWindow::op_remove_camera) }
+	} },
+	{ "select",{
+		{ "camera", &(MainWindow::op_select_camera) }
+	} },
+	{ "attach",{
+		{ "attrib", &(MainWindow::op_attach_attrib) }
+	} },
+	{ "detach",{
+		{ "camera", &(MainWindow::op_detach_attrib) }
 	} }
 };
 
@@ -68,7 +86,23 @@ MainWindow::on_idle()
 	AUTOUNLOCK;
 	if (tmp)
 	{
-
+		try
+		{
+			// Search in Operation and Call Corresponding Function
+			(this->*Operation.at((*tmp)[0]->str_val).at((*tmp)[1]->str_val))(tmp);
+		}
+		catch (out_of_range e)
+		{
+			fprintf(stderr, "  at file %s, line %s,\n    in function %s\n"
+				"    command: %s\n"
+				"    message: %s\n",
+				__FILE__, __LINE__, __FUNCTION__, tmp->param->to_string().c_str(), 
+				"Error: Command Not Found In MainMenu::Operation"
+			);
+			fprintf(stderr, "  Message from exception:\n   ", e.what());
+		}
+		// clear item
+		delete tmp;
 	}
     
     // Always return true to keep handler connected.

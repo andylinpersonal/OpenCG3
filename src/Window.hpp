@@ -56,7 +56,10 @@ namespace OpenCG3 {
 		*  Working functions.
 		*/
 		typedef void (MainWindow::*op_handler_t)(CmdParser::Command *const arg);
-		const static unordered_map<const char *, unordered_map<const char *, op_handler_t>> Operation;
+		/* 
+		*  Call method by corresponding key.
+		*/
+		const static unordered_map<string, unordered_map<string, op_handler_t>> Operation;
 		/* set window attributes
 		*  create window $label_name:S
 		*/
@@ -65,6 +68,10 @@ namespace OpenCG3 {
 		*  delete window $label_name:S Opt_$message:S
 		*/
 		void op_delete_window(CmdParser::Command *const arg);
+		void op_create_camera(CmdParser::Command *const arg);
+		void op_delete_camera(CmdParser::Command *const arg);
+		void op_remove_camera(CmdParser::Command *const arg);
+		void op_select_camera(CmdParser::Command *const arg);
 		/* create point
 		*  create point $point_lbl:S $coord(Vertex3d)
 		*/
@@ -73,7 +80,14 @@ namespace OpenCG3 {
 		*  delete point $point_lbl:S
 		*/
 		void op_delete_point(CmdParser::Command *const arg);
-		void op_create_camera(CmdParser::Command *const arg);
+
+		void op_create_line(CmdParser::Command *const arg);
+		void op_delete_line(CmdParser::Command *const arg);
+
+		void op_create_attrib(CmdParser::Command *const arg);
+		void op_delete_attrib(CmdParser::Command *const arg);
+		void op_attach_attrib(CmdParser::Command *const arg);
+		void op_detach_attrib(CmdParser::Command *const arg);
 
 	};
 }

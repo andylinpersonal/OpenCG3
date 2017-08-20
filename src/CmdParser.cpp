@@ -96,7 +96,7 @@ CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *const raw_arg, deque<
 			}
 			else
 			{
-
+				
 			}
 			++it;
 		}

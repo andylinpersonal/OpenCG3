@@ -21,9 +21,11 @@ using namespace std;
 
 #define AUTOUNLOCK                                                            \
 }
+
 #define DEBUG_TRACEBACK                                                       \
 	fprintf(stderr, "  at file %s, line %s,\n    in function %s\n",           \
 		__FILE__, __LINE__, __FUNCTION__)
+
 #define DEBUG_TRACEBACK_PRINT(msg)                                            \
 	fprintf(stderr, "  at file %s, line %s,\n    in function %s\n"            \
 		"    message: %s\n",__FILE__, __LINE__, __FUNCTION__, msg)
