@@ -55,7 +55,7 @@ namespace OpenCG3 {
 		/*
 		*  Working functions.
 		*/
-		typedef void (MainWindow::*op_handler_t)(CmdParser::Command *const arg);
+		typedef void (MainWindow::*op_handler_t)(StringParser::ArgTree *const arg);
 		/* 
 		*  Call method by corresponding key.
 		*/
@@ -63,31 +63,31 @@ namespace OpenCG3 {
 		/* set window attributes
 		*  create window $label_name:S
 		*/
-		void op_create_window(CmdParser::Command *const arg);
+		void op_create_window(StringParser::ArgTree *const arg);
 		/* close current window
 		*  delete window $label_name:S Opt_$message:S
 		*/
-		void op_delete_window(CmdParser::Command *const arg);
-		void op_create_camera(CmdParser::Command *const arg);
-		void op_delete_camera(CmdParser::Command *const arg);
-		void op_remove_camera(CmdParser::Command *const arg);
-		void op_select_camera(CmdParser::Command *const arg);
+		void op_delete_window(StringParser::ArgTree *const arg);
+		void op_create_camera(StringParser::ArgTree *const arg);
+		void op_delete_camera(StringParser::ArgTree *const arg);
+		void op_remove_camera(StringParser::ArgTree *const arg);
+		void op_select_camera(StringParser::ArgTree *const arg);
 		/* create point
 		*  create point $point_lbl:S $coord(Vertex3d)
 		*/
-		void op_create_point(CmdParser::Command *const arg);
+		void op_create_point(StringParser::ArgTree *const arg);
 		/* delete point
 		*  delete point $point_lbl:S
 		*/
-		void op_delete_point(CmdParser::Command *const arg);
+		void op_delete_point(StringParser::ArgTree *const arg);
 
-		void op_create_line(CmdParser::Command *const arg);
-		void op_delete_line(CmdParser::Command *const arg);
+		void op_create_line(StringParser::ArgTree *const arg);
+		void op_delete_line(StringParser::ArgTree *const arg);
 
-		void op_create_attrib(CmdParser::Command *const arg);
-		void op_delete_attrib(CmdParser::Command *const arg);
-		void op_attach_attrib(CmdParser::Command *const arg);
-		void op_detach_attrib(CmdParser::Command *const arg);
+		void op_create_attrib(StringParser::ArgTree *const arg);
+		void op_delete_attrib(StringParser::ArgTree *const arg);
+		void op_attach_attrib(StringParser::ArgTree *const arg);
+		void op_detach_attrib(StringParser::ArgTree *const arg);
 
 	};
 }

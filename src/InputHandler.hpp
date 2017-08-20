@@ -30,7 +30,7 @@ namespace OpenCG3 {
 		*  Relate macro is defined in Common.hpp
 		*/
 		extern mutex mutex_CommandQueue;
-		extern deque<CmdParser::Command *> CommandQueue;
+		extern deque<StringParser::ArgTree *> CommandQueue;
 
 		/*
 		* if main thread is closing, set this variable to false,
@@ -40,7 +40,7 @@ namespace OpenCG3 {
 		/*
 		*  main function for command input ...
 		*/
-		void stdin_handle_worker(deque<CmdParser::Command *> &Queue);
+		void stdin_handle_worker(deque<StringParser::ArgTree *> &Queue);
 		// auxilliary functions
 		
 	}

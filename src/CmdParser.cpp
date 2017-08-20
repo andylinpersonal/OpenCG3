@@ -19,39 +19,17 @@ CmdParser::OP_ID = {{OP_NAME[0], 0} ,{OP_NAME[1], 1}, {OP_NAME[2], 2}, {OP_NAME[
 const unordered_map<string, int>
 CmdParser::OBJ_ID = {{OBJ_NAME[0], 0} ,{OBJ_NAME[1], 1}, {OBJ_NAME[2], 2}, {OBJ_NAME[3], 3}};
 
-
-
-/// class Command
-CmdParser::Command::Command()
-	:opcode(0),object(0),param(NULL) {}
-
-CmdParser::Command::Command(CmdParser::Command const &in)
-	:opcode(in.opcode),
-	object(in.object),
-	param(in.param) {}
-
-CmdParser::Command::~Command()
-{
-	if (this->param) delete this->param;
-}
-
 void
-CmdParser::Command::swap(Command &target)
-{
-	auto tmp = target.param;
-	target.param = this->param;
-	this->param = tmp;
-}
-
-void
-CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *const raw_arg, deque<CmdParser::Command *> &Queue, mutex &Lock)
+CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *const raw_arg, deque<StringParser::ArgTree *> &Queue, mutex &Lock)
 {
 	// because an input may not include a complete assign command
-	static StringParser::ArgTree cached_assign;
+	static StringParser::ArgTree cached_assign_cmd;
 	// for assign command processing
 	static bool unfinished_assign_op = false;
 	static size_t unfinished_assign_count = 0;
-	Command *tmp = new Command();
+	static deque<StringParser::ArgTree *> cmd_cache;
+
+	StringParser::ArgTree *tmp = new StringParser::ArgTree();
 	{
 		deque<StringParser::ArgTree *>::iterator it = raw_arg->begin();
 		/* expanding assign opname
@@ -66,8 +44,8 @@ CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *const raw_arg, deque<
 				try {
 					unfinished_assign_count = ARG_ROOT_ELEMT(*it, 4).get_uint();
 					// copy $op and $class into cache
-					cached_assign.root->child.push_back(new StringParser::ArgTree::Node(*((*(*it))[2])));
-					cached_assign.root->child.push_back(new StringParser::ArgTree::Node(*((*(*it))[3])));
+					cached_assign_cmd.root->child.push_back(new StringParser::ArgTree::Node(*((*(*it))[2])));
+					cached_assign_cmd.root->child.push_back(new StringParser::ArgTree::Node(*((*(*it))[3])));
 				}
 				catch (exception e) {
 					DBG_DMP_INVALID_CMD(OP_NAME[OP_ID_ASSIGN], "%s\n", ARG_ROOT_PTR(*it)->to_string());
@@ -78,20 +56,18 @@ CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *const raw_arg, deque<
 			if (!unfinished_assign_count)
 			{
 				unfinished_assign_op = false;
-				cached_assign.clear();
+				cached_assign_cmd.clear();
 			}
 			else if (unfinished_assign_op)
 			{
-				tmp->param = new StringParser::ArgTree(*(*it));
-				for (deque<StringParser::ArgTree::Node *>::reverse_iterator it_cached_op = cached_assign.root->child.rbegin();
-					it_cached_op != cached_assign.root->child.rend();
+				tmp = new StringParser::ArgTree(*(*it));
+				for (deque<StringParser::ArgTree::Node *>::reverse_iterator rit_cached_op = cached_assign_cmd.root->child.rbegin();
+					rit_cached_op != cached_assign_cmd.root->child.rend();
 					++it)
 				{
-					tmp->param->root->child.push_front(new StringParser::ArgTree::Node(*(*it_cached_op)));
+					tmp->root->child.push_front(new StringParser::ArgTree::Node(*(*rit_cached_op)));
 				}
-				AUTOLOCK(mutex, Lock)
-					Queue.push_front(tmp);
-				AUTOUNLOCK;
+				cmd_cache.push_front(tmp);
                 --unfinished_assign_count;
 			}
 			else
@@ -106,10 +82,12 @@ CmdParser::safe_queue_maker(deque<StringParser::ArgTree*> *const raw_arg, deque<
 	if (unfinished_assign_op) return;
 
 	// Expand compound commands
-	deque<Command *> cache;
+
+	// move cached cmd to global queue
 	AUTOLOCK(mutex, Lock)
-
+		for (deque<StringParser::ArgTree *>::reverse_iterator rit = cmd_cache.rbegin(); rit != cmd_cache.rend(); ++rit)
+			Queue.push_front(*rit);
 	AUTOUNLOCK;
-
-
+	// because cmd_cache is a static varible, we must clear it manually.
+	cmd_cache.clear();
 }

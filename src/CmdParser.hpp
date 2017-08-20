@@ -20,43 +20,6 @@ using namespace std;
 namespace OpenCG3 {
 	namespace CmdParser{
 
-		class Command {
-		public:
-			int opcode;
-			int object;
-			StringParser::ArgTree * param;
-		
-
-		public:
-			// ctor / dtor
-			Command();
-			Command(CmdParser::Command const&);
-			~Command();
-			// utility
-			void swap(Command &);
-			inline const string &to_string()
-			{
-				if (this->param)
-					return this->param->to_string();
-				else
-					return "";
-			}
-			// get root-level child of param
-			inline StringParser::ArgTree::Node *
-				operator[](size_t idx) 
-			{ 
-				if (this->param->root->child.empty() ||
-					(idx >= this->param->root->child.size()))
-					return NULL;
-				return (*(this->param))[idx]; 
-			}
-			// get root node
-			inline StringParser::ArgTree::Node *
-				get_root(void)
-			{
-				return this->param->root;
-			}
-		};
 
 #define CMD_ROOT(cmd) ARG_ROOT_PTR((cmd)->param)
 #define DBG_DMP_INVALID_CMD(cmd, extra_format, ...)                           \
@@ -87,7 +50,9 @@ namespace OpenCG3 {
 		*/
 		void safe_queue_maker(
 			deque<StringParser::ArgTree *> *const raw_arg,
-			deque<CmdParser::Command *> &queue, mutex &Lock);
+			deque<StringParser::ArgTree *> &queue,
+			mutex &Lock
+		);
 	}
 
 }

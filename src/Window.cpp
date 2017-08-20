@@ -75,7 +75,7 @@ bool
 MainWindow::on_idle()
 {
 	// resolve the command queue
-	CmdParser::Command *tmp = NULL;
+	StringParser::ArgTree *tmp = NULL;
 
 	AUTOLOCK(mutex, Input::mutex_CommandQueue)
 		if (!Input::CommandQueue.empty())
@@ -96,12 +96,12 @@ MainWindow::on_idle()
 			fprintf(stderr, "  at file %s, line %s,\n    in function %s\n"
 				"    command: %s\n"
 				"    message: %s\n",
-				__FILE__, __LINE__, __FUNCTION__, tmp->param->to_string().c_str(), 
+				__FILE__, __LINE__, __FUNCTION__, tmp->to_string().c_str(), 
 				"Error: Command Not Found In MainMenu::Operation"
 			);
 			fprintf(stderr, "  Message from exception:\n   ", e.what());
 		}
-		// clear item
+		// clear item after processing
 		delete tmp;
 	}
     
@@ -113,7 +113,7 @@ MainWindow::on_idle()
 */
 
 void
-MainWindow::op_create_window(CmdParser::Command * const arg)
+MainWindow::op_create_window(StringParser::ArgTree * const arg)
 {
 	this->title = (*arg)[2]->str_val;
 	this->set_title(this->title);
@@ -123,7 +123,7 @@ MainWindow::op_create_window(CmdParser::Command * const arg)
 }
 
 void
-MainWindow::op_delete_window(CmdParser::Command * const args)
+MainWindow::op_delete_window(StringParser::ArgTree * const args)
 {
 	fputs(" info: delete window\n  message: ", stderr);
 	Glib::ustring msg = "Good bye!";
