@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.3.2}
+\newcommand{\Version}[0]{Version 0.3.3}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -407,13 +407,13 @@
 		\hline
 		Property     & Value Format & Example \\ \hline
 		\hline
-		shape        & $\Param{\MSS\in\{\texttt{dot},\texttt{square}\}}$ & \texttt{dot} \\ \hline
+		shape        & $\Param{\MSS\in\{\texttt{none},\texttt{dot},\texttt{square}\}}$ & \texttt{dot} \\ \hline
 		radius       & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{3 px}} \\ \hline
-        fill-rgb     & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
+        fill-rgb     & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{255 255 255}} \\ \hline
         \hline
 		border-type  & $\Param{\MSS\in\{\texttt{none},\texttt{inner},\texttt{middle},\texttt{outer}\}}$ & \texttt{outer} \\ \hline
 		border-width & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
-        border-rgb   & same as fill-rgb  & \texttt{\TupText{127 127 127}} \\ \hline
+        border-rgb   & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{127 127 127}} \\ \hline
 	\end{tabularx}
 
 \end{frame}
@@ -469,6 +469,24 @@
 
 \end{frame}
 
+\subsubsection{Property}
+
+\begin{frame}[t] \frametitle{Properties of a Line}
+
+	\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+	\renewcommand\arraystretch{1.6}
+	\begin{tabularx}{\textwidth}{|l|l|R|}
+		\hline
+		Property & Value Format & Example \\ \hline
+		\hline
+		style    & $\Param{\MSS\in\{\texttt{none},\texttt{solid},\texttt{dotted},\texttt{dashed}\}}$ & \texttt{solid} \\ \hline
+		width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
+        fill-rgb & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
+        pattern  & $\LstFull{\Tup{\Param{\MSR>0}}{} \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{\TupText{8 8} px}} \\ \hline
+	\end{tabularx}
+
+\end{frame}
+
 \subsection{Attribute}
 
 \subsubsection{Create}
@@ -496,7 +514,7 @@
 	\begin{block}{Examples}
 		\CommandEx{create attrib \TupText{magenta dashed-and-translucent-line} \EOLText
 		                         \LstText{\LstText{point fill-hsv \QuoteText{\LstText{300 \TupText{1.0 1.0}}}} \EOLText
-		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rbga \QuoteText{\LstText{\TupText{0 255 0} 0.5}}}}}}
+		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rgb \QuoteText{\TupText{0 255 0}}} \LstText{pattern \QuoteText{\LstText{\TupText{16 8} px}}}}}}
 	\end{block}
 
 \end{frame}
