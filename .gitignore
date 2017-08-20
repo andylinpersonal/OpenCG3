@@ -105,3 +105,6 @@ doc/spec/fig
 
 # Temporary Files
 *.tmp
+
+# misc
+*.url

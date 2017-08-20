@@ -36,7 +36,7 @@ StringParser::ArgTree::Node::~Node()
 string
 StringParser::ArgTree::Node::to_string(void) const
 {
-	ExtensibleString &out = this->aux_to_string();
+	ExtensibleString out = this->aux_to_string();
 	return out.to_string();
 }
 
@@ -105,6 +105,16 @@ StringParser::ArgTree::ArgTree()
 StringParser::ArgTree::~ArgTree()
 {
 	delete this->root;
+}
+
+bool
+StringParser::ArgTree::clear(void)
+{
+	this->logical_line_no = 0;
+	this->physical_line_no = 0;
+	this->pattern = STR_NULL;
+	this->root->clear();
+	return false;
 }
 
 StringParser::ArgTree::Iterator::Iterator()

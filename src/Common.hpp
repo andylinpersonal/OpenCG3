@@ -8,6 +8,14 @@
 
 
 #include <mutex>
+#include <cstdio>
+#include <climits>
+
+#include <string>
+#include <deque>
+#include <iterator>
+using namespace std;
+
 #define AUTOLOCK(MutexType, to_lock)                                          \
 {   lock_guard<MutexType> lock(to_lock);
 
@@ -17,14 +25,10 @@
 #define DEBUG_TRACEBACK                                                       \
 	fprintf(stderr, "  at file %s, line %s,\n    in function %s\n",           \
 		__FILE__, __LINE__, __FUNCTION__)
+
 #define DEBUG_TRACEBACK_PRINT(msg)                                            \
 	fprintf(stderr, "  at file %s, line %s,\n    in function %s\n"            \
 		"    message: %s\n",__FILE__, __LINE__, __FUNCTION__, msg)
-
-#include <string>
-#include <deque>
-#include <iterator>
-using namespace std;
 
 namespace OpenCG3 {
 

@@ -13,12 +13,41 @@ MainWindow::IconFileName = "ocg3.png";
 // instance of this Gtk::Application ...
 Glib::RefPtr<Gtk::Application> App;
 
+const unordered_map<string, unordered_map<string, MainWindow::op_handler_t>>
+MainWindow::Operation = 
+{
+	{ "create", {
+		{ "window", &(MainWindow::op_create_window) },
+		{ "camera",  &(MainWindow::op_create_camera) },
+		{ "point",  &(MainWindow::op_create_point) },
+		{ "line",  &(MainWindow::op_create_line) },
+		{ "attrib",  &(MainWindow::op_create_attrib) }
+	} },
+	{ "delete", {
+		{ "window", &(MainWindow::op_delete_window) },
+		{ "point", &(MainWindow::op_delete_point) },
+		{ "camera",  &(MainWindow::op_delete_camera) },
+		{ "line",  &(MainWindow::op_delete_line) },
+		{ "attrib",  &(MainWindow::op_delete_attrib) }
+	} },
+	{ "remove", {
+		{ "camera", &(MainWindow::op_remove_camera) }
+	} },
+	{ "select",{
+		{ "camera", &(MainWindow::op_select_camera) }
+	} },
+	{ "attach",{
+		{ "attrib", &(MainWindow::op_attach_attrib) }
+	} },
+	{ "detach",{
+		{ "camera", &(MainWindow::op_detach_attrib) }
+	} }
+};
+
 MainWindow::MainWindow(string const& icon, Size2D const& sz_win, Glib::ustring const& title)
     :Window()
 {
-
     set_border_width(5);
-
     set_default_size(sz_win.getX(), sz_win.getY());
     set_title(title);
     try{
@@ -46,7 +75,8 @@ bool
 MainWindow::on_idle()
 {
 	// resolve the command queue
-	CmdParser::Command *tmp = NULL;
+	StringParser::ArgTree *tmp = NULL;
+
 	AUTOLOCK(mutex, Input::mutex_CommandQueue)
 		if (!Input::CommandQueue.empty())
 		{
@@ -56,7 +86,23 @@ MainWindow::on_idle()
 	AUTOUNLOCK;
 	if (tmp)
 	{
-
+		try
+		{
+			// Search in Operation and Call Corresponding Function
+			(this->*Operation.at((*tmp)[0]->str_val).at((*tmp)[1]->str_val))(tmp);
+		}
+		catch (out_of_range e)
+		{
+			fprintf(stderr, "  at file %s, line %s,\n    in function %s\n"
+				"    command: %s\n"
+				"    message: %s\n",
+				__FILE__, __LINE__, __FUNCTION__, tmp->to_string().c_str(), 
+				"Error: Command Not Found In MainMenu::Operation"
+			);
+			fprintf(stderr, "  Message from exception:\n   ", e.what());
+		}
+		// clear item after processing
+		delete tmp;
 	}
     
     // Always return true to keep handler connected.
@@ -67,13 +113,26 @@ MainWindow::on_idle()
 */
 
 void
-MainWindow::op_delete_window(CmdParser::Command * const args)
+MainWindow::op_create_window(StringParser::ArgTree * const arg)
+{
+	this->title = (*arg)[2]->str_val;
+	this->set_title(this->title);
+#ifdef DEBUG
+	cout << "Message:\n " << << arg->to_string() << endl;
+#endif // DEBUG
+}
+
+void
+MainWindow::op_delete_window(StringParser::ArgTree * const args)
 {
 	fputs(" info: delete window\n  message: ", stderr);
-	cout << CMD_ROOT(args)[2].str_val << endl;
+	Glib::ustring msg = "Good bye!";
+	if ((*args)[2])
+		msg = (*args)[2]->str_val;
+	cout << msg << endl;
 	Gtk::MessageDialog msgbox(
 		*this,
-		args->param->root[2].str_val,
+		msg,
 		false,
 		Gtk::MESSAGE_INFO,
 		Gtk::BUTTONS_OK_CANCEL,

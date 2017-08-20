@@ -10,14 +10,15 @@ mutex
 Input::mutex_CommandQueue;
 
 // deque for transferring parsed command to main thread.
-deque<OpenCG3::CmdParser::Command *>
+// push front and pop back
+deque<StringParser::ArgTree *>
 Input::CommandQueue;
 
 volatile bool
 Input::is_alive = true;
 
 void
-Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
+Input::stdin_handle_worker(deque<StringParser::ArgTree *> &queueLst)
 {
 
 	ExtensibleString lineBfr;
@@ -42,7 +43,7 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 		if (ch == '\n')
 		{
 			++physical_line;
-			// if input is "\\\n" , disable this newline (concatenate 
+			// if input is "\\\n" , disable this newline (concatenate
 			// previous input with following input)
 			if (is_invalid_line)
 			{
@@ -57,37 +58,37 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 			++logical_line;
 
 			// parsing input ...
-			deque<ArgTree *> *out = line_parser(lineBfr);
+			deque<ArgTree *> *raw_cmd = line_parser(lineBfr);
 			//  clear empty or invalid commands ...
 
-			for (size_t i = 0; i < out->size(); ++i)
+			for (size_t i = 0; i < raw_cmd->size(); ++i)
 			{
 #ifdef _DEBUG
 				if ((*out)[i]->get_pattern() == PTN_INVALID)
 #endif // _DEBUG
 				{
-					cout << (*out)[i]->get_physical_line_no() << ":" <<
-						(*out)[i]->get_logical_line_no() << " " <<
-						(*out)[i]->get_pattern() << endl;
+					cout << (*raw_cmd)[i]->get_physical_line_no() << ":" <<
+						(*raw_cmd)[i]->get_logical_line_no() << " " <<
+						(*raw_cmd)[i]->get_pattern() << endl;
 
 				}
 
-				if ((out->at(i)->get_pattern() == PTN_EMPTY_TREE) ||
-					(out->at(i)->get_pattern() == PTN_INVALID))
+				if ((raw_cmd->at(i)->get_pattern() == PTN_EMPTY_TREE) ||
+					(raw_cmd->at(i)->get_pattern() == PTN_INVALID))
 				{
 #ifdef _DEBUG
 					cout << " debug:\n  command at line " <<
 						out->at(i)->get_physical_line_no() << " is ignored." << endl;
 #endif // _DEBUG
-					delete out->at(i);
-					out->at(i) == NULL;
+					delete raw_cmd->at(i);
+					raw_cmd->at(i) = NULL;
 				}
 
-				safe_queue_maker(out, Queue, mutex_CommandQueue);
-				
+				CmdParser::safe_queue_maker(raw_cmd, queueLst, mutex_CommandQueue);
+
 			}
 
-			delete out;
+			delete raw_cmd;
 			lineBfr.clear();
 			add_line_no();
 		}
@@ -146,10 +147,11 @@ Input::stdin_handle_worker(deque<CmdParser::Command *> &Queue)
 			}
 		}
 	}
+	// clear before quit the application
 	AUTOLOCK(mutex, mutex_CommandQueue)
 		for (CmdParser::Command *cmd : CommandQueue)
 		{
-			if(cmd)
+			if(cmd) delete cmd;
 		}
 	AUTOUNLOCK;
     return;

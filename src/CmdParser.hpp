@@ -10,7 +10,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 #include "IObject.hpp"
@@ -20,21 +20,6 @@ using namespace std;
 namespace OpenCG3 {
 	namespace CmdParser{
 
-		class Command {
-		public:
-			int opcode;
-			int object;
-			StringParser::ArgTree * param;
-		
-
-		public:
-			// ctor / dtor
-			Command();
-			Command(CmdParser::Command const&);
-			~Command();
-			// utility
-			void swap(Command &);
-		};
 
 #define CMD_ROOT(cmd) ARG_ROOT_PTR((cmd)->param)
 #define DBG_DMP_INVALID_CMD(cmd, extra_format, ...)                           \
@@ -52,11 +37,11 @@ namespace OpenCG3 {
 #define OBJ_ID_INSTR  3
 
 		// Operation and object name
-		extern const string OP_NAME[5];
-		extern const string OBJ_NAME[3];
+		extern const char* OP_NAME[5];
+		extern const char* OBJ_NAME[6];
 		// Operation and object ID
-		extern const map<string, int> OP_ID;
-		extern const map<string, int> OBJ_ID;
+		extern const unordered_map<string, int> OP_ID;
+		extern const unordered_map<string, int> OBJ_ID;
 		extern const string TYPE_STR[4][4];
 
 		/*
@@ -64,8 +49,10 @@ namespace OpenCG3 {
 		*  append it to command queue for further using by main thread.
 		*/
 		void safe_queue_maker(
-			deque<StringParser::ArgTree *> *raw_arg,
-			deque<CmdParser::Command *> &queue, mutex &Lock);
+			deque<StringParser::ArgTree *> *const raw_arg,
+			deque<StringParser::ArgTree *> &queue,
+			mutex &Lock
+		);
 	}
 
 }
