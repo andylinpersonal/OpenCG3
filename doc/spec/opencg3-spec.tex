@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.3.3}
+\newcommand{\Version}[0]{Version 0.3.4}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -18,8 +18,8 @@
 
 
 \author[KVD \and ADL]{Dong Nai-Jia \inst{1} \and Lin Yong-Hsiang \inst{2}}
-\institute{	\inst{1} National Chiao Tung University\\Department of Computer Science \and
-			\inst{2} National Taiwan University\\Department of Agricultural Chemistry}
+\institute{\inst{1} National Chiao Tung University\\Department of Computer Science \and
+           \inst{2} National Taiwan University\\Department of Agricultural Chemistry}
 \date[\today]{\today}
 
 
@@ -216,10 +216,10 @@
 	\renewcommand\arraystretch{1.6}
 	\begin{tabularx}{\textwidth}{|l|l|R|}
 		\hline
-		Property       & Value Format & Example \\ \hline
+		Property         & Value Format & Example \\ \hline
 		\hline
-		dots-per-cm    & $\MSR$ & \texttt{128} \\ \hline
-		background-rgb & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
+		dots-per-cm      & $\MSR$ & \texttt{128} \\ \hline
+		background-color & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
 	\end{tabularx}
 
 \end{frame}
@@ -331,13 +331,13 @@
 		Property      & Value Format & Example \\ \hline
 		\hline
 		axis-enable   & $\Param{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
-		axis-xyz      & $\Param{\MSS\in\{\texttt{x},\texttt{y},\texttt{z},\texttt{xy},\texttt{xz},\texttt{yz},\texttt{xyz}\}}$ & \texttt{xyz} \\ \hline
-		axis-xyz-rgb  & $\Tup{\Tup{\Param{\MSN\in[0,255]}}{3}}{3}$ & \texttt{\TupText{\TupText{255 0 0}\TupText{0 255 0}\TupText{0 0 255}}} \\ \hline
+		axis-show     & $\Param{\MSS\in\{\texttt{x},\texttt{y},\texttt{z},\texttt{xy},\texttt{xz},\texttt{yz},\texttt{xyz}\}}$ & \texttt{xyz} \\ \hline
+		axis-color    & $\Tup{\Tup{\Param{\MSN\in[0,255]}}{3}}{3}$ & \texttt{\TupText{\TupText{255 0 0}\TupText{0 255 0}\TupText{0 0 255}}} \\ \hline
 		axis-width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
 		\hline
 		grid-enable   & $\Param{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
-		grid-xyz      & $\Param{\MSS\in\{\texttt{x},\texttt{y},\texttt{z},\texttt{xy},\texttt{xz},\texttt{yz},\texttt{xyz}\}}$ & \texttt{xy} \\ \hline
-		grid-xyz-rgb  & $\Tup{\Tup{\Param{\MSN\in[0,255]}}{3}}{3}$ & \texttt{\TupText{\TupText{127 0 0}\TupText{0 127 0}\TupText{0 0 127}}} \\ \hline
+		grid-show     & $\Param{\MSS\in\{\texttt{x},\texttt{y},\texttt{z},\texttt{xy},\texttt{xz},\texttt{yz},\texttt{xyz}\}}$ & \texttt{xy} \\ \hline
+		grid-color    & $\Tup{\Tup{\Param{\MSN\in[0,255]}}{3}}{3}$ & \texttt{\TupText{\TupText{127 0 0}\TupText{0 127 0}\TupText{0 0 127}}} \\ \hline
 		grid-width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
 		grid-interval & $\Param{\MSR>0}$ & \texttt{10} \\ \hline
 	\end{tabularx}
@@ -409,11 +409,11 @@
 		\hline
 		shape        & $\Param{\MSS\in\{\texttt{none},\texttt{dot},\texttt{square}\}}$ & \texttt{dot} \\ \hline
 		radius       & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{3 px}} \\ \hline
-        fill-rgb     & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{255 255 255}} \\ \hline
+        color        & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{255 255 255}} \\ \hline
         \hline
 		border-type  & $\Param{\MSS\in\{\texttt{none},\texttt{inner},\texttt{middle},\texttt{outer}\}}$ & \texttt{outer} \\ \hline
 		border-width & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
-        border-rgb   & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{127 127 127}} \\ \hline
+        border-color & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{127 127 127}} \\ \hline
 	\end{tabularx}
 
 \end{frame}
@@ -481,7 +481,9 @@
 		\hline
 		style    & $\Param{\MSS\in\{\texttt{none},\texttt{solid},\texttt{dotted},\texttt{dashed}\}}$ & \texttt{solid} \\ \hline
 		width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
-        fill-rgb & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
+        color    & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
+        \hline
+        cap      & $\MSS\in\{\texttt{butt},\texttt{round},\texttt{square}\}$ & \texttt{butt} \\ \hline
         pattern  & $\LstFull{\Tup{\Param{\MSR>0}}{} \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{\TupText{8 8} px}} \\ \hline
 	\end{tabularx}
 
@@ -512,9 +514,9 @@
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{create attrib \TupText{magenta dashed-and-translucent-line} \EOLText
-		                         \LstText{\LstText{point fill-hsv \QuoteText{\LstText{300 \TupText{1.0 1.0}}}} \EOLText
-		                       \ \LstText{line \LstText{style dashed} \LstText{fill-rgb \QuoteText{\TupText{0 255 0}}} \LstText{pattern \QuoteText{\LstText{\TupText{16 8} px}}}}}}
+		\CommandEx{create attrib \TupText{purple dashed-and-translucent-line} \EOLText
+		                         \LstText{\LstText{point color \QuoteText{\TupText{128 0 128}}} \EOLText
+		                       \ \LstText{line \LstText{style dashed} \LstText{color \QuoteText{\TupText{0 255 0}}} \LstText{pattern \QuoteText{\LstText{\TupText{16 8} px}}}}}}
 	\end{block}
 
 \end{frame}
