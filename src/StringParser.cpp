@@ -113,60 +113,60 @@ StringParser::arg_parser(ExtensibleString const &token)
 		arg_edit.erase(0, 1);
 		paired_bracket_loc = arg_edit.find_last_of('\'');
 		if (paired_bracket_loc < arg_edit.size()) arg_edit.erase(paired_bracket_loc, 1);
-		node->str_val = token.to_string();
-		node->type = ArgTree::Type::Str;
+		node->_Str_val = token.to_string();
+		node->_Node_Type = ArgTree::NodeType::Str;
 		break;
 	case '<':
 		arg_edit.erase(0, 1);
 		paired_bracket_loc = arg_edit.find_last_of('>');
 		if (paired_bracket_loc < arg_edit.size()) arg_edit.erase(paired_bracket_loc, 1);
 		arg_lexer(arg_edit, node);
-		node->str_val = STR_NULL;
-		node->type = ArgTree::Type::Ctnr_Vector;
+		node->_Str_val = STR_NULL;
+		node->_Node_Type = ArgTree::NodeType::Ctnr_Vector;
 		break;
 	case '{':
 		arg_edit.erase(0, 1);
 		paired_bracket_loc = arg_edit.find_last_of('}');
 		if (paired_bracket_loc < arg_edit.size()) arg_edit.erase(paired_bracket_loc, 1);
 		arg_lexer(arg_edit, node);
-		node->str_val = STR_NULL;
-		node->type = ArgTree::Type::Ctnr_Set;
+		node->_Str_val = STR_NULL;
+		node->_Node_Type = ArgTree::NodeType::Ctnr_Set;
 		break;
 	case '(':
 		arg_edit.erase(0, 1);
 		paired_bracket_loc = arg_edit.find_last_of(')');
 		if (paired_bracket_loc < arg_edit.size()) arg_edit.erase(paired_bracket_loc, 1);
 		arg_lexer(arg_edit, node);
-		node->str_val = STR_NULL;
-		node->type = ArgTree::Type::Ctnr_Tuple;
+		node->_Str_val = STR_NULL;
+		node->_Node_Type = ArgTree::NodeType::Ctnr_Tuple;
 		break;
 	case '[':
 		arg_edit.erase(0, 1);
 		paired_bracket_loc = arg_edit.find_last_of(']');
 		if (paired_bracket_loc < arg_edit.size()) arg_edit.erase(paired_bracket_loc, 1);
 		arg_lexer(arg_edit, node);
-		node->str_val = STR_NULL;
-		node->type = ArgTree::Type::Ctnr_Univ;
+		node->_Str_val = STR_NULL;
+		node->_Node_Type = ArgTree::NodeType::Ctnr_Univ;
 		break;
 	default:
-		node->str_val = token.to_string();
+		node->_Str_val = token.to_string();
 		stringstream str;
 		if (isNaturalNum(token))
 		{
 			str << token;
-			node->type = ArgTree::Type::Natural;
-			str >> node->num_val.i64;
+			node->_Node_Type = ArgTree::NodeType::Natural;
+			str >> node->_Num_val.i64;
 		}
 		else if (isReal(token))
 		{
 			str << token;
-			node->type = ArgTree::Type::Real;
-			str >> node->num_val.fp64;
+			node->_Node_Type = ArgTree::NodeType::Real;
+			str >> node->_Num_val.fp64;
 		}
 		else if (isValidRawStr(token))
-			node->type = ArgTree::Type::Str;
+			node->_Node_Type = ArgTree::NodeType::Str;
 		else
-			node->type = ArgTree::Type::Invalid;
+			node->_Node_Type = ArgTree::NodeType::Invalid_Node;
 		break;
 	}
 	return node;
@@ -199,7 +199,7 @@ StringParser::arg_lexer(ExtensibleString const &cmd, ArgTree::Node *parent)
 				else
 				{
 					cerr << "error:    unbalanced quotation marks or brackets" << endl;
-					parent->type = ArgTree::Type::Invalid;
+					parent->_Node_Type = ArgTree::NodeType::Invalid_Node;
 					for (size_t j = 0; j < parent->child.size(); ++j)
 					{
 						if(parent->child[j]) delete parent->child[j];
@@ -302,6 +302,43 @@ StringParser::cmd_trim_terminal_space(ExtensibleString &cmd)
     return true;
 }
 
+void
+StringParser::cmd_get_op_obj_type(ArgTree & in)
+{
+	string const &op = in[0]->get_str_val();
+	string const &obj = in[1]->get_str_val();
+	
+	// get op
+	if (op == "create")
+		in.set_opcode_type(ArgTree::Op_t::Create);
+	else if (op == "attach")
+		in.set_opcode_type(ArgTree::Op_t::Attach);
+	else if (op == "select")
+		in.set_opcode_type(ArgTree::Op_t::Select);
+	else if (op == "remove")
+		in.set_opcode_type(ArgTree::Op_t::Remove);
+	else if (op == "detach")
+		in.set_opcode_type(ArgTree::Op_t::Detach);
+	else if (op == "delete")
+		in.set_opcode_type(ArgTree::Op_t::Delete);
+	else
+		in.set_opcode_type(ArgTree::Op_t::Undefined_Obj);
+	// get obj
+	if (obj == "attrib")
+		in.set_object_type(ArgTree::Obj_t::Attrib);
+	else if (obj == "point")
+		in.set_object_type(ArgTree::Obj_t::Point);
+	else if (obj == "line")
+		in.set_object_type(ArgTree::Obj_t::Line);
+	else if (obj == "camera")
+		in.set_object_type(ArgTree::Obj_t::Camera);
+	else if (obj == "window")
+		in.set_object_type(ArgTree::Obj_t::Window);
+	else
+		in.set_object_type(ArgTree::Obj_t::Undefined);
+	
+}
+
 string
 StringParser::cmd_pattern_parser(ArgTree *const cmd)
 {
@@ -325,7 +362,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 			bfr.push_back(string(tmp));
 		}
 		// [] is universal container : can have different type of child
-		if (arg->type == ArgTree::Type::Ctnr_Univ)
+		if (arg->_Node_Type == ArgTree::NodeType::Ctnr_Univ)
 		{
 			out.append(1, '[');
 			for (string item : bfr) out.append(item);
@@ -333,7 +370,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 			return out;
 		}
 		// root node is also universal container : can have different type of child
-		else if(arg->type == ArgTree::Type::Ctnr_Root)
+		else if(arg->_Node_Type == ArgTree::NodeType::Ctnr_Root)
 		{
 			for (string item : bfr) out.append(item);
 			return out;
@@ -354,7 +391,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 					exist_Other = true;
 			}
 			{
-				auto end_type = [&](ArgTree::Type t) -> string {
+				auto end_type = [&](ArgTree::NodeType t) -> string {
 					switch (t)
 					{
 					case OpenCG3::StringParser::ArgTree::Ctnr_Set:
@@ -384,7 +421,7 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 					out.append(bfr[0]);
 					out.append(1, ':');
 					out.append(to_string(sz_child));
-					out.append(end_type(arg->type));
+					out.append(end_type(arg->_Node_Type));
 					return out;
 				}
 				else if (exist_S)
@@ -393,21 +430,21 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 					// std::to_string(T number) -> convert number to 
 					// corresponding string representation.
 					out.append(to_string(sz_child));
-					out.append(end_type(arg->type));
+					out.append(end_type(arg->_Node_Type));
 					return out;
 				}
 				else if (exist_R)
 				{
 					out = "R:";
 					out.append(to_string(sz_child));
-					out.append(end_type(arg->type));
+					out.append(end_type(arg->_Node_Type));
 					return out;
 				}
 				else if (exist_N)
 				{
 					out = "N:";
 					out.append(to_string(sz_child));
-					out.append(end_type(arg->type));
+					out.append(end_type(arg->_Node_Type));
 					return out;
 				}
 			}
@@ -416,23 +453,23 @@ StringParser::cmd_pattern_parser_rec(ArgTree::Node *const arg)
 	// is leaf node...
 	else
 	{
-		switch (arg->type)
+		switch (arg->_Node_Type)
 		{
 		case ArgTree::Ctnr_Root:
 			return PTN_EMPTY_TREE;
-		case ArgTree::Type::Ctnr_Univ:
+		case ArgTree::NodeType::Ctnr_Univ:
 			return "[]";
-		case ArgTree::Type::Ctnr_Set:
+		case ArgTree::NodeType::Ctnr_Set:
 			return "}";
-		case ArgTree::Type::Ctnr_Tuple:
+		case ArgTree::NodeType::Ctnr_Tuple:
 			return ")";
-		case ArgTree::Type::Ctnr_Vector:
+		case ArgTree::NodeType::Ctnr_Vector:
 			return ">";
-		case ArgTree::Type::Natural:
+		case ArgTree::NodeType::Natural:
 			return "N";
-		case ArgTree::Type::Real:
+		case ArgTree::NodeType::Real:
 			return "R";
-		case ArgTree::Type::Str:
+		case ArgTree::NodeType::Str:
 			return "S";
 		default:
 			return PTN_INVALID;

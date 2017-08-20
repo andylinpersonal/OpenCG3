@@ -30,6 +30,7 @@ namespace OpenCG3 {
 		*  Relate macro is defined in Common.hpp
 		*/
 		extern mutex mutex_CommandQueue;
+		// in->ooooooooo->out
 		extern deque<StringParser::ArgTree *> CommandQueue;
 
 		/*

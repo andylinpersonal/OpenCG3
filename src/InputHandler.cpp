@@ -35,6 +35,7 @@ Input::stdin_handle_worker(deque<StringParser::ArgTree *> &queueLst)
 	auto add_line_no = [&]() {
 		lineBfr.append(to_string(physical_line) + " " + to_string(logical_line) + " ");
 	};
+
 	add_line_no();
 
 	while (is_alive)
@@ -63,8 +64,8 @@ Input::stdin_handle_worker(deque<StringParser::ArgTree *> &queueLst)
 
 			for (size_t i = 0; i < raw_cmd->size(); ++i)
 			{
-#ifdef _DEBUG
-				if ((*out)[i]->get_pattern() == PTN_INVALID)
+#ifndef _DEBUG
+				if ((*raw_cmd)[i]->get_pattern() == PTN_INVALID)
 #endif // _DEBUG
 				{
 					cout << (*raw_cmd)[i]->get_physical_line_no() << ":" <<
@@ -87,8 +88,7 @@ Input::stdin_handle_worker(deque<StringParser::ArgTree *> &queueLst)
 				CmdParser::safe_queue_maker(raw_cmd, queueLst, mutex_CommandQueue);
 
 			}
-
-			delete raw_cmd;
+			delete raw_cmd;	// delete container itself exclude its content
 			lineBfr.clear();
 			add_line_no();
 		}
@@ -149,7 +149,7 @@ Input::stdin_handle_worker(deque<StringParser::ArgTree *> &queueLst)
 	}
 	// clear before quit the application
 	AUTOLOCK(mutex, mutex_CommandQueue)
-		for (CmdParser::Command *cmd : CommandQueue)
+		for (StringParser::ArgTree *cmd : CommandQueue)
 		{
 			if(cmd) delete cmd;
 		}

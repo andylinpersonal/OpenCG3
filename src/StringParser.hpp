@@ -46,6 +46,8 @@ namespace OpenCG3 {
 		bool              arg_lexer(ExtensibleString const& logical_line, ArgTree::Node *parent = NULL);
 		/// remove trailing / fronting space characters.
 		inline bool       cmd_trim_terminal_space(ExtensibleString &);
+		//  get op type and obj type
+		void              cmd_get_op_obj_type(ArgTree &in);
 
 		/// parse pattern of tree content
 		extern const string PTN_INVALID;

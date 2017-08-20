@@ -42,7 +42,6 @@ namespace OpenCG3 {
 		// Operation and object ID
 		extern const unordered_map<string, int> OP_ID;
 		extern const unordered_map<string, int> OBJ_ID;
-		extern const string TYPE_STR[4][4];
 
 		/*
 		*  resolving command and convert to corresponding command object;

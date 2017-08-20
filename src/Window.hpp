@@ -59,7 +59,7 @@ namespace OpenCG3 {
 		/* 
 		*  Call method by corresponding key.
 		*/
-		const static unordered_map<string, unordered_map<string, op_handler_t>> Operation;
+		const static unordered_map<StringParser::ArgTree::Op_t, unordered_map<StringParser::ArgTree::Obj_t, op_handler_t>> Operation;
 		/* set window attributes
 		*  create window $label_name:S
 		*/

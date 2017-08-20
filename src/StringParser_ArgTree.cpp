@@ -3,11 +3,11 @@
 using namespace OpenCG3;
 using namespace std;
 
-StringParser::ArgTree::Node::Node(Type t, string const& val)
-	:type(t), str_val(string(val)){ }
+StringParser::ArgTree::Node::Node(NodeType t, string const& val)
+	:_Node_Type(t), _Str_val(string(val)){ }
 
 StringParser::ArgTree::Node::Node(Node const &src)
-	:type(src.type), str_val(src.str_val), num_val(src.num_val)
+	:_Node_Type(src._Node_Type), _Str_val(src._Str_val), _Num_val(src._Num_val)
 {
 	this->child.clear();
 	if (!this->child.empty())
@@ -54,29 +54,29 @@ StringParser::ArgTree::Node::aux_to_string(void) const
 		}
 		if (front) out += back;
 	};
-	switch (this->type)
+	switch (this->_Node_Type)
 	{
-	case ArgTree::Type::Ctnr_Root:
+	case ArgTree::NodeType::Ctnr_Root:
 		concatenate();
 		break;
-	case ArgTree::Type::Ctnr_Set:
+	case ArgTree::NodeType::Ctnr_Set:
 		concatenate('{','}');
 		break;
-	case ArgTree::Type::Ctnr_Tuple:
+	case ArgTree::NodeType::Ctnr_Tuple:
 		concatenate('(', ')');
 		break;
-	case ArgTree::Type::Ctnr_Univ:
+	case ArgTree::NodeType::Ctnr_Univ:
 		concatenate('[', ']');
 		break;
-	case ArgTree::Type::Ctnr_Vector:
+	case ArgTree::NodeType::Ctnr_Vector:
 		concatenate('<', '>');
 		break;
-	case ArgTree::Type::Natural:
-	case ArgTree::Type::Real:
-	case ArgTree::Type::Str:
-	case ArgTree::Type::Invalid:
-	case ArgTree::Type::Empty:
-		out += this->str_val;
+	case ArgTree::NodeType::Natural:
+	case ArgTree::NodeType::Real:
+	case ArgTree::NodeType::Str:
+	case ArgTree::NodeType::Invalid_Node:
+	case ArgTree::NodeType::Empty:
+		out += this->_Str_val;
 		break;
 	default:
 		break;
@@ -95,11 +95,21 @@ StringParser::ArgTree::ArgTree()
 	:phy_line_number(0), log_line_number(0)
 {
 	this->root = new Node();
-	this->root->type = Ctnr_Root;
-	this->root->str_val = STR_NULL;
+	this->root->_Node_Type = Ctnr_Root;
+	this->root->_Str_val = STR_NULL;
 	this->root->child.clear();
 	// First level is root
 	this->iter = Iterator(this->root);
+}
+
+StringParser::ArgTree::ArgTree(ArgTree const &src)
+{
+	this->pattern = src.pattern;
+	this->phy_line_number = src.phy_line_number;
+	this->log_line_number = src.log_line_number;
+	this->Obj = src.Obj;
+	this->Op = src.Op;
+	this->iter = src.iter;
 }
 
 StringParser::ArgTree::~ArgTree()

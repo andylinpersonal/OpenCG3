@@ -13,34 +13,34 @@ MainWindow::IconFileName = "ocg3.png";
 // instance of this Gtk::Application ...
 Glib::RefPtr<Gtk::Application> App;
 
-const unordered_map<string, unordered_map<string, MainWindow::op_handler_t>>
+const unordered_map<StringParser::ArgTree::Op_t, unordered_map<StringParser::ArgTree::Obj_t, MainWindow::op_handler_t>>
 MainWindow::Operation = 
 {
-	{ "create", {
-		{ "window", &(MainWindow::op_create_window) },
-		{ "camera",  &(MainWindow::op_create_camera) },
-		{ "point",  &(MainWindow::op_create_point) },
-		{ "line",  &(MainWindow::op_create_line) },
-		{ "attrib",  &(MainWindow::op_create_attrib) }
+	{ StringParser::ArgTree::Op_t::Create, {
+		{ StringParser::ArgTree::Obj_t::Window, &(op_create_window) },
+		{ StringParser::ArgTree::Obj_t::Camera,  &(op_create_camera) },
+		{ StringParser::ArgTree::Obj_t::Point,  &(op_create_point) },
+		{ StringParser::ArgTree::Obj_t::Line,  &(op_create_line) },
+		{ StringParser::ArgTree::Obj_t::Attrib,  &(op_create_attrib) }
 	} },
-	{ "delete", {
-		{ "window", &(MainWindow::op_delete_window) },
-		{ "point", &(MainWindow::op_delete_point) },
-		{ "camera",  &(MainWindow::op_delete_camera) },
-		{ "line",  &(MainWindow::op_delete_line) },
-		{ "attrib",  &(MainWindow::op_delete_attrib) }
+	{ StringParser::ArgTree::Op_t::Delete, {
+		{ StringParser::ArgTree::Obj_t::Window, &(op_delete_window) },
+		{ StringParser::ArgTree::Obj_t::Point, &(op_delete_point) },
+		{ StringParser::ArgTree::Obj_t::Camera,  &(op_delete_camera) },
+		{ StringParser::ArgTree::Obj_t::Line,  &(op_delete_line) },
+		{ StringParser::ArgTree::Obj_t::Attrib,  &(op_delete_attrib) }
 	} },
-	{ "remove", {
-		{ "camera", &(MainWindow::op_remove_camera) }
+	{ StringParser::ArgTree::Op_t::Remove, {
+		{ StringParser::ArgTree::Obj_t::Camera, &(op_remove_camera) }
 	} },
-	{ "select",{
-		{ "camera", &(MainWindow::op_select_camera) }
+	{ StringParser::ArgTree::Op_t::Select, {
+		{ StringParser::ArgTree::Obj_t::Camera, &(op_select_camera) }
 	} },
-	{ "attach",{
-		{ "attrib", &(MainWindow::op_attach_attrib) }
+	{ StringParser::ArgTree::Op_t::Attach, {
+		{ StringParser::ArgTree::Obj_t::Attrib, &(op_attach_attrib) }
 	} },
-	{ "detach",{
-		{ "camera", &(MainWindow::op_detach_attrib) }
+	{ StringParser::ArgTree::Op_t::Detach, {
+		{ StringParser::ArgTree::Obj_t::Camera, &(op_detach_attrib) }
 	} }
 };
 
@@ -89,7 +89,7 @@ MainWindow::on_idle()
 		try
 		{
 			// Search in Operation and Call Corresponding Function
-			(this->*Operation.at((*tmp)[0]->str_val).at((*tmp)[1]->str_val))(tmp);
+			(this->*Operation.at(tmp->get_opcode_type()).at(tmp->get_object_type()))(tmp);
 		}
 		catch (out_of_range e)
 		{
@@ -115,7 +115,7 @@ MainWindow::on_idle()
 void
 MainWindow::op_create_window(StringParser::ArgTree * const arg)
 {
-	this->title = (*arg)[2]->str_val;
+	this->title = (*arg)[2]->get_str_val();
 	this->set_title(this->title);
 #ifdef DEBUG
 	cout << "Message:\n " << << arg->to_string() << endl;
@@ -128,7 +128,7 @@ MainWindow::op_delete_window(StringParser::ArgTree * const args)
 	fputs(" info: delete window\n  message: ", stderr);
 	Glib::ustring msg = "Good bye!";
 	if ((*args)[2])
-		msg = (*args)[2]->str_val;
+		msg = (*args)[2]->get_str_val();
 	cout << msg << endl;
 	Gtk::MessageDialog msgbox(
 		*this,
@@ -140,6 +140,7 @@ MainWindow::op_delete_window(StringParser::ArgTree * const args)
 		);
 
 	int result = msgbox.run();
+
 	switch (result)
 	{
 	case Gtk::RESPONSE_OK:

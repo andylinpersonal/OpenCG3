@@ -23,10 +23,20 @@ namespace OpenCG3 {
 			*  Set = {}, Tuple = (), Vector = <>, Universal = [] (no special purpose now)
 			*  Only Ctnr_Root and Ctnr_Univ can contain different type of child...
 			*/
-			typedef enum _Type
+			typedef enum _Op_Type
 			{
-				Invalid, Str, Real, Natural, Ctnr_Set, Ctnr_Tuple, Ctnr_Vector, Ctnr_Univ, Ctnr_Root, Empty
-			}Type;
+				Undefined_Op, Create, Delete, Attach, Detach, Remove, Select
+			} Op_t;
+
+			typedef enum _Obj_Type
+			{
+				Undefined_Obj, Window, Camera, Line, Point, Attrib
+			} Obj_t;
+
+			typedef enum _Nd_Type
+			{
+				Invalid_Node, Str, Real, Natural, Ctnr_Set, Ctnr_Tuple, Ctnr_Vector, Ctnr_Univ, Ctnr_Root, Empty
+			} NodeType;
 
 			class Node {
 			public:
@@ -42,23 +52,24 @@ namespace OpenCG3 {
 #define ID_NOT_FOUND ULLONG_MAX
 #define STR_NULL  ""
 #define XSTR_NULL ""_xs
-				// get root node *
-#define ARG_ROOT_PTR(arg) (arg)->root
-				// get node * by subscript in root level
-#define ARG_ROOT_ELEMT(arg, idx_root_lvl) ARG_ROOT_PTR(arg)[(idx_root_lvl)]
+				// get root node
+#define GET_ROOT_FROM_ITER(iter) (*((*(iter))->root))
+				// get node by subscript in root level
+#define GET_ROOT_ELEMT(iter, idx_at_root_lvl) (*(GET_ROOT_FROM_ITER(iter)[(idx_at_root_lvl)]))
 				 
 				// members
 			public:
-				Type   type;
-				string str_val;
-				Number num_val;
+				NodeType _Node_Type;
+				string   _Str_val;
+				Number   _Num_val;
 
 				deque<Node *> child;
 				
 				// methods
 			public:
 
-				Node(Type t = Invalid, string const& val = "");
+				Node(NodeType t = Invalid_Node, string const& val = "");
+				// deep copy ctor
 				Node(Node const &src);
 				~Node();
 
@@ -69,9 +80,9 @@ namespace OpenCG3 {
 						if (item != NULL) delete item;
 
 					this->child.clear();
-					this->num_val.i64 = 0;
-					this->str_val.clear();
-					this->type = Type::Empty;
+					this->_Num_val.i64 = 0;
+					this->_Str_val.clear();
+					this->_Node_Type = NodeType::Empty;
 				}
 
 				inline bool  isLeaf(void) { return this->child.empty(); }
@@ -91,10 +102,12 @@ namespace OpenCG3 {
 				// get set
 				Node               *get_deep_copy(void) const;
 				string              to_string(void) const;
-				inline uint64_t    &uint() { return this->num_val.i64; }
-				inline uint64_t     get_uint() { return this->num_val.i64; }
-				inline long double &ldouble() { return this->num_val.fp64; }
-				inline long double  get_ldouble() { return this->num_val.fp64; }
+				inline string const&get_str_val() { return this->_Str_val; }
+				inline uint64_t    &uint() { return this->_Num_val.i64; }
+				inline uint64_t     get_uint() { return this->_Num_val.i64; }
+				inline long double &ldouble() { return this->_Num_val.fp64; }
+				inline long double  get_ldouble() { return this->_Num_val.fp64; }
+				inline NodeType const&  get_type() { return this->_Node_Type; }
 
 			private:
 				ExtensibleString aux_to_string(void) const;
@@ -143,20 +156,22 @@ namespace OpenCG3 {
 			size_t phy_line_number;
 			size_t log_line_number;
 
+			Op_t   Op;
+			Obj_t  Obj;
+
 		public:
 			ArgTree();
+			// copy all without root
+			ArgTree(ArgTree const&);
 			~ArgTree();
 
 			// methods ...
 			inline void          iter_return_root(void) { this->iter.to_root(this->root); }
+			// Copy all with root
 			inline ArgTree *     get_deep_copy(void)
 			{
 				ArgTree *out = new ArgTree(*this);
 				out->root = new Node(*this->root);
-				out->pattern = this->pattern;
-				out->phy_line_number = this->phy_line_number;
-				out->log_line_number = this->log_line_number;
-
 				return out;
 			}
 			bool                 clear(void);
@@ -177,11 +192,15 @@ namespace OpenCG3 {
 			inline void          set_pattern(string const &pat) { this->pattern = string(pat); }
 			inline void          set_physical_line_no(size_t no) { this->phy_line_number = no; }
 			inline size_t &      physical_line_no(void) { return this->phy_line_number; }
-			inline size_t        get_physical_line_no(void) const { return this->phy_line_number; }
+			inline size_t const  get_physical_line_no(void) const { return this->phy_line_number; }
 
 			inline void          set_logical_line_no(size_t no) { this->log_line_number = no; }
 			inline size_t &      logical_line_no(void) { return this->log_line_number; }
-			inline size_t        get_logical_line_no(void) const { return this->log_line_number; }
+			inline size_t const  get_logical_line_no(void) const { return this->log_line_number; }
+			inline Obj_t const   get_object_type(void) const { return this->Obj; }
+			inline void          set_object_type(Obj_t T) { this->Obj = T; }
+			inline Op_t  const   get_opcode_type(void) const { return this->Op; }
+			inline void          set_opcode_type(Op_t T) { this->Op = T; }
 
 		};
 	}
