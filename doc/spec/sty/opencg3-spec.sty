@@ -26,40 +26,53 @@
 \newcommand{\LstBrkL}[0]{[}
 \newcommand{\LstBrkR}[0]{]}
 
-\newcommand{\Tup}[2]        {#1:#2 \ \mathclap{\TupBrkR}     \hphantom{:}}
+\newcommand{\Tup}[2]    {#1:#2 \ \mathclap{\TupBrkR}     \hphantom{:}}
+\newcommand{\Vct}[2]    {#1:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}}
+\newcommand{\Set}[2]    {#1:#2 \ \mathclap{\SetBrkR}     \hphantom{:}}
+\newcommand{\Lst}[2]    {\MSL  \,\mathclap{\LstBrkL}     \hphantom{:} #1:#2 \ \mathclap{\LstBrkR} \hphantom{:}}
+\newcommand{\LstFull}[1]{\MSL  \,\mathclap{\LstBrkL}     \hphantom{:} #1    \ \mathclap{\LstBrkR} \hphantom{:}}
+
 \newcommand{\TupStar}[2]    {#1:#2 \ \mathclap{\TupBrkR}     \hphantom{:}^{\star}}
-\newcommand{\Vct}[2]        {#1:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}}
 \newcommand{\VctStar}[2]    {#1:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}^{\star}}
-\newcommand{\Set}[2]        {#1:#2 \ \mathclap{\SetBrkR}     \hphantom{:}}
 \newcommand{\SetStar}[2]    {#1:#2 \ \mathclap{\SetBrkR}     \hphantom{:}^{\star}}
-\newcommand{\Lst}[2]        {\MSL  \,\mathclap{\LstBrkL}     \hphantom{:} #1:#2 \ \mathclap{\LstBrkR} \hphantom{:}}
-\newcommand{\LstFull}[1]    {\MSL  \,\mathclap{\LstBrkL}     \hphantom{:} #1    \ \mathclap{\LstBrkR} \hphantom{:}}
 \newcommand{\LstStar}[2]    {\MSL  \,\mathclap{\LstBrkL}     \hphantom{:} #1:#2 \ \mathclap{\LstBrkR} \hphantom{:}^{\star}}
 \newcommand{\LstStarFull}[1]{\MSL  \,\mathclap{\LstBrkL}     \hphantom{:} #1    \ \mathclap{\LstBrkR} \hphantom{:}^{\star}}
 
-\newcommand{\ArgName}[1]        {\ARG             \ \text{\underline{\smash{#1}}}}
-\newcommand{\MSNName}[1]        {\MSN             \ \text{\underline{\smash{#1}}}}
-\newcommand{\MSRName}[1]        {\MSR             \ \text{\underline{\smash{#1}}}}
-\newcommand{\StrName}[1]        {\MSS             \ \text{\underline{\smash{#1}}}}
-\newcommand{\TupName}[3]        {\Tup{#1}{#2}     \ \text{\underline{\smash{#3}}}}
+\newcommand{\ArgName}[1]    {\ARG             \ \text{\underline{\smash{#1}}}}
+\newcommand{\MSNName}[1]    {\MSN             \ \text{\underline{\smash{#1}}}}
+\newcommand{\MSRName}[1]    {\MSR             \ \text{\underline{\smash{#1}}}}
+\newcommand{\StrName}[1]    {\MSS             \ \text{\underline{\smash{#1}}}}
+\newcommand{\TupName}[3]    {\Tup{#1}{#2}     \ \text{\underline{\smash{#3}}}}
+\newcommand{\VctName}[3]    {\Vct{#1}{#2}     \ \text{\underline{\smash{#3}}}}
+\newcommand{\SetName}[3]    {\Set{#1}{#2}     \ \text{\underline{\smash{#3}}}}
+\newcommand{\LstName}[3]    {\Lst{#1}{#2}     \ \text{\underline{\smash{#3}}}}
+\newcommand{\LstFullName}[2]{\Lst{#1}         \ \text{\underline{\smash{#2}}}}
+
 \newcommand{\TupStarName}[3]    {\TupStar{#1}{#2} \ \text{\underline{\smash{#3}}}}
-\newcommand{\VctName}[3]        {\Vct{#1}{#2}     \ \text{\underline{\smash{#3}}}}
 \newcommand{\VctStarName}[3]    {\VctStar{#1}{#2} \ \text{\underline{\smash{#3}}}}
-\newcommand{\SetName}[3]        {\Set{#1}{#2}     \ \text{\underline{\smash{#3}}}}
 \newcommand{\SetStarName}[3]    {\SetStar{#1}{#2} \ \text{\underline{\smash{#3}}}}
-\newcommand{\LstName}[3]        {\Lst{#1}{#2}     \ \text{\underline{\smash{#3}}}}
-\newcommand{\LstFullName}[2]    {\Lst{#1}         \ \text{\underline{\smash{#2}}}}
 \newcommand{\LstStarName}[3]    {\LstStar{#1}{#2} \ \text{\underline{\smash{#3}}}}
 \newcommand{\LstStarFullName}[2]{\LstStar{#1}     \ \text{\underline{\smash{#2}}}}
 
-\newcommand{\TupOptl}[2]    {#1\color{gray}:#2 \ \mathclap{\TupBrkR}     \hphantom{:}         \leavevmode\color{black}}
+\newcommand{\TupOptl}[2]{#1\color{gray}:#2 \ \mathclap{\TupBrkR}     \hphantom{:} \leavevmode\color{black}}
+\newcommand{\VctOptl}[2]{#1\color{gray}:#2 \ \mathclap{\VctBrkMathR} \hphantom{:} \leavevmode\color{black}}
+\newcommand{\SetOptl}[2]{#1\color{gray}:#2 \ \mathclap{\SetBrkR}     \hphantom{:} \leavevmode\color{black}}
+\newcommand{\LstOptl}[2]{\color{gray} \MSL \,\mathclap{\LstBrkL}     \leavevmode\color{black}\hphantom{:} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\hphantom{:} \leavevmode\color{black}}
+
 \newcommand{\TupStarOptl}[2]{#1\color{gray}:#2 \ \mathclap{\TupBrkR}     \hphantom{:}^{\star} \leavevmode\color{black}}
-\newcommand{\VctOptl}[2]    {#1\color{gray}:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}         \leavevmode\color{black}}
 \newcommand{\VctStarOptl}[2]{#1\color{gray}:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}^{\star} \leavevmode\color{black}}
-\newcommand{\SetOptl}[2]    {#1\color{gray}:#2 \ \mathclap{\SetBrkR}     \hphantom{:}         \leavevmode\color{black}}
 \newcommand{\SetStarOptl}[2]{#1\color{gray}:#2 \ \mathclap{\SetBrkR}     \hphantom{:}^{\star} \leavevmode\color{black}}
-\newcommand{\LstOptl}[2]    {\color{gray}\MSL  \,\mathclap{\LstBrkL}     \leavevmode\color{black}\hphantom{:} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\hphantom{:}        \leavevmode\color{black}}
-\newcommand{\LstStarOptl}[2]{\color{gray}\MSL  \,\mathclap{\LstBrkL}     \leavevmode\color{black}\hphantom{:} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\hphantom{:}^{\star}\leavevmode\color{black}}
+\newcommand{\LstStarOptl}[2]{\color{gray} \MSL \,\mathclap{\LstBrkL}     \leavevmode\color{black}\hphantom{:} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\hphantom{:}^{\star}\leavevmode\color{black}}
+
+\newcommand{\TupNameOptl}[3]{#1\color{gray}:#2 \ \mathclap{\TupBrkR}     \hphantom{:} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+\newcommand{\VctNameOptl}[3]{#1\color{gray}:#2 \ \mathclap{\VctBrkMathR} \hphantom{:} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+\newcommand{\SetNameOptl}[3]{#1\color{gray}:#2 \ \mathclap{\SetBrkR}     \hphantom{:} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+\newcommand{\LstNameOptl}[3]{\color{gray} \MSL \,\mathclap{\LstBrkL}     \leavevmode\color{black}\hphantom{:} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\hphantom{:} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+
+\newcommand{\TupStarNameOptl}[3]{#1\color{gray}:#2 \ \mathclap{\TupBrkR}     \hphantom{:}^{\star} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+\newcommand{\VctStarNameOptl}[3]{#1\color{gray}:#2 \ \mathclap{\VctBrkMathR} \hphantom{:}^{\star} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+\newcommand{\SetStarNameOptl}[3]{#1\color{gray}:#2 \ \mathclap{\SetBrkR}     \hphantom{:}^{\star} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
+\newcommand{\LstStarNameOptl}[3]{\color{gray} \MSL \,\mathclap{\LstBrkL}     \leavevmode\color{black}\hphantom{:}^{\star} #1\color{gray}:#2 \ \mathclap{\LstBrkR}\hphantom{:} \ \text{\underline{\smash{#3}}} \leavevmode\color{black}}
 
 \newcommand{\TupText}[1]{\texttt{\TupBrkL#1\TupBrkR}}
 \newcommand{\VctText}[1]{\texttt{\VctBrkTextL#1\VctBrkTextR}}
@@ -91,3 +104,6 @@
 \newcommand{\ADD}[0]{\texttt{+\,}}
 \newcommand{\SUB}[0]{\texttt{-\,}}
 \newcommand{\REF}[0]{\texttt{\&\,}}
+
+\newenvironment{CmdFmt}[1]{\newcolumntype{R}{>{\raggedleft\arraybackslash}X}\tabularx{\textwidth}{#1}}{\endtabularx}
+\newenvironment{PptFmt}[1]{\newcolumntype{L}{>{\raggedright\arraybackslash}X}\renewcommand\arraystretch{1.6}\tabularx{\textwidth}{#1}}{\endtabularx}
