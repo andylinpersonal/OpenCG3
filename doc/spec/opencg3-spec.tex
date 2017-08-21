@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.3.4}
+\newcommand{\Version}[0]{Version 0.3.5}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -132,7 +132,7 @@
 	\begin{block}{Notations}
 		\begin{itemize}
 			\item \mbox{\rlap{\CLS{x}}\hphantom{\LAB{x}}} denotes the name of a class in the field \texttt{x}.
-			\item             \LAB{x}                     denotes the globally unique name of the object from a class in the field \texttt{x}.
+			\item             \LAB{x}                     denotes the unique name of the object from a class in the field \texttt{x}.
 		\end{itemize}
 	\end{block}
 
@@ -216,9 +216,11 @@
 	\renewcommand\arraystretch{1.6}
 	\begin{tabularx}{\textwidth}{|l|l|R|}
 		\hline
-		Property         & Value Format & Example \\ \hline
+		Property         & Value Format & Default \\ \hline
 		\hline
-		dots-per-cm      & $\MSR$ & \texttt{128} \\ \hline
+		dots-per-cm      & $\Param{\MSR>0}$ & \texttt{128} \\ \hline
+		dots-per-unit    & $\Param{\MSR>0}$ & \texttt{256} \\ \hline
+		\hline
 		background-color & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{0 0 0}} \\ \hline
 	\end{tabularx}
 
@@ -248,7 +250,8 @@
 	\end{itemize} \end{block}
 
 	\begin{block}{Examples}
-		\CommandEx{create camera z-top \TupText{0 0 1} \TupText{\VctText{1 0 0} \VctText{0 1 0}} \VctText{0 0 1}}
+		\CommandEx{create camera z-top \TupText{0 0 1} \TupText{\VctText{2 0 0} \VctText{0 1.5 0}} \VctText{0 0 1}}
+		\CommandEx{// The size of the viewport is 512px * 384px when dots-per-unit is 256.}
 	\end{block}
 
 \end{frame}
@@ -328,17 +331,17 @@
 	\renewcommand\arraystretch{1.6}
 	\begin{tabularx}{\textwidth}{|l|l|R|}
 		\hline
-		Property      & Value Format & Example \\ \hline
+		Property      & Value Format & Default \\ \hline
 		\hline
 		axis-enable   & $\Param{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
 		axis-show     & $\Param{\MSS\in\{\texttt{x},\texttt{y},\texttt{z},\texttt{xy},\texttt{xz},\texttt{yz},\texttt{xyz}\}}$ & \texttt{xyz} \\ \hline
 		axis-color    & $\Tup{\Tup{\Param{\MSN\in[0,255]}}{3}}{3}$ & \texttt{\TupText{\TupText{255 0 0}\TupText{0 255 0}\TupText{0 0 255}}} \\ \hline
-		axis-width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
+		axis-width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
 		\hline
 		grid-enable   & $\Param{\MSS\in\{\texttt{true},\texttt{false}\}}$ & \texttt{true} \\ \hline
 		grid-show     & $\Param{\MSS\in\{\texttt{x},\texttt{y},\texttt{z},\texttt{xy},\texttt{xz},\texttt{yz},\texttt{xyz}\}}$ & \texttt{xy} \\ \hline
 		grid-color    & $\Tup{\Tup{\Param{\MSN\in[0,255]}}{3}}{3}$ & \texttt{\TupText{\TupText{127 0 0}\TupText{0 127 0}\TupText{0 0 127}}} \\ \hline
-		grid-width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
+		grid-width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{1 px}} \\ \hline
 		grid-interval & $\Param{\MSR>0}$ & \texttt{10} \\ \hline
 	\end{tabularx}
 
@@ -405,14 +408,14 @@
 	\renewcommand\arraystretch{1.6}
 	\begin{tabularx}{\textwidth}{|l|l|R|}
 		\hline
-		Property     & Value Format & Example \\ \hline
+		Property     & Value Format & Default \\ \hline
 		\hline
 		shape        & $\Param{\MSS\in\{\texttt{none},\texttt{dot},\texttt{square}\}}$ & \texttt{dot} \\ \hline
-		radius       & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{3 px}} \\ \hline
+		radius       & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{3 px}} \\ \hline
         color        & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{255 255 255}} \\ \hline
         \hline
 		border-type  & $\Param{\MSS\in\{\texttt{none},\texttt{inner},\texttt{middle},\texttt{outer}\}}$ & \texttt{outer} \\ \hline
-		border-width & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
+		border-width & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
         border-color & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{127 127 127}} \\ \hline
 	\end{tabularx}
 
@@ -477,14 +480,14 @@
 	\renewcommand\arraystretch{1.6}
 	\begin{tabularx}{\textwidth}{|l|l|R|}
 		\hline
-		Property & Value Format & Example \\ \hline
+		Property & Value Format & Default \\ \hline
 		\hline
 		style    & $\Param{\MSS\in\{\texttt{none},\texttt{solid},\texttt{dotted},\texttt{dashed}\}}$ & \texttt{solid} \\ \hline
-		width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
+		width    & $\LstFull{\Param{\MSR>0} \ \ \Param{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{2 px}} \\ \hline
         color    & $\Tup{\Param{\MSN\in[0,255]}}{3}$ & \texttt{\TupText{191 191 191}} \\ \hline
         \hline
         cap      & $\MSS\in\{\texttt{butt},\texttt{round},\texttt{square}\}$ & \texttt{butt} \\ \hline
-        pattern  & $\LstFull{\Tup{\Param{\MSR>0}}{} \ \Param{\MSS\in\{\texttt{px},\texttt{cm},\texttt{in}\}}}$ & \texttt{\LstText{\TupText{8 8} px}} \\ \hline
+        pattern  & $\LstFull{\Tup{\Param{\MSR>0}}{} \ \Param{\MSS\in\{\texttt{px},\texttt{cm}\}}}$ & \texttt{\LstText{\TupText{8 8} px}} \\ \hline
 	\end{tabularx}
 
 \end{frame}
