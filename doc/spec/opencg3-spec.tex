@@ -8,7 +8,7 @@
 \usefonttheme[onlymath]{serif}
 \setcounter{tocdepth}{4}
 
-\newcommand{\Version}[0]{Version 0.3.5}
+\newcommand{\Version}[0]{Version 0.3.6}
 \newcommand{\PrjName}{OpenCG\texorpdfstring{\textsuperscript{3}}}
 \newcommand{\PrjNameFull}{\LARGE Open Command-oriented\\Geometric Graphics Generator}
 \newcommand{\PrjSpec}{\PrjName{} Specification \Version}
@@ -365,11 +365,12 @@
 		\begin{CmdFmt}{*{4}{@{}l}@{}R}
 			\InstrName{create point } &
 		  	\ParamMust{\SetStarOptl{\StrName{\ADD\LAB{p}}}{}} &
-		  	\ParamMust{\TupName{\MSR}{3}{coord}} & & \InstrItem \\
+		  	\ParamMust{\TupName{\MSR}{3}{coord}} &
+		  	\ParamOptl{\TupStarOptl{\StrName{\REF\LAB{a}}}{}} & \InstrItem \\
 			\InstrName{create point } &
 			\ParamMust{\TupStar{\StrName{\ADD\LAB{p}}}{\,\geqslant n}} &
 			\ParamMust{\TupStar{\TupName{\MSR}{3}{coord}}{n}} &
-		  	\ParamOptl{\TupStarNameOptl{\MSS}{}{\REF\LAB{a}}} & \InstrItem \\
+		  	\ParamOptl{\TupStarOptl{\StrName{\REF\LAB{a}}}{}} & \InstrItem
 		\end{CmdFmt}
 	\end{block}
 
@@ -385,7 +386,7 @@
 		\CommandEx{create point \QuoteText{origin} \ \ \TupText{0 0 0}}
 		\CommandEx{create point \SetText{X-1 X-2} \ \TupText{1 0 0}}
 		\CommandEx{create point \TupText{Y-1 Y-2} \TupText{\TupText{0 1 0}}}
-		\CommandEx{create point \TupText{Z D1 D2} \TupText{\TupText{0 1 0} \TupText{1 1 1}} \TupText{square red}}
+		\CommandEx{create point \TupText{Z D1 D2} \TupText{\TupText{0 1 0} \TupText{1 1 1}} \TupText{square}}
 	\end{block}
 
 \end{frame}
@@ -443,11 +444,12 @@
 		\begin{CmdFmt}{*{4}{@{}l}@{}R}
 			\InstrName{create line \ } &
 		  	\ParamMust{\SetStarOptl{\StrName{\ADD\LAB{c}}}{}} &
-		  	\ParamMust{\Set{\StrName{\REF\LAB{p}}}{2}} & & \InstrItem \\
+		  	\ParamMust{\Set{\StrName{\REF\LAB{p}}}{2}} &
+		  	\ParamOptl{\TupStarOptl{\StrName{\REF\LAB{a}}}{}} & \InstrItem \\
 			\InstrName{create line \ } &
 			\ParamMust{\TupStar{\StrName{\ADD\LAB{c}}}{\,\geqslant n}} &
 			\ParamMust{\TupStar{\Set{\StrName{\REF\LAB{p}}}{2}}{n}} &
-			\ParamOptl{\TupStarNameOptl{\MSS}{}{\REF\LAB{a}}} & \InstrItem
+			\ParamOptl{\TupStarOptl{\StrName{\REF\LAB{a}}}{}} & \InstrItem
 		\end{CmdFmt}
 	\end{block}
 
@@ -582,17 +584,18 @@
 	\begin{block}{Command}
 		\begin{CmdFmt}{*{3}{@{}l}@{}R}
 			\InstrName{detach attrib} &
-			\ParamMust{\SetStarOptl{\StrName{\REF\LAB{a}}}{}} &
-			\ParamMust{\SetStarOptl{\StrName{\REF\LAB{pc}}}{}} & \InstrItem \\
+			\ParamMust{\SetStarOptl{\StrName{\REF\LABEL{a}{1}}}{}} &
+			\ParamMust{\SetStarOptl{\StrName{\REF\LAB{pc}/\,\LABEL{a}{2}}}{}} & \InstrItem \\
 			\InstrName{detach attrib} &
-			\ParamMust{\TupStar{\StrName{\REF\LAB{a}}}{}} &
-			\ParamMust{\TupStar{\StrName{\REF\LAB{pc}}}{}} & \InstrItem
+			\ParamMust{\TupStar{\StrName{\REF\LABEL{a}{1}}}{}} &
+			\ParamMust{\TupStar{\StrName{\REF\LAB{pc}/\,\LABEL{a}{2}}}{}} & \InstrItem
 		\end{CmdFmt}
 	\end{block}
 
 	\begin{block}{Parameters}
 		\begin{itemize}
-			\ParamItem{\LAB{a}}  the name of the object from the class attrib
+			\ParamItem{\LABEL{a}{1}} the name of the object from the class attrib
+			\ParamItem{\LABEL{a}{2}} the name of the object from the class group
 			\ParamItem{\LAB{pc}} the name of the object from a class in the field primitive or compound
 		\end{itemize}
 	\end{block}
